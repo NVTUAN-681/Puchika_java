@@ -3,4 +3,4 @@
 target/
 *.class
 *.log
-.exe
+*.exe
