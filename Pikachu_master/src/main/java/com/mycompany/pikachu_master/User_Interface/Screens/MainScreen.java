@@ -5,6 +5,7 @@
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundStartScreen;
 
 /**
  *
@@ -15,10 +16,10 @@ public class MainScreen extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainScreen.class.getName());
 
     /**
-     * Creates new form MainScreen
+     * Creates new form main
      */
     public MainScreen() {
-//        setContentPane(new BackgroundMain());
+//        setContentPane(new BackgroundStartScreen());
 //        initComponents();
 
         setContentPane(new BackgroundMain());
@@ -119,7 +120,8 @@ public class MainScreen extends javax.swing.JFrame {
         getContentPane().add(coinLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, -1, -1));
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 260, 20));
 
-        setBounds(0, 0, 814, 608);
+        setSize(new java.awt.Dimension(814, 608));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void settingmainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingmainButtonActionPerformed
@@ -140,7 +142,7 @@ public class MainScreen extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void MainScreen(String args[]) {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

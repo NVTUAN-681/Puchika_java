@@ -142,7 +142,7 @@ System.out.println(getContentPane().getWidth() + " " + getContentPane().getHeigh
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         // TODO add your handling code here:
-        Playsreen Main = new Playsreen();
+        MainScreen Main = new MainScreen();
         Main.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_newButtonActionPerformed
