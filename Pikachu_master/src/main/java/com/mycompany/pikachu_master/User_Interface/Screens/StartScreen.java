@@ -4,6 +4,7 @@
  */
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
+import com.mycompany.pikachu_master.Controller.GameConfig;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
 
 /**
@@ -121,9 +122,10 @@ public class StartScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-       MainScreen Main = new MainScreen();
-       Main.setVisible(true);
-       this.dispose();
+        GameConfig config = new GameConfig(5, 6, 0);
+        MainScreen Main = new MainScreen(config);
+        Main.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void maxButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maxButtonActionPerformed

@@ -4,6 +4,7 @@
  */
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
+import com.mycompany.pikachu_master.Controller.GameConfig;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
 
 /**
@@ -20,6 +21,7 @@ public class LevelScreen extends javax.swing.JFrame {
     public LevelScreen() {
         setContentPane(new BackgroundMain());
         initComponents();
+//        GameConfig Level = new GameConfig(ERROR, ABORT, HEIGHT);
     }
 
     /**
@@ -135,7 +137,11 @@ public class LevelScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void normalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_normalButtonActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here
+        GameConfig Level = new GameConfig(10, 10, 300);
+        MainScreen Main = new MainScreen(Level);
+        Main.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_normalButtonActionPerformed
 
     private void exitButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButton3ActionPerformed

@@ -4,8 +4,9 @@
  */
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
+import com.mycompany.pikachu_master.Controller.GameConfig;
+import com.mycompany.pikachu_master.Controller.PlayScreen;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
-import com.mycompany.pikachu_master.User_Interface.Components.BackgroundStartScreen;
 
 /**
  *
@@ -16,17 +17,16 @@ public class MainScreen extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainScreen.class.getName());
 
     /**
-     * Creates new form main
+     * Creates new form MainScreen
      */
-    public MainScreen() {
-//        setContentPane(new BackgroundStartScreen());
+    public MainScreen(GameConfig config) {
+//        setContentPane(new BackgroundMain());
 //        initComponents();
-
         setContentPane(new BackgroundMain());
             initComponents();
 
             // Khởi tạo bàn cờ
-            PlayScreen gameBoard = new PlayScreen();
+            PlayScreen gameBoard = new PlayScreen(config);
 
             // SỬA TẠI ĐÂY: Thay vì BorderLayout, hãy dùng AbsoluteConstraints
             // Tham số: (x, y, width, height) - Điều chỉnh số này để khớp với ảnh nền của em
@@ -120,8 +120,7 @@ public class MainScreen extends javax.swing.JFrame {
         getContentPane().add(coinLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, -1, -1));
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 260, 20));
 
-        setSize(new java.awt.Dimension(814, 608));
-        setLocationRelativeTo(null);
+        setBounds(0, 0, 814, 608);
     }// </editor-fold>//GEN-END:initComponents
 
     private void settingmainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingmainButtonActionPerformed
@@ -142,7 +141,7 @@ public class MainScreen extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main (String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -159,9 +158,10 @@ public class MainScreen extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        GameConfig config = new GameConfig(6, 5, 12);
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MainScreen().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new MainScreen(config).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

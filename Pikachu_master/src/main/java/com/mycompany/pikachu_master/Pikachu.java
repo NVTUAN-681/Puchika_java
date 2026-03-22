@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class Pikachu {
 
     public static void main(String[] args) {
-        Board b = new Board(100, 100);
+        Board b = new Board(12, 14);
         IAlgorithm a = new ClassicAlgorithm();
         System.out.println("Hello world!");
         b.initBoard(a);
