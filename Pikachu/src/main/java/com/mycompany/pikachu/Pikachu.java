@@ -6,6 +6,7 @@ package com.mycompany.pikachu;
 
 import com.mycompany.pikachu.Module.Algorithm.ClassicAlgorithm;
 import com.mycompany.pikachu.Module.Algorithm.IAlgorithm;
+import com.mycompany.pikachu.Module.Algorithm.MediumModeAlgorithm;
 
 import com.mycompany.pikachu.Module.Model.Board;
 import java.util.Scanner;
@@ -18,14 +19,17 @@ public class Pikachu {
 
     public static void main(String[] args) {
         //System.out.println("Hello World!");
-        Board b = new Board(3, 2);
-        IAlgorithm a = new ClassicAlgorithm();
+        Board b = new Board(6, 6);
+        IAlgorithm a = new MediumModeAlgorithm();
         System.out.println("Hello world!");
         b.initBoard(a);
 //        int[][] values = {
-//            {16, 18},
-//            {3, 3},
-//            {18, 16}
+//            {1, 1, 1, 1, 1, 1},
+//            {1, 1, 1, 1, 1, 1},
+//            {1, 1, 1, 1, 1, 1},
+//            {1, 1, 1, 1, 1, 1},
+//            {1, 1, 1, 1, 1, 1},
+//            {1, 1, 1, 1, 1, 1}
 //        };
 //        b.initBoardFixed(a, values);
         System.out.println("Hello world!");
@@ -34,7 +38,7 @@ public class Pikachu {
         int x1, y1, x2, y2;
         
         do {
-            b.print();
+            b.printFull();
             //System.out.println("");
             //b.printStatus();
             //b.printCoordinates();

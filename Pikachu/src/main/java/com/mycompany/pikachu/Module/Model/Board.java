@@ -111,6 +111,24 @@ public class Board {
 
     
 // Fixed
+    
+    public void printFull() {
+        for (int i = 0; i <= rows; i++) {
+            for (int j = 0; j <= cols; j++) {
+                if (matrix[i][j].isStatus()) {
+                    System.out.printf("%-5d", matrix[i][j].getId());
+                } else if (i == 0){
+                    System.out.printf("%-5d", j);
+                } else if (j == 0){
+                    System.out.printf("%-5d", i);
+                } else {
+                    System.out.printf("%-5c", ' ');
+                }
+            }
+            System.out.println();
+        }
+    }
+    
     public void printStatus() {
         for (int i = 0; i <= rows + 1; i++) {
             for (int j = 0; j <= cols + 1; j++) {
