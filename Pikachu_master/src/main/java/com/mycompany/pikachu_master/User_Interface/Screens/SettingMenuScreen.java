@@ -22,9 +22,9 @@ public class SettingMenuScreen extends javax.swing.JFrame {
         this.start = start;
     }
 
-    SettingMenuScreen() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+//    SettingMenuScreen() {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.

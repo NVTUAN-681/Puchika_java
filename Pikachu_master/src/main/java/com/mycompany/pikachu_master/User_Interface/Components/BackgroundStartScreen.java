@@ -8,26 +8,26 @@ import javax.swing.JPanel;
 import java.awt.*;
 import javax.swing.*;
 
+
 /**
  *
  * @author laptop
  */
+public class BackgroundStartScreen extends JPanel {
+    private Image backgroundImage;
 
-public class BackgroundStartScreen extends JPanel{
-    private final Image backgroundImage;
-//    String dir = "C:\\Users\\DELL\\Documents\\BTL_java\\";
     public BackgroundStartScreen() {
-//        backgroundImage = new ImageIcon( dir +  "pikachu_UI\\src\\main\\java\\images\\BackgroundStartScreen.jpg").getImage();
-        backgroundImage = new ImageIcon("images/backGroundMain.jpg").getImage();
+        String path = "/images/BackgroundStartScreen.jpg";
+        // Lấy ảnh từ resources thông qua ImageIcon để đảm bảo ảnh tải xong
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        this.backgroundImage = icon.getImage();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if(backgroundImage == null){
-            System.out.println("khong co anh");
-        }
-
+        // Vẽ ảnh phủ kín toàn bộ diện tích của Panel
+        // g.drawImage(image, x, y, width, height, observer)
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 }

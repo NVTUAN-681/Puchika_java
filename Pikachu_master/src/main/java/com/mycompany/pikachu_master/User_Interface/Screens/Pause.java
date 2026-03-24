@@ -162,7 +162,8 @@ public class Pause extends javax.swing.JFrame {
 
     private void exitmenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitmenuButtonActionPerformed
         // TODO add your handling code here:
-        StartScreen pika = new StartScreen();
+        StartScreen pika = new StartScreen(config);
+        pika.setLevel(config.GetLevel());
         pika.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_exitmenuButtonActionPerformed

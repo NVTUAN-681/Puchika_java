@@ -25,13 +25,18 @@ public class MainScreen extends javax.swing.JFrame {
      */
     GameConfig config;
     PlayScreen gameBoard;
+    
+    int hintCount;
+    int shuffleCount;
 
     public MainScreen(GameConfig config) {
         this.config = config;
-        setContentPane(new BackgroundStartScreen());
+        this.gameBoard = new PlayScreen(config);
+        this.hintCount = 3;
+        this.shuffleCount = 3;
+        setContentPane(new BackgroundMain());
         initComponents();
 
-        gameBoard = new PlayScreen(config);
 
         // Khởi tạo bàn cờ
         //gameBoard.setPreferredSize(new java.awt.Dimension(700, 450));
@@ -190,6 +195,7 @@ public class MainScreen extends javax.swing.JFrame {
         swapButton.setFont(new java.awt.Font("Segoe UI Emoji", 0, 10)); // NOI18N
         swapButton.setText("🔁");
         swapButton.setPreferredSize(new java.awt.Dimension(30, 30));
+        swapButton.addActionListener(this::swapButtonActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 0;
@@ -220,6 +226,7 @@ public class MainScreen extends javax.swing.JFrame {
         hintButton.setFont(new java.awt.Font("Segoe UI Emoji", 0, 16)); // NOI18N
         hintButton.setText("🔍");
         hintButton.setPreferredSize(new java.awt.Dimension(30, 30));
+        hintButton.addActionListener(this::hintButtonActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 0;
@@ -287,6 +294,28 @@ public class MainScreen extends javax.swing.JFrame {
     private void timeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_timeButtonMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_timeButtonMouseClicked
+
+    private void swapButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_swapButtonActionPerformed
+        // TODO add your handling code here:
+        if(this.shuffleCount>=0){
+            this.shuffleCount --;
+            gameBoard.shuffle();
+        }
+        else{
+//          làm mình làm mẩy ở đây đi :))  
+        }
+    }//GEN-LAST:event_swapButtonActionPerformed
+
+    private void hintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hintButtonActionPerformed
+        // TODO add your handling code here:
+        if(this.hintCount >=0){
+            this.hintCount --;
+            gameBoard.findHint();
+        }
+        else{
+//            ở đây thì làm trò mèo nhá 🐧
+        }
+    }//GEN-LAST:event_hintButtonActionPerformed
 
     /**
      * @param args the command line arguments

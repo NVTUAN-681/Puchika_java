@@ -14,17 +14,20 @@ import javax.swing.*;
  * @author laptop
  */
 public class BackgroundMain extends JPanel {
-  private final Image backgroundImage;
-//    String dir = "C:\\Users\\DELL\\Documents\\BTL_java\\";
+    private Image backgroundImage;
+
     public BackgroundMain() {
-//        backgroundImage = new ImageIcon( "C:\\Users\\DELL\\Documents\\BTL-JAVA\\pikachu_UI\\src\\main\\java\\images\\backGroundMain.jpg").getImage();
-        backgroundImage = new ImageIcon("images/backGround_MENU.jpg").getImage();
+        String path = "/images/backGroundMain.jpg";
+        // Lấy ảnh từ resources thông qua ImageIcon để đảm bảo ảnh tải xong
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        this.backgroundImage = icon.getImage();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+        // Vẽ ảnh phủ kín toàn bộ diện tích của Panel
+        // g.drawImage(image, x, y, width, height, observer)
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 }

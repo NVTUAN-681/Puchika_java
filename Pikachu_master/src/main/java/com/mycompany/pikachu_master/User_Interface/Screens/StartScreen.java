@@ -6,6 +6,7 @@ package com.mycompany.pikachu_master.User_Interface.Screens;
 
 import com.mycompany.pikachu_master.Controller.GameConfig;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundStartScreen;
 import com.mycompany.pikachu_master.Utils.ImageLoad;
 
 /**
@@ -22,9 +23,9 @@ public class StartScreen extends javax.swing.JFrame {
      */
 //    public static GameConfig config2 = new GameConfig();
     private GameConfig config;
-    public StartScreen() {
-        this.config = new GameConfig(10, 10, 10,null);
-        setContentPane(new BackgroundMain());
+    public StartScreen(GameConfig config) {
+        this.config = config;
+        setContentPane(new BackgroundStartScreen());
         ImageLoad.loadAllImages(); // tải ảnh trước khi bắt đầu trò chơi
         initComponents();
  // Gọi trước khi vào các màn hình chơi
@@ -201,8 +202,8 @@ public class StartScreen extends javax.swing.JFrame {
         //</editor-fold>
 
     /* Create and display the form */
-    java.awt.EventQueue.invokeLater (
-() -> new StartScreen().setVisible(true));
+    GameConfig config = new GameConfig(1,2,10,"EUROPE");
+    java.awt.EventQueue.invokeLater (() -> new StartScreen(config).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -8,23 +8,26 @@ import javax.swing.JPanel;
 import java.awt.*;
 import javax.swing.*;
 
+
 /**
  *
  * @author laptop
  */
 public class BackgroundHelp extends JPanel {
-
-    private final Image backgroundImage;
+    private Image backgroundImage;
 
     public BackgroundHelp() {
-//        backgroundImage = new ImageIcon("C:\\BTL_java\\pikachu_UI\\src\\main\\java\\images\\instruction.jpg").getImage();
-          backgroundImage = new ImageIcon("images/instruction.jpg").getImage();
+        String path = "/images/BackgroundHelp.jpg";
+        // Lấy ảnh từ resources thông qua ImageIcon để đảm bảo ảnh tải xong
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        this.backgroundImage = icon.getImage();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+        // Vẽ ảnh phủ kín toàn bộ diện tích của Panel
+        // g.drawImage(image, x, y, width, height, observer)
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 }

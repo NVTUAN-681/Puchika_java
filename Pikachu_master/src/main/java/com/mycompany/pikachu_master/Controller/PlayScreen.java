@@ -9,6 +9,7 @@ import com.mycompany.pikachu_master.Algorithm.IAlgorithm;
 import com.mycompany.pikachu_master.Algorithm.MediumModeAlgorithm;
 import com.mycompany.pikachu_master.Model.Board;
 import com.mycompany.pikachu_master.Model.Cell;
+import com.mycompany.pikachu_master.Model.CellPair;
 import com.mycompany.pikachu_master.User_Interface.Components.ButtonMain;
 
 import com.mycompany.pikachu_master.User_Interface.Components.RoundedIconButton;
@@ -48,6 +49,9 @@ public class PlayScreen extends JPanel implements ActionListener {
         if(config.GetLevel().equals("AFICA")){
             this.algorithm = new ClassicAlgorithm();
         }
+        else if(config.GetLevel().equals("EUROPE")){
+            this.algorithm = new ClassicAlgorithm();
+        }
         else if(config.GetLevel().equals("ASIAN")){
             this.algorithm = new MediumModeAlgorithm();
         }
@@ -76,22 +80,6 @@ public class PlayScreen extends JPanel implements ActionListener {
         }
     }
     
-//    private void updateAllButtons() {
-//    for (int i = 1; i <= this.rows; i++) {
-//        for (int j = 1; j <= this.cols; j++) {
-//            Cell cell = board.getCell(i, j);
-//            if (cell.isStatus()) {
-//                btnMatrix[i][j].setIcon(ImageLoad.getImage(cell.getId()));
-//                btnMatrix[i][j].setVisible(true);
-//            } else {
-//                btnMatrix[i][j].setVisible(false);
-//            }
-//            // Reset lại viền nếu có
-//            btnMatrix[i][j].setBorderPainted(false);
-//        }
-//    }
-//}
-
     private void updateAllButtons() {
     for (int i = 1; i <= this.rows; i++) {
         for (int j = 1; j <= this.cols; j++) {
@@ -115,6 +103,28 @@ public class PlayScreen extends JPanel implements ActionListener {
     this.revalidate();
     this.repaint();
 }
+    
+    public void shuffle(){
+        algorithm.shuffle(board);
+        updateAllButtons();
+        firstClick = null;
+        firstClickBtn = null;
+    }
+    
+    public void findHint(){
+        CellPair hintPair = algorithm.findHint(board);
+        
+        Cell    c1 = hintPair.getCell1();
+        Cell    c2 = hintPair.getCell2();
+        
+        RoundedIconButton btn1 = btnMatrix[c1.getX()][c1.getY()];
+        RoundedIconButton btn2 = btnMatrix[c2.getX()][c2.getY()];
+        
+        btn1.setSelectedState(true);
+        btn2.setSelectedState(true);
+    }
+    
+    
     
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -166,6 +176,12 @@ public class PlayScreen extends JPanel implements ActionListener {
                 remainingTiles -= 2;
                 if (remainingTiles <= 0) {
                     showHonorScreen();
+                }
+                else{
+                    if(algorithm.hasAnyMatch(board) == false){
+                        algorithm.shuffle(board);
+                        updateAllButtons();
+                    }
                 }
             } else {
                 firstBtn.setSelectedState(false);
