@@ -29,6 +29,49 @@ public class MainScreen extends javax.swing.JFrame {
     int hintCount;
     int shuffleCount;
 
+    private javax.swing.Timer countdownTimer;
+    private int maxTime;
+    private int currentTime;
+
+    private void initTimer() {
+        maxTime = config.GetTimeLimit();
+        if (maxTime <= 0) {
+            maxTime = 120; // 120 giây mặc định nếu timeLimit <= 0
+        }
+        currentTime = maxTime;
+        Timeline.setMaximum(maxTime);
+        Timeline.setMinimum(0);
+        Timeline.setValue(maxTime);
+
+        if (countdownTimer == null) {
+            countdownTimer = new javax.swing.Timer(1000, new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    currentTime--;
+                    Timeline.setValue(currentTime);
+
+                    // In ra console để bạn dễ theo dõi thời gian thực
+                    System.out.println("Thời gian còn: " + currentTime + " giây");
+
+                    if (currentTime <= 0) {
+                        countdownTimer.stop();
+                        handleGameOver();
+                    }
+                }
+            });
+        }
+    }
+
+    public void stopTimer() {
+        if (countdownTimer != null && countdownTimer.isRunning()) {
+            countdownTimer.stop();
+        }
+    }
+
+    private void handleGameOver() {
+        javax.swing.JOptionPane.showMessageDialog(this, "Hết giờ! Bạn đã thua cuộc.", "Game Over", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public MainScreen(GameConfig config) {
         this.config = config;
         this.gameBoard = new PlayScreen(config);
@@ -37,6 +80,9 @@ public class MainScreen extends javax.swing.JFrame {
         setContentPane(new BackgroundMain());
         initComponents();
 
+
+        initTimer();
+        countdownTimer.start();
 
         // Khởi tạo bàn cờ
         //gameBoard.setPreferredSize(new java.awt.Dimension(700, 450));
@@ -85,6 +131,10 @@ public class MainScreen extends javax.swing.JFrame {
 
     // xử lý resert lại game mới.
     public void resertGame(GameConfig newConfig) {
+        if (countdownTimer != null) {
+            countdownTimer.stop();
+        }
+
         this.config = newConfig;
 
         int currentX = gameBoard.getX();
@@ -94,6 +144,9 @@ public class MainScreen extends javax.swing.JFrame {
         this.getContentPane().remove(gameBoard);
         // tạo bảng mới.
         gameBoard = new PlayScreen(config);
+
+        initTimer();
+        countdownTimer.start();
 
         //this.getContentPane().add(gameBoard);
         this.getContentPane().add(gameBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(currentX, currentY, 700, 450));
@@ -282,7 +335,7 @@ public class MainScreen extends javax.swing.JFrame {
     private void settingmainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingmainButtonActionPerformed
         // TODO add your handling code here:
         //Pause Setting = new Pause();
-        Pause pause = new Pause(this,config);
+        Pause pause = new Pause(this, config);
         pause.setVisible(true);
         // this.dispose();
     }//GEN-LAST:event_settingmainButtonActionPerformed

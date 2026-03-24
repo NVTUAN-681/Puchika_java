@@ -7,8 +7,6 @@ package com.mycompany.pikachu_master.User_Interface.Components;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
-import javax.swing.event.EventListenerList;
-import javax.swing.plaf.ComponentUI;
 
 /**
  *
@@ -24,15 +22,11 @@ public class RoundedIconButton extends JButton {
 
     private boolean selected = false;
     private Color selectBorderColor = Color.YELLOW;
-//    int x;
-//    int y;
-    
     
     public RoundedIconButton(ImageIcon icon, int radius) {
         super(icon); // Đặt hình ảnh
         this.cornerRadius = radius;
-//        this.x = x;
-//        this.y = y;
+
         // BẮT BUỘC: Làm cho nút không trong suốt và không vẽ nội dung mặc định của Swing
         setOpaque(false);
         setContentAreaFilled(false);
@@ -43,12 +37,7 @@ public class RoundedIconButton extends JButton {
         setHorizontalTextPosition(JButton.CENTER);
         setVerticalTextPosition(JButton.CENTER);
     }
-//    public int GetX(){ 
-//        return x;
-//    }
-//    public int GetY(){
-//        return y;
-//    }
+
     // --> SỬA TẠI ĐÂY 2: Thêm phương thức để thiết lập trạng thái được chọn
     public void setSelectedState(boolean selected) {
         this.selected = selected;

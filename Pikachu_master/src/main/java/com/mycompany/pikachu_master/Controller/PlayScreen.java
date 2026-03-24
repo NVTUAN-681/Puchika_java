@@ -141,8 +141,6 @@ public class PlayScreen extends JPanel implements ActionListener {
                 }
             }
         }
-//        r = clickedBtn.getX();
-//        c = clickedBtn.getY();
         if (r == -1 || c == -1) {
             return;
         }
@@ -199,6 +197,7 @@ public class PlayScreen extends JPanel implements ActionListener {
 
             HonorScreen honorScreen = new HonorScreen(main, config);
             honorScreen.setVisible(true);
+            main.stopTimer();
         }
     }
 }
