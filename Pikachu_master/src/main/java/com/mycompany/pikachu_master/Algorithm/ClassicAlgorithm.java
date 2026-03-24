@@ -341,40 +341,6 @@ public class ClassicAlgorithm implements IAlgorithm{
         return false;
     }
 
-//public boolean hasAnyMatch(Board board) {
-//    System.out.println("=== hasAnyMatch ===");
-//    System.out.println("Map keys: " + map.keySet());
-//    for (Integer key : map.keySet()) {
-//        System.out.print("Key " + key + ": ");
-//        for (Cell c : map.get(key)) {
-//            System.out.print("(" + c.getX() + "," + c.getY() + " status=" + c.isStatus() + " id=" + c.getId() + ") ");
-//        }
-//        System.out.println();
-//    }
-//    
-//    for (Integer key : map.keySet()) {
-//        List<Cell> cells = map.get(key);
-//        int size = map.get(key).size();
-//        for (int i = 0; i < size; i++) {
-//            if (cells.get(i).isStatus() == true) {
-//                Cell cellI = cells.get(i);
-//                for (int j = i + 1; j < size; j++) {
-//                    if (cells.get(j).isStatus() == true) {
-//                        Cell cellJ = cells.get(j);
-//                        System.out.println("Checking: (" + cellI.getX() + "," + cellI.getY() + ") vs (" + cellJ.getX() + "," + cellJ.getY() + ")");
-//                        if (checkPath(board, cellI, cellJ) == true) {
-//                            System.out.println("Found match!");
-//                            return true;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    System.out.println("No match found!");
-//    return false;
-//}
-
     @Override
     public CellPair findHint (Board board) {
         return new CellPair(board.getCell(list.getFirst().x, list.getFirst().y), 
@@ -390,18 +356,7 @@ public class ClassicAlgorithm implements IAlgorithm{
                     allCellsAvalible.add(board.getCell(i, j).getId());
                 }                
             }
-        }
-//            int count = 0;
-//            for (int i = 1; i <= board.getRows(); i++) {
-//                for (int j = 1; j <= board.getCols(); j++) {
-//                    if (board.getCell(i, j).isStatus()) {
-//                        count++;
-//                    }
-//                }
-//            }
-//            System.out.println("Count = " + count);
-//            System.out.println("allCellsAvalible = " + allCellsAvalible.size());
-        
+        }        
         do {            
             Collections.shuffle(allCellsAvalible);
             int index = 0;
@@ -435,58 +390,4 @@ public class ClassicAlgorithm implements IAlgorithm{
         c2.setStatus(false);
         board.setTotalCells(board.getTotalCells() - 2);
     }    
-
-//    public boolean checkPathfix(Board board, Cell c1, Cell c2) {
-//        list.clear();
-//        System.out.println("checkPath: c1=(" + c1.getX() + "," + c1.getY() + ") id=" + c1.getId() 
-//                         + " c2=(" + c2.getX() + "," + c2.getY() + ") id=" + c2.getId());
-//        if (c1.getId() != c2.getId()) {
-//            System.out.println("false id: " + c1.getId() + " != " + c2.getId());
-//            return false;
-//        }
-//        if (checkCoincident(c1, c2)) return false;
-//
-//        list.clear();
-//        boolean lx = checkLineX(board, c1.getX(), c1.getY(), c2.getX(), c2.getY(), c1.getY() < c2.getY());
-//        System.out.println("checkLineX: " + lx);
-//
-//        list.clear();
-//        boolean ly = checkLineY(board, c1.getX(), c1.getY(), c2.getX(), c2.getY(), c1.getX() < c2.getX());
-//        System.out.println("checkLineY: " + ly);
-//
-//        list.clear();
-//        boolean lxCheck = checkLX(board, c1.getX(), c1.getY(), c2.getX(), c2.getY());
-//        System.out.println("checkLX: " + lxCheck);
-//
-//        list.clear();
-//        boolean lyCheck = checkLY(board, c1.getX(), c1.getY(), c2.getX(), c2.getY());
-//        System.out.println("checkLY: " + lyCheck);
-//
-//        list.clear();
-//        boolean zx = checkZX(board, c1.getX(), c1.getY(), c2.getX(), c2.getY());
-//        System.out.println("checkZX: " + zx);
-//
-//        list.clear();
-//        boolean zy = checkZY(board, c1.getX(), c1.getY(), c2.getX(), c2.getY());
-//        System.out.println("checkZY: " + zy);
-//
-//        list.clear();
-//        boolean ux = checkUX(board, c1.getX(), c1.getY(), c2.getX(), c2.getY());
-//        System.out.println("checkUX: " + ux);
-//
-//        list.clear();
-//        boolean uy = checkUY(board, c1.getX(), c1.getY(), c2.getX(), c2.getY());
-//        System.out.println("checkUY: " + uy);
-//
-//        if (lx) { list.clear(); checkLineX(board, c1.getX(), c1.getY(), c2.getX(), c2.getY(), c1.getY() < c2.getY()); list.add(new Point(c2.getX(), c2.getY())); return true; }
-//        if (ly) { list.clear(); checkLineY(board, c1.getX(), c1.getY(), c2.getX(), c2.getY(), c1.getX() < c2.getX()); list.add(new Point(c2.getX(), c2.getY())); return true; }
-//        if (lxCheck) { list.clear(); checkLX(board, c1.getX(), c1.getY(), c2.getX(), c2.getY()); list.add(new Point(c2.getX(), c2.getY())); return true; }
-//        if (lyCheck) { list.clear(); checkLY(board, c1.getX(), c1.getY(), c2.getX(), c2.getY()); list.add(new Point(c2.getX(), c2.getY())); return true; }
-//        if (zx) { list.clear(); checkZX(board, c1.getX(), c1.getY(), c2.getX(), c2.getY()); list.add(new Point(c2.getX(), c2.getY())); return true; }
-//        if (zy) { list.clear(); checkZY(board, c1.getX(), c1.getY(), c2.getX(), c2.getY()); list.add(new Point(c2.getX(), c2.getY())); return true; }
-//        if (ux) { list.clear(); checkUX(board, c1.getX(), c1.getY(), c2.getX(), c2.getY()); list.add(new Point(c2.getX(), c2.getY())); return true; }
-//        if (uy) { list.clear(); checkUY(board, c1.getX(), c1.getY(), c2.getX(), c2.getY()); list.add(new Point(c2.getX(), c2.getY())); return true; }
-//
-//        return false;
-//    }
 }

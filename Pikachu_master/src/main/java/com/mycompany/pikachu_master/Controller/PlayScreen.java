@@ -44,13 +44,14 @@ public class PlayScreen extends JPanel implements ActionListener {
         this.cols = config.GetCols();
         this.timelimit = config.GetTimeLimit();
         this.tileSize = 55;
+        this.remainingTiles = this.rows * this.cols;
         if(config.GetLevel().equals("AFICA")){
             this.algorithm = new ClassicAlgorithm();
         }
         else if(config.GetLevel().equals("ASIAN")){
             this.algorithm = new MediumModeAlgorithm();
         }
-        this.remainingTiles = this.rows * this.cols;
+
         
         setLayout(new GridLayout(rows, cols, 0, 0)); 
         this.setPreferredSize(new Dimension(cols * tileSize, rows * tileSize));
@@ -75,22 +76,46 @@ public class PlayScreen extends JPanel implements ActionListener {
         }
     }
     
+//    private void updateAllButtons() {
+//    for (int i = 1; i <= this.rows; i++) {
+//        for (int j = 1; j <= this.cols; j++) {
+//            Cell cell = board.getCell(i, j);
+//            if (cell.isStatus()) {
+//                btnMatrix[i][j].setIcon(ImageLoad.getImage(cell.getId()));
+//                btnMatrix[i][j].setVisible(true);
+//            } else {
+//                btnMatrix[i][j].setVisible(false);
+//            }
+//            // Reset lại viền nếu có
+//            btnMatrix[i][j].setBorderPainted(false);
+//        }
+//    }
+//}
+
     private void updateAllButtons() {
     for (int i = 1; i <= this.rows; i++) {
         for (int j = 1; j <= this.cols; j++) {
             Cell cell = board.getCell(i, j);
+            RoundedIconButton btn = btnMatrix[i][j];
+            
             if (cell.isStatus()) {
-                btnMatrix[i][j].setIcon(ImageLoad.getImage(cell.getId()));
-                btnMatrix[i][j].setVisible(true);
+                // Cập nhật lại Icon vì sau khi dồn, ID tại vị trí (i,j) đã thay đổi
+                btn.setIcon(ImageLoad.getImage(cell.getId()));
+                btn.setVisible(true);
             } else {
-                btnMatrix[i][j].setVisible(false);
+                // Ô trống thì ẩn đi
+                btn.setVisible(false);
             }
-            // Reset lại viền nếu có
-            btnMatrix[i][j].setBorderPainted(false);
+            
+            // Quan trọng: Reset trạng thái chọn để tránh lỗi hiển thị viền vàng cũ
+            btn.setSelectedState(false);
         }
     }
+    // Vẽ lại giao diện sau khi thay đổi hàng loạt
+    this.revalidate();
+    this.repaint();
 }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         RoundedIconButton clickedBtn = (RoundedIconButton) e.getSource();
@@ -106,21 +131,20 @@ public class PlayScreen extends JPanel implements ActionListener {
                 }
             }
         }
+//        r = clickedBtn.getX();
+//        c = clickedBtn.getY();
         if (r == -1 || c == -1) {
             return;
         }
         Cell currentCell = board.getCell(r, c);
-
         if (!currentCell.isStatus()) {
             return;
         }
 
         if (firstClick  == null) {
             firstClick  = currentCell;
-            
             firstClickBtn = clickedBtn;
             clickedBtn.setSelectedState(true);
-
         } else {
             // Lấy nút đầu tiên để xử lý viền
             //RoundedIconButton firstBtn = btnMatrix[firstClick.getX()][firstClick.getY()];

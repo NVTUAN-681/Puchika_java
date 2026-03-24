@@ -85,7 +85,7 @@ public class HonorScreen extends javax.swing.JFrame {
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         // TODO add your handling code here:
-//        GameConfig config = new GameConfig(6, 5, 0, "");
+//        GameConfig config = new GameConfig(6, 5,0);
         main.resertGame(config);
         this.dispose();
     }//GEN-LAST:event_newButtonActionPerformed
