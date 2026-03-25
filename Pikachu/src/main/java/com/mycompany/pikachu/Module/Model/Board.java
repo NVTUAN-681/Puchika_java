@@ -72,13 +72,18 @@ public class Board {
         //System.out.println(a.getMap());
     }
     
-    public void initHardBoard(IAlgorithm a, int NoP) { // NoP (Number of Pokemons): số loại hình trên bảng
+    public void initHardBoard(IAlgorithm a, int NoP, boolean rocket) {
+    
+        // NoP (Number of Pokemons): số loại hình trên bảng
+        // rocket : biến xác nhận xem có cho tên lửa (Id = 1) vào màn chơi không
         
         ArrayList<Integer> list = new ArrayList<>();
         int halfElems = totalCells / 2;
         for (int i = 1; i < halfElems; i++) {
-            list.add(i % NoP);
-            list.add(i % NoP);
+            if(i != 1 || (i == 1 && rocket == false)) {
+                list.add(i % NoP);
+                list.add(i % NoP);
+            }
         }        
         
         do {
