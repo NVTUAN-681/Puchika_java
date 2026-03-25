@@ -7,7 +7,7 @@ package com.mycompany.pikachu_master.User_Interface.Screens;
 import com.mycompany.pikachu_master.Controller.GameConfig;
 import com.mycompany.pikachu_master.Controller.PlayScreen;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundPause;
-
+import com.mycompany.pikachu_master.User_Interface.Screens.MainScreen;
 /**
  *
  * @author laptop
@@ -151,6 +151,7 @@ public class Pause extends javax.swing.JFrame {
     private void Choi_tiepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Choi_tiepActionPerformed
         // TODO add your handling code here:    
         this.setVisible(false);
+        main.countdownTimer.start();
     }//GEN-LAST:event_Choi_tiepActionPerformed
 
     private void Van_moiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Van_moiActionPerformed
@@ -165,6 +166,7 @@ public class Pause extends javax.swing.JFrame {
         StartScreen pika = new StartScreen(config);
         pika.setLevel(config.GetLevel());
         pika.setVisible(true);
+        main.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_exitmenuButtonActionPerformed
 

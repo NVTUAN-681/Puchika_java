@@ -6,26 +6,26 @@ package com.mycompany.pikachu_master.User_Interface.Screens;
 
 import com.mycompany.pikachu_master.Controller.GameConfig;
 
-
-
 /**
  *
  * @author laptop
  */
-public class HonorScreen extends javax.swing.JFrame {
+public class LossScreen extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(HonorScreen.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LossScreen.class.getName());
 
     /**
-     * Creates new form HonorScreen
+     * Creates new form LossScreen
      */
     
     MainScreen main;
     GameConfig config;
-    public HonorScreen(MainScreen main, GameConfig config) {
+    
+    public LossScreen(MainScreen main, GameConfig config) {
         initComponents();
         this.main = main;
         this.config = config;
+        
     }
 
     /**
@@ -38,61 +38,63 @@ public class HonorScreen extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        exitButton = new javax.swing.JButton();
-        newButton = new javax.swing.JButton();
         scoreLabel = new javax.swing.JLabel();
+        retryButton = new javax.swing.JButton();
+        exitButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        scoreLabel.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        scoreLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        scoreLabel.setText("ÔI THÔI CHẾC!!!");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 43;
+        gridBagConstraints.ipady = 37;
+        gridBagConstraints.insets = new java.awt.Insets(121, 74, 0, 76);
+        getContentPane().add(scoreLabel, gridBagConstraints);
+
+        retryButton.setText("VÁN MỚI");
+        retryButton.setPreferredSize(new java.awt.Dimension(150, 30));
+        retryButton.addActionListener(this::retryButtonActionPerformed);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.ipady = 7;
+        gridBagConstraints.insets = new java.awt.Insets(70, 74, 0, 76);
+        getContentPane().add(retryButton, gridBagConstraints);
 
         exitButton.setText("THOÁT");
         exitButton.setPreferredSize(new java.awt.Dimension(150, 30));
         exitButton.addActionListener(this::exitButtonActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 78;
+        gridBagConstraints.ipadx = 158;
         gridBagConstraints.ipady = 7;
         gridBagConstraints.insets = new java.awt.Insets(6, 74, 58, 76);
         getContentPane().add(exitButton, gridBagConstraints);
-
-        newButton.setText("VÁN MỚI");
-        newButton.setPreferredSize(new java.awt.Dimension(150, 30));
-        newButton.addActionListener(this::newButtonActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 70;
-        gridBagConstraints.ipady = 7;
-        gridBagConstraints.insets = new java.awt.Insets(70, 74, 0, 76);
-        getContentPane().add(newButton, gridBagConstraints);
-
-        scoreLabel.setFont(new java.awt.Font("Segoe UI", 3, 48)); // NOI18N
-        scoreLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        scoreLabel.setText("9999");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 118;
-        gridBagConstraints.ipady = 29;
-        gridBagConstraints.insets = new java.awt.Insets(121, 74, 0, 76);
-        getContentPane().add(scoreLabel, gridBagConstraints);
 
         setSize(new java.awt.Dimension(314, 408));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
+    private void retryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retryButtonActionPerformed
         // TODO add your handling code here:
        // config = new GameConfig(6, 5,150, "");
        main.setEnabled(true);
        main.resertGame(config);
-//       main.resertGame(config);
-       this.dispose();
-    }//GEN-LAST:event_newButtonActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_retryButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         // TODO add your handling code here:
@@ -124,12 +126,12 @@ public class HonorScreen extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        //java.awt.EventQueue.invokeLater(() -> new HonorScreen().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new LossScreen().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton exitButton;
-    private javax.swing.JButton newButton;
+    private javax.swing.JButton retryButton;
     private javax.swing.JLabel scoreLabel;
     // End of variables declaration//GEN-END:variables
 }

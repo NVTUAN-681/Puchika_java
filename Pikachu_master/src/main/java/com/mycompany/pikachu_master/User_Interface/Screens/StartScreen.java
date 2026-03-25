@@ -200,7 +200,7 @@ public class StartScreen extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        GameConfig config = new GameConfig(1, 2,150 , "EUROPE");
+        GameConfig config = new GameConfig(2, 2, 5, "Start");
     /* Create and display the form */
 //    GameConfig config = new GameConfig(1,2,10,"EUROPE");
     java.awt.EventQueue.invokeLater (() -> new StartScreen(config).setVisible(true));

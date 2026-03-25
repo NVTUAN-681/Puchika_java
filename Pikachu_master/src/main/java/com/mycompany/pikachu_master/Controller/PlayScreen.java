@@ -10,7 +10,6 @@ import com.mycompany.pikachu_master.Algorithm.MediumModeAlgorithm;
 import com.mycompany.pikachu_master.Model.Board;
 import com.mycompany.pikachu_master.Model.Cell;
 import com.mycompany.pikachu_master.Model.CellPair;
-import com.mycompany.pikachu_master.User_Interface.Components.ButtonMain;
 
 import com.mycompany.pikachu_master.User_Interface.Components.RoundedIconButton;
 import com.mycompany.pikachu_master.User_Interface.Screens.HonorScreen;
@@ -54,6 +53,9 @@ public class PlayScreen extends JPanel implements ActionListener {
         }
         else if(config.GetLevel().equals("ASIAN")){
             this.algorithm = new MediumModeAlgorithm();
+        }
+        else if(config.GetLevel().equals("Start")){
+            this.algorithm = new ClassicAlgorithm();
         }
 
         
@@ -114,16 +116,45 @@ public class PlayScreen extends JPanel implements ActionListener {
     public void findHint(){
         CellPair hintPair = algorithm.findHint(board);
         
-        Cell    c1 = hintPair.getCell1();
-        Cell    c2 = hintPair.getCell2();
-        
-        RoundedIconButton btn1 = btnMatrix[c1.getX()][c1.getY()];
-        RoundedIconButton btn2 = btnMatrix[c2.getX()][c2.getY()];
-        
-        btn1.setSelectedState(true);
-        btn2.setSelectedState(true);
+        if (hintPair != null) {
+            Cell c1 = hintPair.getCell1();
+            Cell c2 = hintPair.getCell2();
+            
+            RoundedIconButton btn1 = btnMatrix[c1.getX()][c1.getY()];
+            RoundedIconButton btn2 = btnMatrix[c2.getX()][c2.getY()];
+            
+            // Gọi hàm nhấp nháy
+            blinkHint(btn1, btn2);
+        } else {
+            System.out.println("Khong con cap nao de an.");
+            // shuffle(); // Mở comment này nếu muốn hết đường là tự động đảo
+        }
     }
     
+    // Hiệu ứng nhấp nháy 2 ô
+    private void blinkHint(RoundedIconButton b1, RoundedIconButton b2) {
+        javax.swing.Timer blinkTimer = new javax.swing.Timer(300, new java.awt.event.ActionListener() {
+            int count = 0;
+            boolean isOn = false;
+
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                isOn = !isOn; // Đảo trạng thái (Bật/Tắt)
+                b1.setSelectedState(isOn);
+                b2.setSelectedState(isOn);
+                count++;
+                
+                // Nháy 6 nhịp (tầm gần 2 giây) thì dừng hẳn
+                if (count >= 6) {
+                    ((javax.swing.Timer) e.getSource()).stop();
+                    b1.setSelectedState(false);
+                    b2.setSelectedState(false);
+                }
+            }
+        });
+        blinkTimer.start(); 
+    }
+    // ---> KẾT THÚC SỬA <---
     
     
     @Override
@@ -194,10 +225,11 @@ public class PlayScreen extends JPanel implements ActionListener {
         java.awt.Window windown = javax.swing.SwingUtilities.getWindowAncestor(this);
         if(windown instanceof MainScreen) {
             MainScreen main = (MainScreen) windown;
-
-            HonorScreen honorScreen = new HonorScreen(main, config);
-            honorScreen.setVisible(true);
             main.stopTimer();
+            main.setEnabled(false);
+            HonorScreen honorScreen = new HonorScreen(main, config);
+            honorScreen.setAlwaysOnTop(true);
+            honorScreen.setVisible(true);           
         }
     }
 }
