@@ -98,7 +98,7 @@ public class LevelScreen extends javax.swing.JFrame {
     private void europeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_europeButtonActionPerformed
         // TODO add your handling code here:
         start.setLevel("EUROPE");
-        start.UpdateLevel(2, 4, 5, "EUROPE");
+        start.UpdateLevel(2, 4, 50, "EUROPE");
         start.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_europeButtonActionPerformed
