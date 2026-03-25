@@ -72,6 +72,42 @@ public class Board {
         //System.out.println(a.getMap());
     }
     
+    public void initHardBoard(IAlgorithm a, int NoP) {
+        
+        ArrayList<Integer> list = new ArrayList<>();
+        int halfElems = totalCells / 2;
+        for (int i = 1; i < halfElems; i++) {
+            list.add(i % NoP);
+            list.add(i % NoP);
+        }        
+        
+        do {
+            Collections.shuffle(list);
+            int index = 0;
+            for (int i = 0; i <= this.rows + 1; i++) {
+                for (int j = 0; j <= this.cols + 1; j++) {
+                    if (i == 0 || j == 0 || i == this.rows + 1 || j == this.cols + 1) {
+                        matrix[i][j] = new Cell(i, j, 0, false);
+                    } else {
+                        matrix[i][j] = new Cell(i, j, list.get(index++), true);
+                    }
+                }
+            }
+            
+            a.getMap().clear();
+            for (int i = 1; i <= this.rows; i++) {
+                for (int j = 1; j <= this.cols; j++) {
+                    if (a.getMap().containsKey(matrix[i][j].getId()) == false) {
+                        a.getMap().put(matrix[i][j].getId(), new ArrayList<>());
+                    }
+                    a.getMap().get(matrix[i][j].getId()).add(matrix[i][j]);
+                }
+            }
+
+        } while(a.hasAnyMatch(this) == false);
+        //System.out.println(a.getMap());
+    }
+    
     public Cell getCell(int r, int c) {
         return matrix[r][c];
     }
