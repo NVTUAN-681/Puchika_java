@@ -21,7 +21,7 @@ public class Pikachu {
 
     public static void main(String[] args) {
         //System.out.println("Hello World!");
-        Board b = new Board(6, 6);
+        Board b = new Board(6, 6, true);
         IAlgorithm a = new MediumModeAlgorithm();
         System.out.println("Hello world!");
         b.initBoard(a, 9);

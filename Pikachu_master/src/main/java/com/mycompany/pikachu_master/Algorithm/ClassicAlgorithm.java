@@ -48,7 +48,7 @@ public class ClassicAlgorithm implements IAlgorithm{
         }
         
         int row = x1;
-        int left = y1 < y2 ? y1 : y2;
+	int left = y1 < y2 ? y1 : y2;
 	int right = y1 > y2 ? y1 : y2;
         list.add(new Point(x1, y1));
         if (left_right == true) {
@@ -194,8 +194,8 @@ public class ClassicAlgorithm implements IAlgorithm{
             return false;
         }
         
-        int right = y1 < y2 ? y1 : y2;
-        int left = y1 > y2 ? y1 : y2;
+        int right = y1 > y2 ? y1 : y2;
+        int left = y1 < y2 ? y1 : y2;
         
         for (int i = right + 1; i <= board.getCols() + 1; i++) { // U ngang hở trái
             if (checkLineX(board, x1, y1, x1, i + 1, true)) {
@@ -343,6 +343,7 @@ public class ClassicAlgorithm implements IAlgorithm{
 
     @Override
     public CellPair findHint (Board board) {
+        hasAnyMatch(board);
         return new CellPair(board.getCell(list.getFirst().x, list.getFirst().y), 
                 board.getCell(list.getLast().x, list.getLast().y));
     }
@@ -356,7 +357,8 @@ public class ClassicAlgorithm implements IAlgorithm{
                     allCellsAvalible.add(board.getCell(i, j).getId());
                 }                
             }
-        }        
+        }
+
         do {            
             Collections.shuffle(allCellsAvalible);
             int index = 0;
@@ -389,5 +391,34 @@ public class ClassicAlgorithm implements IAlgorithm{
         c1.setStatus(false);
         c2.setStatus(false);
         board.setTotalCells(board.getTotalCells() - 2);
-    }    
+        
+        if (c1.getId() == 1) {
+            // Tìm tất cả các id còn lại (không phải tên lửa)
+            List<Integer> availableIds = new ArrayList<>();
+            for (Integer key : map.keySet()) {
+                if (key != 1) { // không phải tên lửa
+                    List<Cell> cells = map.get(key);
+                    if (cells.stream().anyMatch(Cell::isStatus)) {
+                        availableIds.add(key);
+                    }
+                }
+            }
+
+            if (availableIds.isEmpty()) return;
+
+            // Chọn ngẫu nhiên 1 id
+            int randomId = availableIds.get((int)(Math.random() * availableIds.size()));
+            List<Cell> pair = map.get(randomId);
+
+            // Lấy 2 ô còn active của id đó
+            Cell randomC1 = pair.stream().filter(Cell::isStatus).findFirst().get();
+            Cell randomC2 = pair.stream().filter(Cell::isStatus).skip(1).findFirst().get();
+
+            list.clear();
+            randomC1.setStatus(false);
+            randomC2.setStatus(false);
+            board.setTotalCells(board.getTotalCells() - 2);
+        }
+    }   
+
 }

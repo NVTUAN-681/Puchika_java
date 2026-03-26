@@ -42,7 +42,7 @@ public class PlayScreen extends JPanel implements ActionListener {
         this.config = config;
         this.rows = config.GetRows();
         this.cols = config.GetCols();
-        board = new Board(this.rows, this.cols);
+        board = new Board(this.rows, this.cols, true);
         this.timelimit = config.GetTimeLimit();
         this.tileSize = 55;
         this.remainingTiles = this.rows * this.cols;
@@ -59,7 +59,7 @@ public class PlayScreen extends JPanel implements ActionListener {
         }
         else if(config.GetLevel().equals("ASIAN")){
             this.algorithm = new MediumModeAlgorithm();
-            this.NoP = 21;
+            this.NoP = 18;
             board.initHardBoard(algorithm, NoP, true);
         }
         else if(config.GetLevel().equals("Start")){

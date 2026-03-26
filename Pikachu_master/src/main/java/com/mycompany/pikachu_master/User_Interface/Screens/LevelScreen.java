@@ -37,6 +37,7 @@ public class LevelScreen extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         exitButton3 = new javax.swing.JButton();
         africaButton = new javax.swing.JButton();
@@ -44,30 +45,59 @@ public class LevelScreen extends javax.swing.JFrame {
         europeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         exitButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         exitButton3.setText("<");
         exitButton3.addActionListener(this::exitButton3ActionPerformed);
-        getContentPane().add(exitButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 33;
+        gridBagConstraints.ipady = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
+        getContentPane().add(exitButton3, gridBagConstraints);
 
         africaButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         africaButton.setText("AFRICA");
         africaButton.setPreferredSize(new java.awt.Dimension(220, 50));
         africaButton.addActionListener(this::africaButtonActionPerformed);
-        getContentPane().add(africaButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 280, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 139;
+        gridBagConstraints.ipady = 23;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(240, 60, 270, 0);
+        getContentPane().add(africaButton, gridBagConstraints);
 
         asianButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         asianButton.setText("ASIAN ");
         asianButton.setPreferredSize(new java.awt.Dimension(220, 50));
         asianButton.addActionListener(this::asianButtonActionPerformed);
-        getContentPane().add(asianButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 280, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 141;
+        gridBagConstraints.ipady = 23;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(240, 0, 270, 80);
+        getContentPane().add(asianButton, gridBagConstraints);
 
         europeButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         europeButton.setText("EUROPE  ");
         europeButton.setPreferredSize(new java.awt.Dimension(220, 50));
         europeButton.addActionListener(this::europeButtonActionPerformed);
-        getContentPane().add(europeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 280, -1, -1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 126;
+        gridBagConstraints.ipady = 23;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(240, 0, 270, 0);
+        getContentPane().add(europeButton, gridBagConstraints);
 
         setSize(new java.awt.Dimension(814, 608));
         setLocationRelativeTo(null);
@@ -90,7 +120,7 @@ public class LevelScreen extends javax.swing.JFrame {
     private void asianButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asianButtonActionPerformed
         // TODO add your handling code here:
         start.setLevel("ASIAN");
-        start.UpdateLevel(10, 10, 150, "ASIAN");
+        start.UpdateLevel(18, 18, 150, "ASIAN");
         start.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_asianButtonActionPerformed

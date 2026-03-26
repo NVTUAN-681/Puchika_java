@@ -28,9 +28,19 @@ public class Board {
         this.totalCells = rows * cols;        
     }
     
-    public Board(int rows, int cols) {
-        this.rows = rows;
-        this.cols = cols;
+    public Board(int a, int b, boolean fin) {
+        // Biến fin dùng để xác định xem tham số truyền vào là số
+        // hàng, cột cố định hay khoảng giá trị random số hàng, cột
+        if (fin) {
+            this.rows = a;
+            this.cols = b;            
+        } else {
+            do {            
+                Random rand = new Random();
+                this.rows = rand.nextInt(a, b + 1);
+                this.cols = rand.nextInt(a, b + 1);
+            } while (this.rows * this.cols % 2 != 0);
+        }
         this.matrix = new Cell[rows+ 2][cols + 2];
         this.totalCells = rows * cols;
     }
@@ -79,10 +89,10 @@ public class Board {
         
         ArrayList<Integer> list = new ArrayList<>();
         int halfElems = totalCells / 2;
-        for (int i = 1; i < halfElems; i++) {
-            if(i != 1 || (i == 1 && rocket == false)) {
-                list.add(i % NoP);
-                list.add(i % NoP);
+        for (int i = 1; i <= halfElems; i++) {
+            if(i != 1 || (i == 1 && rocket == true)) {
+                list.add(i % NoP + 1);
+                list.add(i % NoP + 1);
             }
         }        
         
