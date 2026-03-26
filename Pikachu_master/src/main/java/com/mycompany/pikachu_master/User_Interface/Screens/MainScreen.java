@@ -161,8 +161,8 @@ public class MainScreen extends javax.swing.JFrame {
                 int screenWidth = getContentPane().getWidth();
                 int screenHeight = getContentPane().getHeight();
 
-                int boardWidth = 700;
-                int boardHeight = 450;
+                int boardWidth = 1400;
+                int boardHeight = 800;
 
                 int newX = (screenWidth - boardWidth) / 2;
 

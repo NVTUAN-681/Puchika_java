@@ -120,7 +120,7 @@ public class LevelScreen extends javax.swing.JFrame {
     private void asianButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asianButtonActionPerformed
         // TODO add your handling code here:
         start.setLevel("ASIAN");
-        start.UpdateLevel(18, 18, 150, "ASIAN");
+        start.UpdateLevel(18, 18, 360, "ASIAN");
         start.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_asianButtonActionPerformed
