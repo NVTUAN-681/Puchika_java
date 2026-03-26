@@ -69,6 +69,11 @@ public class MainScreen extends javax.swing.JFrame {
         }
     }
     
+    public void resumeTimer() {
+        if (countdownTimer != null && !countdownTimer.isRunning() && currentTime > 0 ) {
+            countdownTimer.start();
+        }
+    }
     // ---> THÊM HÀM NÀY VÀO ĐỂ TRANG TRÍ THANH TOP BAR <---
     private void styleTopBar() {
         // 1. Chỉnh màu chữ: Tiêu đề màu Trắng, Chỉ số màu Vàng Gold
@@ -368,8 +373,10 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void settingmainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingmainButtonActionPerformed
         // TODO add your handling code here:
-        //Pause Setting = new Pause();
-        Pause pause = new Pause(this, config);
+        //Pause Setting = new PauseScreen();
+        this.stopTimer();
+        PauseScreen pause = new PauseScreen(this, config);
+        //this.setUndecorated(true);
         pause.setVisible(true);
         countdownTimer.stop();
         // this.dispose();

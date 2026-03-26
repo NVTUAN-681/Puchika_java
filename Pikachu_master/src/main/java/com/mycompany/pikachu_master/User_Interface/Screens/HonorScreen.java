@@ -26,6 +26,15 @@ public class HonorScreen extends javax.swing.JFrame {
         initComponents();
         this.main = main;
         this.config = config;
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        
+        // Bắt sự kiện bấm nút X
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                main.resumeTimer(); // Báo màn hình chính đếm thời gian tiếp
+            }
+        });
     }
 
     /**

@@ -34,7 +34,7 @@ public class PlayScreen extends JPanel implements ActionListener {
     private final RoundedIconButton[][] btnMatrix;
     private Cell firstClick = null;
     private GameConfig config;
-    private int rows, cols, timelimit, tileSize;
+    private int rows, cols, timelimit, tileSize, NoP;
     private int remainingTiles;
     private RoundedIconButton firstClickBtn;
 
@@ -42,20 +42,30 @@ public class PlayScreen extends JPanel implements ActionListener {
         this.config = config;
         this.rows = config.GetRows();
         this.cols = config.GetCols();
+        board = new Board(this.rows, this.cols);
         this.timelimit = config.GetTimeLimit();
         this.tileSize = 55;
         this.remainingTiles = this.rows * this.cols;
+        
         if(config.GetLevel().equals("AFICA")){
             this.algorithm = new ClassicAlgorithm();
+            this.NoP = 12;
+            board.initBoard(algorithm, NoP);
         }
         else if(config.GetLevel().equals("EUROPE")){
             this.algorithm = new ClassicAlgorithm();
+            this.NoP = 16;
+            board.initHardBoard(algorithm, NoP, true);
         }
         else if(config.GetLevel().equals("ASIAN")){
             this.algorithm = new MediumModeAlgorithm();
+            this.NoP = 21;
+            board.initHardBoard(algorithm, NoP, true);
         }
         else if(config.GetLevel().equals("Start")){
             this.algorithm = new ClassicAlgorithm();
+            this.NoP = 6;
+            board.initBoard(algorithm, NoP);
         }
 
         
@@ -66,8 +76,8 @@ public class PlayScreen extends JPanel implements ActionListener {
 
         this.setOpaque(false); // Dòng này làm cho Panel không còn màu nền xám nữa
         this.setBackground(new Color(0, 0, 0, 0)); // Đảm bảo màu nền hoàn toàn trong suốt
-        board = new Board(config.GetRows(), config.GetCols()); 
-        board.initBoard(algorithm, 20); // Tạo số ngẫu nhiên từ thuật toán chính
+//        board = new Board(config.GetRows(), config.GetCols()); 
+//        board.initBoard(algorithm, 20); // Tạo số ngẫu nhiên từ thuật toán chính
         btnMatrix = new RoundedIconButton[rows + 2][cols + 2]; // Bao gồm cả viền trống nếu cần
 
         for (int i = 1; i <= rows; i++) {
