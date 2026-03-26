@@ -25,6 +25,7 @@ public class PauseScreen extends javax.swing.JFrame {
     public PauseScreen(MainScreen main, GameConfig config) {
         setContentPane(new BackgroundPause());
         initComponents();
+        this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.main = main;
         this.config = config;
         

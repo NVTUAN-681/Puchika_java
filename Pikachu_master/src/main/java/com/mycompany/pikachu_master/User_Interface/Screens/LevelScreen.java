@@ -24,6 +24,7 @@ public class LevelScreen extends javax.swing.JFrame {
     public LevelScreen(StartScreen start) {
         setContentPane(new BackgroundStartScreen());
         initComponents();
+        this.setMinimumSize(new java.awt.Dimension(800, 600));
         this.start = start;
 //        GameConfig Level = new GameConfig(ERROR, ABORT, HEIGHT);
     }
@@ -120,7 +121,7 @@ public class LevelScreen extends javax.swing.JFrame {
     private void asianButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asianButtonActionPerformed
         // TODO add your handling code here:
         start.setLevel("ASIAN");
-        start.UpdateLevel(18, 18, 150, "ASIAN");
+        start.UpdateLevel(10, 20, 250, "ASIAN");
         start.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_asianButtonActionPerformed
@@ -128,7 +129,7 @@ public class LevelScreen extends javax.swing.JFrame {
     private void europeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_europeButtonActionPerformed
         // TODO add your handling code here:
         start.setLevel("EUROPE");
-        start.UpdateLevel(8, 8, 90, "EUROPE");
+        start.UpdateLevel(7, 10, 90, "EUROPE");
         start.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_europeButtonActionPerformed
