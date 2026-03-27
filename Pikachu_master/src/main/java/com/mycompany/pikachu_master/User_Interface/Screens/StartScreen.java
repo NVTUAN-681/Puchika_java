@@ -37,8 +37,7 @@ public class StartScreen extends javax.swing.JFrame {
         levelButton.setText("CẤP ĐỘ: " + level);
     }
     
-    
-    
+       
     public void UpdateLevel(int rows, int cols, int TimeLimit, String Level){
         this.config = new GameConfig(rows, cols, TimeLimit, Level);
         levelButton.setText("CẤP ĐỘ: " + Level);

@@ -40,7 +40,7 @@ public class PathOverlay extends JComponent{
         if (clearTimer != null && clearTimer.isRunning()) {
             clearTimer.stop();
         }
-        clearTimer = new Timer(400, e -> {
+        clearTimer = new Timer(50, e -> {
             this.pathGrid = null;
             repaint();
         });
