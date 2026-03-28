@@ -7,6 +7,7 @@ package com.mycompany.pikachu_master.Controller;
 import com.mycompany.pikachu_master.Algorithm.ClassicAlgorithm;
 import com.mycompany.pikachu_master.Algorithm.IAlgorithm;
 import com.mycompany.pikachu_master.Algorithm.MediumModeAlgorithm;
+import com.mycompany.pikachu_master.Effect.RocketAnimation;
 import com.mycompany.pikachu_master.Model.Board;
 import com.mycompany.pikachu_master.Model.Cell;
 import com.mycompany.pikachu_master.Model.CellPair;
@@ -40,14 +41,10 @@ public class PlayScreen extends JPanel implements ActionListener {
     private int remainingTiles;
     private RoundedIconButton firstClickBtn;
 
-    // --- BIẾN CHO CHẾ ĐỘ ASIAN (TÀNG HÌNH) ---
-    private javax.swing.Timer asianTimer;
-    private int asianTick = 0;
-    private boolean isHiddenPhase = false;
-
-    // --- BIẾN KHOÁ CHUỘT KHI ĐANG HIỆN HÌNH SAI ---
+    // gọi hàm asianmodel;
+    private AsianModel asianModel;
     private boolean isProcessingMismatch = false;
-
+    
     public PlayScreen(GameConfig config) {
         this.config = config;
         this.rows = config.GetRows();
@@ -72,22 +69,9 @@ public class PlayScreen extends JPanel implements ActionListener {
             board.initHardBoard(algorithm, NoP, true);
 
             // --- KHỞI TẠO ĐỒNG HỒ TÀNG HÌNH CHO ASIAN ---
-            asianTimer = new javax.swing.Timer(1000, new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    asianTick++;
-                    if (!isHiddenPhase && asianTick >= 10) {
-                        isHiddenPhase = true;
-                        asianTick = 0;
-                        updateAllButtons();
-                    } else if (isHiddenPhase && asianTick >= 5) {
-                        isHiddenPhase = false;
-                        asianTick = 0;
-                        updateAllButtons();
-                    }
-                }
-            });
-            asianTimer.start();
+            asianModel = new AsianModel(this);
+            asianModel.start();
+            
         } else if (config.GetLevel().equals("Start")) {
             this.algorithm = new ClassicAlgorithm();
             this.NoP = 6;
@@ -127,7 +111,9 @@ public class PlayScreen extends JPanel implements ActionListener {
         }
     }
 
-    private void updateAllButtons() {
+    public void updateAllButtons() {
+        boolean isHiddenPhase = asianModel != null && asianModel.isHiddenPhase();
+        
         for (int i = 1; i <= this.rows; i++) {
             for (int j = 1; j <= this.cols; j++) {
                 Cell cell = board.getCell(i, j);
@@ -161,9 +147,8 @@ public class PlayScreen extends JPanel implements ActionListener {
         algorithm.shuffle(board);
 
         // --- ÉP HIỆN HÌNH LẠI KHI ĐẢO MAP ---
-        if (config.GetLevel().equals("ASIAN")) {
-            isHiddenPhase = false;
-            asianTick = 0;
+        if (config.GetLevel().equals("ASIAN") &&asianModel != null) {
+           asianModel.reset();
         }
 
         updateAllButtons();
@@ -241,12 +226,15 @@ public class PlayScreen extends JPanel implements ActionListener {
         if (!currentCell.isStatus()) {
             return;
         }
+        
+        boolean isHiddenPhase = asianModel != null && asianModel.isHiddenPhase();
        
 // lần click đầu tiên
         if (firstClick == null) {
             firstClick = currentCell;
             firstClickBtn = clickedBtn;
             clickedBtn.setSelectedState(true);
+            //boolean isHiddenPhase;
 
             // --- CHO XEM LÉN KHI CLICK (Đang tàng hình) ---
             if (isHiddenPhase) {
@@ -299,17 +287,15 @@ public class PlayScreen extends JPanel implements ActionListener {
                 
                 if (matchedId == ROCKET_ITEM_ID) {
                     // Nếu là tên lửa, gọi hàm hoạt họa bay tới đập cặp khác
-                    triggerRocketEffect(firstBtn, clickedBtn);
-                } else {
+                    RocketAnimation.triggerRocketEffect(this, firstBtn, clickedBtn);
                     // Nếu là Pikachu bình thường, chạy logic check thắng / xáo trộn như cũ
                     if (isBoardEmpty()) {
                         showHonorScreen();
                     } else {
                         if (algorithm.hasAnyMatch(board) == false) {
                             algorithm.shuffle(board);
-                            if (config.GetLevel().equals("ASIAN")) {
-                                isHiddenPhase = false;
-                                asianTick = 0;
+                            if (config.GetLevel().equals("ASIAN") && asianModel != null) {
+                               asianModel.reset();
                             }
                             updateAllButtons();
                         }
@@ -348,7 +334,7 @@ public class PlayScreen extends JPanel implements ActionListener {
     }
 
     // Hàm quét thực tế: Còn ô nào sống không?
-    private boolean isBoardEmpty() {
+    public boolean isBoardEmpty() {
         for (int i = 1; i <= this.rows; i++) {
             for (int j = 1; j <= this.cols; j++) {
                 if (board.getCell(i, j).isStatus()) {
@@ -359,7 +345,7 @@ public class PlayScreen extends JPanel implements ActionListener {
         return true; // Bảng đã trống trơn 100%
     }
 
-    private void showHonorScreen() {
+    public void showHonorScreen() {
         java.awt.Window windown = javax.swing.SwingUtilities.getWindowAncestor(this);
         if (windown instanceof MainScreen) {
             MainScreen main = (MainScreen) windown;
@@ -372,114 +358,20 @@ public class PlayScreen extends JPanel implements ActionListener {
     }
 
     // --- 3 HÀM ĐỂ MAIN SCREEN ĐIỀU KHIỂN TÀNG HÌNH KHI PAUSE/RESTART ---
+    public void setProcessingMismatch(boolean b) { this.isProcessingMismatch = b; }
+    public IAlgorithm getAlgorithm() { return this.algorithm; }
+    public Board getBoard() { return this.board; }
+    public RoundedIconButton[][] getBtnMatrix() { return this.btnMatrix; }
+
     public void pauseAsianTimer() {
-        if (asianTimer != null && asianTimer.isRunning()) {
-            asianTimer.stop();
-        }
+        if (asianModel != null) asianModel.pause();
     }
 
     public void resumeAsianTimer() {
-        if (asianTimer != null && !asianTimer.isRunning() && config.GetLevel().equals("ASIAN")) {
-            asianTimer.start();
-        }
+        if (asianModel != null && config.GetLevel().equals("ASIAN")) asianModel.resume();
     }
 
     public void stopAsianTimer() {
-        if (asianTimer != null) {
-            asianTimer.stop();
-        }
-    }
-////XU LY BAN TEN LUA HOAT HOA////
-    
-    public void triggerRocketEffect(RoundedIconButton startBtn1, RoundedIconButton startBtn2) {
-        // 1. Tìm 1 cặp Pikachu ngẫu nhiên trên bàn để làm mục tiêu
-        CellPair targetPair = algorithm.findHint(board);
-        if (targetPair == null) {
-            if (isBoardEmpty()) showHonorScreen();
-            return; 
-        }
-
-        Cell tCell1 = targetPair.getCell1();
-        Cell tCell2 = targetPair.getCell2();
-        RoundedIconButton targetBtn1 = btnMatrix[tCell1.getX()][tCell1.getY()];
-        RoundedIconButton targetBtn2 = btnMatrix[tCell2.getX()][tCell2.getY()];
-
-        java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(this);
-        if (!(window instanceof MainScreen)) return;
-        MainScreen main = (MainScreen) window;
-
-        
-        int ROCKET_ID = 1; // ID của item tên lửa
-        javax.swing.ImageIcon originalIcon = ImageLoad.getImage(ROCKET_ID); 
-        java.awt.Image img = originalIcon.getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH);
-        javax.swing.ImageIcon rocketIcon = new javax.swing.ImageIcon(img);
-
-        javax.swing.JLabel rocket1 = new javax.swing.JLabel(rocketIcon);
-        javax.swing.JLabel rocket2 = new javax.swing.JLabel(rocketIcon);
-        rocket1.setSize(40, 40);
-        rocket2.setSize(40, 40);
-
-        // 3. Tính toán tọa độ xuất phát (Từ 2 ô tên lửa vừa ăn)
-        java.awt.Point s1 = javax.swing.SwingUtilities.convertPoint(this, startBtn1.getLocation(), main.getContentPane());
-        java.awt.Point s2 = javax.swing.SwingUtilities.convertPoint(this, startBtn2.getLocation(), main.getContentPane());
-        
-        // Tính toán tọa độ đích (Đến 2 ô mục tiêu)
-        java.awt.Point t1 = javax.swing.SwingUtilities.convertPoint(this, targetBtn1.getLocation(), main.getContentPane());
-        java.awt.Point t2 = javax.swing.SwingUtilities.convertPoint(this, targetBtn2.getLocation(), main.getContentPane());
-
-        rocket1.setLocation(s1.x, s1.y);
-        rocket2.setLocation(s2.x, s2.y);
-
-        main.getLayeredPane().add(rocket1, javax.swing.JLayeredPane.DRAG_LAYER);
-        main.getLayeredPane().add(rocket2, javax.swing.JLayeredPane.DRAG_LAYER);
-
-        // 4. Bật Timer để tạo hoạt họa bay
-        isProcessingMismatch = true; // Khóa không cho bấm bậy bạ lúc tên lửa đang bay
-        int totalFrames = 35; // khung hình bay
-        int delayPerFrame = 15; // Mỗi khung 15 mili-giây
-
-        javax.swing.Timer animTimer = new javax.swing.Timer(delayPerFrame, null);
-        animTimer.addActionListener(new java.awt.event.ActionListener() {
-            int currentFrame = 0;
-
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                currentFrame++;
-                float progress = (float) currentFrame / totalFrames;
-
-                // Cập nhật vị trí tên lửa bay dần đến mục tiêu
-                rocket1.setLocation((int) (s1.x + (t1.x - s1.x) * progress), (int) (s1.y + (t1.y - s1.y) * progress));
-                rocket2.setLocation((int) (s2.x + (t2.x - s2.x) * progress), (int) (s2.y + (t2.y - s2.y) * progress));
-
-                // Khi tên lửa chạm đích
-                if (currentFrame >= totalFrames) {
-                    animTimer.stop();
-                    
-                    // Xóa ảnh tên lửa khỏi màn hình
-                    main.getLayeredPane().remove(rocket1);
-                    main.getLayeredPane().remove(rocket2);
-                    main.getLayeredPane().repaint();
-
-                    // Tiêu diệt cặp mục tiêu
-                    algorithm.removePair(tCell1, tCell2, board);
-                    targetBtn1.setVisible(false);
-                    targetBtn2.setVisible(false);
-                    targetBtn1.setSelectedState(false);
-                    targetBtn2.setSelectedState(false);
-                    updateAllButtons();
-
-                    isProcessingMismatch = false; // Mở khóa chuột
-
-                    // Kiểm tra thắng hoặc hết đường đi
-                    if (isBoardEmpty()) {
-                        showHonorScreen();
-                    } else if (!algorithm.hasAnyMatch(board)) {
-                        shuffle();
-                        updateAllButtons();
-                    }
-                }
-            }
-        });
-        animTimer.start();
+        if (asianModel != null) asianModel.stop();
     }
 }

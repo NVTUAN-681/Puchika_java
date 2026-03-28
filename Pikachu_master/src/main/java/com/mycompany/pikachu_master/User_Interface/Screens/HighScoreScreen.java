@@ -4,27 +4,33 @@
  */
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
-import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
+import java.awt.event.WindowEvent;
 
 /**
  *
  * @author laptop
  */
 public class HighScoreScreen extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(HighScoreScreen.class.getName());
 
     /**
      * Creates new form HighScoreScreen
      */
-    
     StartScreen start;
+
     public HighScoreScreen(StartScreen start) {
-        //setContentPane(new BackgroundMain());
         initComponents();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.setMinimumSize(new java.awt.Dimension(300, 400));
-        //this.setMaximumSize(new java.awt.Dimension(300, 400));
         this.start = start;
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                start.setVisible(true);
+            }
+        });
+
     }
 
     /**
