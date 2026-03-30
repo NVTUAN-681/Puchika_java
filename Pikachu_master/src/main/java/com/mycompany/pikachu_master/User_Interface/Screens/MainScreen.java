@@ -26,7 +26,7 @@ public class MainScreen extends javax.swing.JFrame {
      */
     GameConfig config;
     PlayScreen gameBoard;
-    
+
     int hintCount;
     int shuffleCount;
 
@@ -68,12 +68,13 @@ public class MainScreen extends javax.swing.JFrame {
             countdownTimer.stop();
         }
     }
-    
+
     public void resumeTimer() {
-        if (countdownTimer != null && !countdownTimer.isRunning() && currentTime > 0 ) {
+        if (countdownTimer != null && !countdownTimer.isRunning() && currentTime > 0) {
             countdownTimer.start();
         }
     }
+
     // ---> THÊM HÀM NÀY VÀO ĐỂ TRANG TRÍ THANH TOP BAR <---
     private void styleTopBar() {
         // 1. Chỉnh màu chữ: Tiêu đề màu Trắng, Chỉ số màu Vàng Gold
@@ -94,13 +95,13 @@ public class MainScreen extends javax.swing.JFrame {
             public void paintBorder(java.awt.Component c, java.awt.Graphics g, int x, int y, int width, int height) {
                 java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
                 g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                
+
                 // Vẽ nền đen trong suốt (Alpha = 180)
-                g2.setColor(new java.awt.Color(20, 20, 20, 180)); 
+                g2.setColor(new java.awt.Color(20, 20, 20, 180));
                 g2.fillRoundRect(x + 2, y + 2, width - 4, height - 8, 25, 25);
-                
+
                 // Vẽ viền Vàng
-                g2.setColor(valueColor); 
+                g2.setColor(valueColor);
                 g2.setStroke(new java.awt.BasicStroke(2f));
                 g2.drawRoundRect(x + 2, y + 2, width - 4, height - 8, 25, 25);
                 g2.dispose();
@@ -109,7 +110,7 @@ public class MainScreen extends javax.swing.JFrame {
             @Override
             public java.awt.Insets getBorderInsets(java.awt.Component c) {
                 // Đẩy các component bên trong lùi vào một chút để không đè lên viền
-                return new java.awt.Insets(5, 15, 5, 15); 
+                return new java.awt.Insets(5, 15, 5, 15);
             }
         });
 
@@ -125,6 +126,44 @@ public class MainScreen extends javax.swing.JFrame {
 
         // 4. Ẩn cái đường kẻ ngang mặc định đi cho đỡ chướng mắt
         jSeparator1.setVisible(false);
+
+        // 5. "Độ" lại giao diện cho cái JSlider (Thanh thời gian)
+        Timeline.setUI(new javax.swing.plaf.basic.BasicSliderUI(Timeline) {
+            @Override
+            public void paintTrack(java.awt.Graphics g) {
+                java.awt.Graphics2D g2d = (java.awt.Graphics2D) g;
+                g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+
+                java.awt.Rectangle t = trackRect;
+
+                // Vẽ cái nền của thanh thời gian (Màu xám đen)
+                g2d.setColor(new java.awt.Color(50, 50, 50, 200));
+                int trackHeight = 16; // Độ dày của thanh
+                g2d.fillRoundRect(t.x, t.y + (t.height - trackHeight) / 2, t.width, trackHeight, trackHeight, trackHeight);
+
+                // Tính toán độ dài thời gian còn lại
+                int fillWidth = 0;
+                if (Timeline.getMaximum() > 0) {
+                    fillWidth = (int) (t.width * ((double) Timeline.getValue() / Timeline.getMaximum()));
+                }
+
+                // Đổi màu cảnh báo nếu sắp hết giờ (dưới 20%)
+                if (((double) Timeline.getValue() / Timeline.getMaximum()) < 0.2) {
+                    g2d.setColor(new java.awt.Color(255, 50, 50)); // Đỏ lè
+                } else {
+                    g2d.setColor(new java.awt.Color(0, 200, 100)); // Xanh lá cây mát mắt
+                }
+
+                // Vẽ phần thời gian còn lại
+                g2d.fillRoundRect(t.x, t.y + (t.height - trackHeight) / 2, fillWidth, trackHeight, trackHeight, trackHeight);
+            }
+
+            @Override
+            public void paintThumb(java.awt.Graphics g) {
+                // Giấu luôn cái cục kéo tròn tròn đi, vì đây là thanh thời gian chứ không phải chỗ chỉnh âm lượng
+            }
+        });
+
     }
     // ---> KẾT THÚC HÀM TRANG TRÍ <---
 
@@ -143,52 +182,135 @@ public class MainScreen extends javax.swing.JFrame {
         this.shuffleCount = 3;
         setContentPane(new BackgroundMain());
         initComponents();
-
+        this.setMinimumSize(new java.awt.Dimension(800, 600));
+        
+        // ---> THÊM 3 DÒNG NÀY ĐỂ KÍCH HOẠT LỚP VẼ ĐƯỜNG ĐI <---
+        com.mycompany.pikachu_master.User_Interface.Components.PathOverlay pathOverlay = new com.mycompany.pikachu_master.User_Interface.Components.PathOverlay();
+        this.setGlassPane(pathOverlay);
+        pathOverlay.setVisible(true);
+        
         Timeline.setOpaque(false);
         //Timeline.setUI(new com.mycompany.pikachu_master.User_Interface.Components.CustomTimelineUI(Timeline));//Timeline.setUI(new com.mycompany.pikachu_master.User_Interface.Components.);
         Timeline.setEnabled(false);
         styleTopBar();
         initTimer();
         countdownTimer.start();
-        this.getContentPane().add(gameBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 700, 450));
+        this.getContentPane().setLayout(null);
+        this.getContentPane().add(gameBoard);
+        //this.getContentPane().add(gameBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 700, 450));
         //this.getContentPane().setLayout(new java.awt.GridBagLayout());
         //this.getContentPane().add(gameBoard);
 
         //căn chỉnh vị trí.
+        // Căn chỉnh vị trí và kích thước linh động cho bảng Pokemon
+        // Căn chỉnh vị trí và Kích thước (Scale) động cho TOÀN BỘ màn hình
         this.addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent evt) {
-                int screenWidth = getContentPane().getWidth();
-                int screenHeight = getContentPane().getHeight();
-
-                int boardWidth = 1400;
-                int boardHeight = 800;
-
-                int newX = (screenWidth - boardWidth) / 2;
-
-                int newY = ((screenHeight - 80) - boardHeight) / 2 + 80;
-
-                if (newX < 0) {
-                    newX = 0;
-                }
-                if (newY < 80) {
-                    newY = 80;
-                }
-
-                getContentPane().add(gameBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(newX, newY, boardWidth, boardHeight));
-                int topBarX = (screenWidth - topBarPanel.getWidth()) / 2;
-                if (topBarX < 0) {
-                    topBarX = 0;
-                }
-                getContentPane().add(topBarPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(topBarX, 10, topBarPanel.getWidth(), topBarPanel.getHeight()));
-                // --------------------------------------------------
-
-                getContentPane().revalidate();
+                updateGameLayout();
             }
         });
+        
+        javax.swing.SwingUtilities.invokeLater(()->{
+            updateGameLayout();
+        });
+    }
 
-        this.revalidate();
-        this.repaint();
+    // Hàm dùng chung để tự động tính toán và phóng to/thu nhỏ mọi thứ
+    public void updateGameLayout() {
+        int screenWidth = getContentPane().getWidth();
+        int screenHeight = getContentPane().getHeight();
+
+        if (screenWidth == 0 || screenHeight == 0) {
+            return; // Tránh lỗi chia 0 lúc mới khởi tạo
+        }
+        double scaleRatio = (double) screenWidth / 800.0;
+        if (scaleRatio < 1.0) {
+            scaleRatio = 1.0;
+        }
+
+        int newTopBarHeight = (int) (80 * scaleRatio);
+
+        int newFontSize = (int) (14 * scaleRatio);
+        java.awt.Font newFont = new java.awt.Font("Segoe UI", java.awt.Font.BOLD, newFontSize);
+        levelLabel.setFont(newFont);
+        level_point.setFont(newFont);
+        PointLabel.setFont(newFont);
+        point.setFont(newFont);
+        coin.setFont(newFont);
+        coinLabel.setFont(newFont);
+
+        int newTimelineWidth = (int) (240 * scaleRatio);
+        int newTimelineHeight = (int) (30 * scaleRatio);
+        Timeline.setPreferredSize(new java.awt.Dimension(newTimelineWidth, newTimelineHeight));
+
+        int newBtnSize = (int) (30 * scaleRatio);
+        java.awt.Dimension newBtnDim = new java.awt.Dimension(newBtnSize, newBtnSize);
+        swapButton.setPreferredSize(newBtnDim);
+        timeButton.setPreferredSize(newBtnDim);
+        hintButton.setPreferredSize(newBtnDim);
+
+        int newSettingSize = (int) (45 * scaleRatio);
+        settingmainButton.setPreferredSize(new java.awt.Dimension(newSettingSize, newSettingSize));
+
+        swapButton.setFont(swapButton.getFont().deriveFont((float) (10f * scaleRatio)));
+        timeButton.setFont(timeButton.getFont().deriveFont((float) (12f * scaleRatio)));
+        hintButton.setFont(hintButton.getFont().deriveFont((float) (16f * scaleRatio)));
+        settingmainButton.setFont(settingmainButton.getFont().deriveFont((float) (20f * scaleRatio)));
+
+        int topBarWidth = (int) (800 * scaleRatio);
+        if (topBarWidth > screenWidth) {
+            topBarWidth = screenWidth;
+        }
+        int topBarX = (screenWidth - topBarWidth) / 2;
+        //getContentPane().add(topBarPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(topBarX, 10, topBarWidth, newTopBarHeight));
+        topBarPanel.setBounds(topBarX, 10, topBarWidth, newTopBarHeight);
+        
+        // ==========================================
+        // PHẦN 2: SCALE BẢNG POKEMON (GAME BOARD)
+        // ==========================================
+        int padding = (int) (40 * scaleRatio); // Lề
+
+        // Không gian khả dụng tối đa cho gameBoard (Cái hộp chứa)
+        int maxBoardWidth = screenWidth - (padding * 2);
+        int maxBoardHeight = screenHeight - newTopBarHeight - (padding * 2);
+
+        // Lấy số hàng và cột từ config
+        int numRows = config.GetRows();
+        int numCols = config.GetCols();
+
+        // Tính toán kích thước lớn nhất có thể của MỘT ô Pikachu vuông
+        // Nó phải vừa với cả chiều rộng tối đa chia cho số cột VÀ chiều cao tối đa chia cho số hàng.
+        int maxTileSize_H = maxBoardWidth / numCols;
+        int maxTileSize_V = maxBoardHeight / numRows;
+
+        // Kích thước ô cuối cùng là giá trị nhỏ nhất trong 2 giá trị trên, để luôn đảm bảo là hình vuông
+        int finalTileSize = Math.min(maxTileSize_H, maxTileSize_V);
+
+        // Cập nhật kích thước thực tế của gameBoard theo tỷ lệ đan khít
+        // Bảng không được phình to quá mức nữa, để không bị méo.
+        int boardWidth = finalTileSize * numCols;
+        int boardHeight = finalTileSize * numRows;
+
+        // Đặt giới hạn tối thiểu (giữ nguyên logic cũ)
+        if (boardWidth < 400) {
+            boardWidth = 400;
+        }
+        if (boardHeight < 300) {
+            boardHeight = 300;
+        }
+
+        // Tọa độ luôn nằm chính giữa khoảng trống còn lại
+        int newX = (screenWidth - boardWidth) / 2;
+        int newY = newTopBarHeight + (screenHeight - newTopBarHeight - boardHeight) / 2;
+
+        //getContentPane().add(gameBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(newX, newY, boardWidth, boardHeight));
+        gameBoard.setBounds(newX, newY, boardWidth, boardHeight);
+        
+        topBarPanel.revalidate();
+        topBarPanel.repaint();
+        getContentPane().revalidate();
+        getContentPane().repaint();
     }
 
     // xử lý resert lại game mới.
@@ -198,22 +320,22 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         this.config = newConfig;
-
-        int currentX = gameBoard.getX();
-        int currentY = gameBoard.getY();
+        
+        this.hintCount = 3;
+        this.shuffleCount = 3;
 
         //xóa bảng hiện tại.
+        if(gameBoard != null){
         this.getContentPane().remove(gameBoard);
+        }
         // tạo bảng mới.
         gameBoard = new PlayScreen(config);
+        this.getContentPane().add(gameBoard);
 
         initTimer();
         countdownTimer.start();
 
-        //this.getContentPane().add(gameBoard);
-        this.getContentPane().add(gameBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(currentX, currentY, 700, 450));
-        this.revalidate();
-        this.repaint();
+        updateGameLayout();
     }
 
     /**
@@ -224,6 +346,7 @@ public class MainScreen extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         topBarPanel = new javax.swing.JPanel();
         coin = new javax.swing.JLabel();
@@ -241,34 +364,91 @@ public class MainScreen extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(800, 600));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         topBarPanel.setOpaque(false);
         topBarPanel.setPreferredSize(new java.awt.Dimension(800, 80));
+        topBarPanel.setLayout(new java.awt.GridBagLayout());
 
         coin.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         coin.setText("VÀNG:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 16, 30, 0);
+        topBarPanel.add(coin, gridBagConstraints);
 
         levelLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         levelLabel.setText("CẤP ĐỘ: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.ipadx = -21;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
+        topBarPanel.add(levelLabel, gridBagConstraints);
 
         level_point.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         level_point.setText("12");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.ipadx = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 8, 30, 0);
+        topBarPanel.add(level_point, gridBagConstraints);
 
         PointLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         PointLabel.setText("ĐIỂM:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 30, 0);
+        topBarPanel.add(PointLabel, gridBagConstraints);
 
         point.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         point.setText("110");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 9, 30, 0);
+        topBarPanel.add(point, gridBagConstraints);
 
         Timeline.setToolTipText("");
         Timeline.setEnabled(false);
         Timeline.setPreferredSize(new java.awt.Dimension(200, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipadx = 204;
+        gridBagConstraints.ipady = -20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 38, 0, 0);
+        topBarPanel.add(Timeline, gridBagConstraints);
 
         swapButton.setFont(new java.awt.Font("Segoe UI Emoji", 0, 10)); // NOI18N
         swapButton.setText("🔁");
         swapButton.setPreferredSize(new java.awt.Dimension(30, 30));
         swapButton.addActionListener(this::swapButtonActionPerformed);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.ipady = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 18, 30, 0);
+        topBarPanel.add(swapButton, gridBagConstraints);
 
         timeButton.setFont(new java.awt.Font("Segoe UI Emoji", 0, 12)); // NOI18N
         timeButton.setText("kk");
@@ -279,88 +459,62 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
         timeButton.addActionListener(this::timeButtonActionPerformed);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 6;
+        gridBagConstraints.ipady = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(20, 18, 30, 0);
+        topBarPanel.add(timeButton, gridBagConstraints);
 
         hintButton.setFont(new java.awt.Font("Segoe UI Emoji", 0, 16)); // NOI18N
         hintButton.setText("🔍");
         hintButton.setPreferredSize(new java.awt.Dimension(30, 30));
         hintButton.addActionListener(this::hintButtonActionPerformed);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 4;
+        gridBagConstraints.ipadx = 2;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(19, 18, 0, 0);
+        topBarPanel.add(hintButton, gridBagConstraints);
 
         coinLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         coinLabel.setText("9999");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridheight = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 4, 30, 0);
+        topBarPanel.add(coinLabel, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 260;
+        gridBagConstraints.ipady = 20;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 34, 0, 0);
+        topBarPanel.add(jLabel1, gridBagConstraints);
 
         settingmainButton.setFont(new java.awt.Font("Segoe UI Emoji", 0, 20)); // NOI18N
         settingmainButton.setText("⚙");
         settingmainButton.setAlignmentY(0.0F);
         settingmainButton.setPreferredSize(new java.awt.Dimension(45, 45));
         settingmainButton.addActionListener(this::settingmainButtonActionPerformed);
-
-        javax.swing.GroupLayout topBarPanelLayout = new javax.swing.GroupLayout(topBarPanel);
-        topBarPanel.setLayout(topBarPanelLayout);
-        topBarPanelLayout.setHorizontalGroup(
-            topBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(topBarPanelLayout.createSequentialGroup()
-                .addComponent(levelLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
-                .addComponent(level_point, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(PointLabel)
-                .addGap(9, 9, 9)
-                .addComponent(point)
-                .addGap(16, 16, 16)
-                .addComponent(coin)
-                .addGap(4, 4, 4)
-                .addGroup(topBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(topBarPanelLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(topBarPanelLayout.createSequentialGroup()
-                        .addComponent(coinLabel)
-                        .addGap(38, 38, 38)
-                        .addComponent(Timeline, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(timeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(swapButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(hintButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(settingmainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        topBarPanelLayout.setVerticalGroup(
-            topBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(topBarPanelLayout.createSequentialGroup()
-                .addGroup(topBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(topBarPanelLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(levelLabel))
-                    .addGroup(topBarPanelLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(level_point))
-                    .addGroup(topBarPanelLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(PointLabel))
-                    .addGroup(topBarPanelLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(point))
-                    .addGroup(topBarPanelLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(coin))
-                    .addGroup(topBarPanelLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(topBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(coinLabel)
-                            .addComponent(Timeline, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(topBarPanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(topBarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(swapButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(timeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(hintButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(settingmainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(37, 37, 37))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 3;
+        gridBagConstraints.ipadx = 7;
+        gridBagConstraints.ipady = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(18, 18, 0, 49);
+        topBarPanel.add(settingmainButton, gridBagConstraints);
 
         getContentPane().add(topBarPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -384,6 +538,13 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void timeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timeButtonActionPerformed
         // TODO add your handling code here:
+        currentTime += 15;
+        if(currentTime > maxTime){
+        currentTime = maxTime;
+        }
+        
+        Timeline.setValue(currentTime);
+        System.out.println("cong them 15 giay");
     }//GEN-LAST:event_timeButtonActionPerformed
 
     private void timeButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_timeButtonMouseClicked
@@ -392,22 +553,20 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void swapButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_swapButtonActionPerformed
         // TODO add your handling code here:
-        if(this.shuffleCount>=0){
-            this.shuffleCount --;
+        if (this.shuffleCount >= 0) {
+            this.shuffleCount--;
             gameBoard.shuffle();
-        }
-        else{
+        } else {
 //          làm mình làm mẩy ở đây đi :))  
         }
     }//GEN-LAST:event_swapButtonActionPerformed
 
     private void hintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hintButtonActionPerformed
         // TODO add your handling code here:
-        if(this.hintCount >=0){
-            this.hintCount --;
+        if (this.hintCount >= 0) {
+            this.hintCount--;
             gameBoard.findHint();
-        }
-        else{
+        } else {
 //            ở đây thì làm trò mèo nhá 🐧
         }
     }//GEN-LAST:event_hintButtonActionPerformed

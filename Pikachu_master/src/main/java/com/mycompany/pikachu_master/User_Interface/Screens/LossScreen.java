@@ -23,6 +23,7 @@ public class LossScreen extends javax.swing.JFrame {
     
     public LossScreen(MainScreen main, GameConfig config) {
         initComponents();
+        this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.main = main;
         this.config = config;
         
@@ -32,7 +33,11 @@ public class LossScreen extends javax.swing.JFrame {
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                main.resumeTimer(); // Báo màn hình chính đếm thời gian tiếp
+               main.setEnabled(true);
+                main.dispose(); 
+                StartScreen pika = new StartScreen(config);
+                pika.setLevel(config.GetLevel());
+                pika.setVisible(true); // Báo màn hình chính đếm thời gian tiếp
             }
         });
         

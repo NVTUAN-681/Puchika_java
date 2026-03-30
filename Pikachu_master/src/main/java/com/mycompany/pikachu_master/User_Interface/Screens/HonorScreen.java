@@ -13,26 +13,31 @@ import com.mycompany.pikachu_master.Controller.GameConfig;
  * @author laptop
  */
 public class HonorScreen extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(HonorScreen.class.getName());
 
     /**
      * Creates new form HonorScreen
      */
-    
     MainScreen main;
     GameConfig config;
+
     public HonorScreen(MainScreen main, GameConfig config) {
         initComponents();
+        this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.main = main;
         this.config = config;
         this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-        
+
         // Bắt sự kiện bấm nút X
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                main.resumeTimer(); // Báo màn hình chính đếm thời gian tiếp
+                main.setEnabled(true);
+                main.dispose(); 
+                StartScreen pika = new StartScreen(config);
+                pika.setLevel(config.GetLevel());
+                pika.setVisible(true); // Báo màn hình chính đếm thời gian tiếp
             }
         });
     }
@@ -96,11 +101,10 @@ public class HonorScreen extends javax.swing.JFrame {
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         // TODO add your handling code here:
-       // config = new GameConfig(6, 5,150, "");
-       main.setEnabled(true);
-       main.resertGame(config);
-//       main.resertGame(config);
-       this.dispose();
+        // config = new GameConfig(6, 5,150, "");
+        main.setEnabled(true);
+        main.resertGame(config);
+        this.dispose();
     }//GEN-LAST:event_newButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
@@ -108,6 +112,7 @@ public class HonorScreen extends javax.swing.JFrame {
         StartScreen pika = new StartScreen(config);
         pika.setLevel(config.GetLevel());
         pika.setVisible(true);
+        main.dispose();
         this.dispose();
     }//GEN-LAST:event_exitButtonActionPerformed
 

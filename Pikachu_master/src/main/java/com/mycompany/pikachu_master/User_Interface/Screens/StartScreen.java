@@ -28,6 +28,7 @@ public class StartScreen extends javax.swing.JFrame {
         setContentPane(new BackgroundStartScreen());
         ImageLoad.loadAllImages(); // tải ảnh trước khi bắt đầu trò chơi
         initComponents();
+        this.setMinimumSize(new java.awt.Dimension(800, 600));
  // Gọi trước khi vào các màn hình chơi
 //        initComponents();
     }
@@ -36,8 +37,7 @@ public class StartScreen extends javax.swing.JFrame {
         levelButton.setText("CẤP ĐỘ: " + level);
     }
     
-    
-    
+       
     public void UpdateLevel(int rows, int cols, int TimeLimit, String Level){
         this.config = new GameConfig(rows, cols, TimeLimit, Level);
         levelButton.setText("CẤP ĐỘ: " + Level);
@@ -151,7 +151,7 @@ public class StartScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         HighScoreScreen Max = new HighScoreScreen(this);
         Max.setVisible(true);
-        this.setVisible(false);
+       //this.setVisible(false);
     }//GEN-LAST:event_maxButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed

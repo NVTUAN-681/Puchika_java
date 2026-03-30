@@ -22,6 +22,8 @@ public class HighScoreScreen extends javax.swing.JFrame {
     public HighScoreScreen(StartScreen start) {
         //setContentPane(new BackgroundMain());
         initComponents();
+        this.setMinimumSize(new java.awt.Dimension(300, 400));
+        //this.setMaximumSize(new java.awt.Dimension(300, 400));
         this.start = start;
     }
 
@@ -35,60 +37,58 @@ public class HighScoreScreen extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        exitButton1 = new javax.swing.JButton();
-        max_point = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        exitButton5 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(300, 400));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        exitButton1.setText("<");
-        exitButton1.setAutoscrolls(true);
-        exitButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        exitButton1.setPreferredSize(new java.awt.Dimension(50, 30));
-        exitButton1.addActionListener(this::exitButton1ActionPerformed);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-        gridBagConstraints.ipadx = 32;
-        gridBagConstraints.ipady = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        getContentPane().add(exitButton1, gridBagConstraints);
-
-        max_point.setFont(new java.awt.Font("Segoe UI", 1, 50)); // NOI18N
-        max_point.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        max_point.setText("9999");
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 3, 48)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("9999");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 59;
-        gridBagConstraints.ipady = 34;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(195, 275, 0, 0);
-        getContentPane().add(max_point, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 28;
+        gridBagConstraints.ipady = 46;
+        gridBagConstraints.insets = new java.awt.Insets(84, 24, 0, 0);
+        getContentPane().add(jLabel2, gridBagConstraints);
 
-        jLabel1.setPreferredSize(new java.awt.Dimension(800, 600));
+        exitButton5.setText("<");
+        exitButton5.setPreferredSize(new java.awt.Dimension(50, 30));
+        exitButton5.addActionListener(this::exitButton5ActionPerformed);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 27;
+        gridBagConstraints.ipady = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        getContentPane().add(exitButton5, gridBagConstraints);
+
+        jLabel1.setPreferredSize(new java.awt.Dimension(300, 400));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 3;
-        gridBagConstraints.ipadx = 800;
-        gridBagConstraints.ipady = 600;
+        gridBagConstraints.ipadx = 300;
+        gridBagConstraints.ipady = 400;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         getContentPane().add(jLabel1, gridBagConstraints);
 
-        setSize(new java.awt.Dimension(814, 608));
+        setSize(new java.awt.Dimension(314, 408));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void exitButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButton1ActionPerformed
+    private void exitButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButton5ActionPerformed
         // TODO add your handling code here:
         start.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_exitButton1ActionPerformed
+    }//GEN-LAST:event_exitButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -116,8 +116,8 @@ public class HighScoreScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton exitButton1;
+    private javax.swing.JButton exitButton5;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel max_point;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
