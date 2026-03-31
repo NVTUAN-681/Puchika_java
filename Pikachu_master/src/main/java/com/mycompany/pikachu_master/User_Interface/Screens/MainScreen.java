@@ -27,56 +27,11 @@ public class MainScreen extends javax.swing.JFrame {
      * @param config
      */
     GameConfig config;
-    PlayScreen gameBoard;
+    PlayScreen play;
     LevelType level;
 
     int hintCount;
     int shuffleCount;
-
-    public javax.swing.Timer countdownTimer;
-    private int maxTime;
-    private int currentTime;
-
-    private void initTimer(LevelType level) {
-        maxTime = level.getTimeLimit();
-        if (maxTime <= 0) {
-            maxTime = 120; // 120 giây mặc định nếu timeLimit <= 0
-        }
-        currentTime = maxTime;
-        Timeline.setMaximum(maxTime);
-        Timeline.setMinimum(0);
-        Timeline.setValue(maxTime);
-
-        if (countdownTimer == null) {
-            countdownTimer = new javax.swing.Timer(1000, new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    currentTime--;
-                    Timeline.setValue(currentTime);
-
-                    // In ra console để bạn dễ theo dõi thời gian thực
-                    System.out.println("Thoi gian con: " + currentTime + " giay");
-
-                    if (currentTime <= 0) {
-                        countdownTimer.stop();
-                        handleGameOver();
-                    }
-                }
-            });
-        }
-    }
-
-    public void stopTimer() {
-        if (countdownTimer != null && countdownTimer.isRunning()) {
-            countdownTimer.stop();
-        }
-    }
-
-    public void resumeTimer() {
-        if (countdownTimer != null && !countdownTimer.isRunning() && currentTime > 0) {
-            countdownTimer.start();
-        }
-    }
 
     // ---> THÊM HÀM NÀY VÀO ĐỂ TRANG TRÍ THANH TOP BAR <---
     private void styleTopBar() {
@@ -170,14 +125,16 @@ public class MainScreen extends javax.swing.JFrame {
     }
 
     public MainScreen(GameConfig config, LevelType level) {
+        initComponents();
         this.config = config;
         this.level = level;
-        this.gameBoard = new PlayScreen(config);
+        this.play = new PlayScreen(config);
         this.hintCount = 3;
         this.shuffleCount = 3;
         setContentPane(new BackgroundMain());
         initComponents();
         this.setMinimumSize(new java.awt.Dimension(800, 600));
+        play.initTimer(this.Timeline);
         
         // ---> THÊM 3 DÒNG NÀY ĐỂ KÍCH HOẠT LỚP VẼ ĐƯỜNG ĐI <---
         PathOverlay pathOverlay = new PathOverlay();
@@ -187,13 +144,8 @@ public class MainScreen extends javax.swing.JFrame {
         Timeline.setOpaque(false);
         Timeline.setEnabled(false);
         styleTopBar();
-        initTimer(level);
-        countdownTimer.start();
         this.getContentPane().setLayout(null);
-        this.getContentPane().add(gameBoard);
-        //this.getContentPane().add(gameBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, 700, 450));
-        //this.getContentPane().setLayout(new java.awt.GridBagLayout());
-        //this.getContentPane().add(gameBoard);
+        this.getContentPane().add(play);
 
         //căn chỉnh vị trí.
         // Căn chỉnh vị trí và kích thước linh động cho bảng Pokemon
@@ -265,7 +217,7 @@ public class MainScreen extends javax.swing.JFrame {
         // ==========================================
         int padding = (int) (40 * scaleRatio); // Lề
 
-        // Không gian khả dụng tối đa cho gameBoard (Cái hộp chứa)
+        // Không gian khả dụng tối đa cho play (Cái hộp chứa)
         int maxBoardWidth = screenWidth - (padding * 2);
         int maxBoardHeight = screenHeight - newTopBarHeight - (padding * 2);
 
@@ -280,7 +232,7 @@ public class MainScreen extends javax.swing.JFrame {
         // Kích thước ô cuối cùng là giá trị nhỏ nhất trong 2 giá trị trên, để luôn đảm bảo là hình vuông
         int finalTileSize = Math.min(maxTileSize_H, maxTileSize_V);
 
-        // Cập nhật kích thước thực tế của gameBoard theo tỷ lệ đan khít
+        // Cập nhật kích thước thực tế của play theo tỷ lệ đan khít
         // Bảng không được phình to quá mức nữa, để không bị méo.
         int boardWidth = finalTileSize * numCols;
         int boardHeight = finalTileSize * numRows;
@@ -297,8 +249,8 @@ public class MainScreen extends javax.swing.JFrame {
         int newX = (screenWidth - boardWidth) / 2;
         int newY = newTopBarHeight + (screenHeight - newTopBarHeight - boardHeight) / 2;
 
-        //getContentPane().add(gameBoard, new org.netbeans.lib.awtextra.AbsoluteConstraints(newX, newY, boardWidth, boardHeight));
-        gameBoard.setBounds(newX, newY, boardWidth, boardHeight);
+        //getContentPane().add(play, new org.netbeans.lib.awtextra.AbsoluteConstraints(newX, newY, boardWidth, boardHeight));
+        play.setBounds(newX, newY, boardWidth, boardHeight);
         
         topBarPanel.revalidate();
         topBarPanel.repaint();
@@ -308,24 +260,20 @@ public class MainScreen extends javax.swing.JFrame {
 
     // xử lý resert lại game mới.
     public void resertGame(GameConfig newConfig, LevelType level) {
-        if (countdownTimer != null) {
-            countdownTimer.stop();
-        }
 
         this.config = newConfig;
         this.hintCount = 3;
         this.shuffleCount = 3;
 
         //xóa bảng hiện tại.
-        if(gameBoard != null){
-        this.getContentPane().remove(gameBoard);
+        if(play != null){
+        this.getContentPane().remove(play);
         }
         // tạo bảng mới.
-        gameBoard = new PlayScreen(config);
-        this.getContentPane().add(gameBoard);
+        play = new PlayScreen(config);
+        this.getContentPane().add(play);
+        play.initTimer(Timeline);
 
-        initTimer(level);
-        countdownTimer.start();
         updateGameLayout(level);
     }
 
@@ -500,22 +448,16 @@ public class MainScreen extends javax.swing.JFrame {
     private void settingmainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingmainButtonActionPerformed
         // TODO add your handling code here:
         //Pause Setting = new PauseScreen();
-        this.stopTimer();
-        PauseScreen pause = new PauseScreen(this, config, level);
-        //this.setUndecorated(true);
+        play.stopTimer();
+        PauseScreen pause = new PauseScreen(this, config, level, play);
         pause.setVisible(true);
-        countdownTimer.stop();
+        play.countdownTimer.stop();
         // this.dispose();
     }//GEN-LAST:event_settingmainButtonActionPerformed
 
     private void timeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timeButtonActionPerformed
-        // TODO add your handling code here:
-        currentTime += 15;
-        if(currentTime > maxTime){
-        currentTime = maxTime;
-        }
-        
-        Timeline.setValue(currentTime);
+//        // TODO add your handling code here:
+        play.addTimer(15);
         System.out.println("cong them 15 giay");
     }//GEN-LAST:event_timeButtonActionPerformed
 
@@ -527,7 +469,7 @@ public class MainScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (this.hintCount >= 0) {
             this.hintCount--;
-            gameBoard.findHint();
+            play.findHint();
         } else {
 //            ở đây thì làm trò mèo nhá 🐧
         }
@@ -538,7 +480,7 @@ public class MainScreen extends javax.swing.JFrame {
         
         if (this.shuffleCount >= 0) {
             this.shuffleCount--;
-            gameBoard.shuffle();
+            play.shuffle();
         } else {
 //          làm mình làm mẩy ở đây đi :))  
         }

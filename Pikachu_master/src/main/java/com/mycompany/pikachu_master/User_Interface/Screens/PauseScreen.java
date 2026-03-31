@@ -23,14 +23,16 @@ public class PauseScreen extends javax.swing.JFrame {
     MainScreen main;
     GameConfig config;
     LevelType level;
+    PlayScreen play;
 
-    public PauseScreen(MainScreen main, GameConfig config, LevelType level) {
+    public PauseScreen(MainScreen main, GameConfig config, LevelType level, PlayScreen play) {
         setContentPane(new BackgroundPause());
         initComponents();
         this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.level = level;
         this.config = config;
         this.main = main;
+        this.play = play;
         
         // ---> VIẾT CODE Ở ĐÂY <---
         // Ghi đè thiết lập của NetBeans: Chỉ ẩn cửa sổ khi bấm X
@@ -40,7 +42,7 @@ public class PauseScreen extends javax.swing.JFrame {
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                main.resumeTimer(); // Báo màn hình chính đếm thời gian tiếp
+                play.resumeTimer(); // Báo màn hình chính đếm thời gian tiếp
             }
         });
     }
@@ -165,9 +167,9 @@ public class PauseScreen extends javax.swing.JFrame {
 
     private void Choi_tiepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Choi_tiepActionPerformed
         // TODO add your handling code here:    
-        main.resumeTimer();
+        play.resumeTimer();
         this.setVisible(false);
-        main.countdownTimer.start();
+        play.countdownTimer.start();
     }//GEN-LAST:event_Choi_tiepActionPerformed
 
     private void Van_moiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Van_moiActionPerformed

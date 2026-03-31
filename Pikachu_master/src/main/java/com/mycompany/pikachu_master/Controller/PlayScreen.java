@@ -17,6 +17,7 @@ import com.mycompany.pikachu_master.Model.CellPair;
 import com.mycompany.pikachu_master.Model.LevelType;
 import com.mycompany.pikachu_master.User_Interface.Components.RoundedIconButton;
 import com.mycompany.pikachu_master.User_Interface.Screens.HonorScreen;
+import com.mycompany.pikachu_master.User_Interface.Screens.LossScreen;
 import com.mycompany.pikachu_master.User_Interface.Screens.MainScreen;
 import com.mycompany.pikachu_master.Utils.ImageLoad;
 import java.awt.Color;
@@ -42,6 +43,11 @@ public class PlayScreen extends JPanel implements ActionListener {
     private final ScoreDAO DTB;
     private AsianModel asianModel;
     private boolean isProcessingMismatch = false;
+    private int maxTime;
+    private int currentTime;
+    private int TileCount;
+    public javax.swing.Timer countdownTimer;
+    private javax.swing.JSlider timeline;
 
     
     public PlayScreen(GameConfig config) {
@@ -76,10 +82,10 @@ public class PlayScreen extends JPanel implements ActionListener {
         }
         
 //Thiết lập bảng
-        System.out.println("HardMode: " + this.level.isIsHardMode());
-        System.out.println("rocket: " + this.level.isIsRocket());
-        System.out.println("Algorithm: " + this.algorithm);
-        System.out.println("level: " + this.level.getName());
+//        System.out.println("HardMode: " + this.level.isIsHardMode());
+//        System.out.println("rocket: " + this.level.isIsRocket());
+//        System.out.println("Algorithm: " + this.algorithm);
+//        System.out.println("level: " + this.level.getName());
         this.board = new Board(level.getRows(), level.getCols(),true);
         if(level.isIsHardMode() == true){
             board.initHardBoard(algorithm, level.getNoP(), level.isIsRocket());
@@ -92,7 +98,9 @@ public class PlayScreen extends JPanel implements ActionListener {
         this.setOpaque(false); // Dòng này làm cho Panel không còn màu nền xám nữa
         this.setBackground(new Color(0, 0, 0, 0)); // Đảm bảo màu nền hoàn toàn trong suốt
         btnMatrix = new RoundedIconButton[level.getRows() + 2][level.getCols() + 2]; // Bao gồm cả viền trống nếu cần
-
+        
+        this.TileCount = (level.getRows() * level.getCols())/2;
+        
         for (int i = 1; i <= level.getRows(); i++) {
             for (int j = 1; j <= level.getCols(); j++) {
                 int id = board.getCell(i, j).getId();
@@ -204,13 +212,25 @@ public class PlayScreen extends JPanel implements ActionListener {
         java.awt.Window windown = javax.swing.SwingUtilities.getWindowAncestor(this);
         if (windown instanceof MainScreen) {
             MainScreen main = (MainScreen) windown;
-            main.stopTimer();
+//            main.stopTimer();
             main.setEnabled(false);
             HonorScreen honorScreen = new HonorScreen(main, config, level);
             honorScreen.setAlwaysOnTop(true);
             honorScreen.setVisible(true);
         }
-    }    
+    } 
+    
+    public void showlossScreen(){
+        java.awt.Window windown = javax.swing.SwingUtilities.getWindowAncestor(this);
+            if (windown instanceof MainScreen) {
+                MainScreen main = (MainScreen) windown;
+//                main.stopTimer();
+                main.setEnabled(false);
+                LossScreen lossScreen = new LossScreen(main, config, level);
+                lossScreen.setAlwaysOnTop(true);
+                lossScreen.setVisible(true);
+            }
+    }
 
 // hàm vẽ 
     private void drawPathOnOverlay() {
@@ -235,7 +255,7 @@ public class PlayScreen extends JPanel implements ActionListener {
         final RoundedIconButton firstBtn = firstClickBtn;
         final RoundedIconButton secondBtn = clickedBtn;
 
-        javax.swing.Timer delayTimer = new javax.swing.Timer(750, new java.awt.event.ActionListener() {
+        javax.swing.Timer delayTimer = new javax.swing.Timer(100, new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 // Tắt viền vàng của cả 2 nút
@@ -261,7 +281,7 @@ public class PlayScreen extends JPanel implements ActionListener {
         firstClickBtn = null;
     }
     
-        private void handleFirstClick(Cell cell, RoundedIconButton btn, boolean isHidden) {
+    private void handleFirstClick(Cell cell, RoundedIconButton btn, boolean isHidden) {
         firstClick = cell;
         firstClickBtn = btn;
         btn.setSelectedState(true);
@@ -315,6 +335,8 @@ public class PlayScreen extends JPanel implements ActionListener {
     private void checkGameState() {
         if (isBoardEmpty()) {
             // Tính điểm dựa trên LevelType
+            stopTimer();
+            stopAsianTimer();
             int score = level.getNoP() * 10; 
             DTB.insertScore("tuan", level.getName(), score, 150);
             showHonorScreen();
@@ -329,7 +351,63 @@ public class PlayScreen extends JPanel implements ActionListener {
         firstClick = null;
         firstClickBtn = null;
     }
-  
+   
+    
+    public void stopTimer() {
+        if (countdownTimer != null && countdownTimer.isRunning()) {
+            countdownTimer.stop();
+        }
+    }
+    public void resumeTimer() {
+        if (countdownTimer != null && !countdownTimer.isRunning() && currentTime > 0) {
+            countdownTimer.start();
+        }
+    }
+    
+    public void addTimer(int time){
+        currentTime = currentTime + time;
+    }
+    
+public void initTimer(javax.swing.JSlider externalTimeline) {
+    this.timeline = externalTimeline;
+    this.maxTime = level.getTimeLimit();
+    
+    if (maxTime <= 0) maxTime = 120;
+    
+    this.currentTime = maxTime;
+    
+    if (timeline != null) {
+        timeline.setMaximum(maxTime);
+        timeline.setMinimum(0);
+        timeline.setValue(maxTime);
+    }
+
+    if (countdownTimer != null) {
+        countdownTimer.stop(); // Dừng cái cũ nếu có (tránh chạy chồng chéo)
+    }
+
+    countdownTimer = new javax.swing.Timer(1000, new java.awt.event.ActionListener() {
+        @Override
+        public void actionPerformed(java.awt.event.ActionEvent e) {
+            currentTime--;
+            
+            if (timeline != null) {
+                timeline.setValue(currentTime);
+                timeline.repaint(); // <--- Thêm dòng này để ép UI vẽ lại giá trị mới
+            }
+
+            System.out.println("Thoi gian con: " + currentTime + " giay");
+            if(currentTime > maxTime){
+                currentTime = maxTime;
+            }
+            if (currentTime <= 0) {
+                countdownTimer.stop();
+                showlossScreen();
+           }
+        }
+    });
+    countdownTimer.start();
+}
     @Override
     public void actionPerformed(ActionEvent e) {
         if (isProcessingMismatch) return;

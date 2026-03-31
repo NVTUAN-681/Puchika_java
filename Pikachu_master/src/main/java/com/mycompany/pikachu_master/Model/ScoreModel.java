@@ -9,5 +9,13 @@ package com.mycompany.pikachu_master.Model;
  * @author Admin
  */
 public class ScoreModel {
+    private int Score;
+
+    public ScoreModel(int score) {
+        this.Score = score;
+    }
     
+//    public int Score(int time, int )
+//    
+//    
 }
