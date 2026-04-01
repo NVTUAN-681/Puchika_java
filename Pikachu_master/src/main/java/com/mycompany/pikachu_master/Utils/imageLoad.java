@@ -14,7 +14,7 @@ import java.awt.Image;
 import java.util.HashMap;
 import java.util.Map;
 
-public class imageLoad {
+public class ImageLoad {
     // Map lưu trữ: Key là ID (1-21), Value là đối tượng Image tương ứng
     private static Map<Integer, ImageIcon> imageMap = new HashMap<>();
 
@@ -25,7 +25,7 @@ public class imageLoad {
             try {
                 // Đường dẫn tương đối trong project Maven
                 String path = "/images/Picture/" + i + ".jpg"; 
-                java.net.URL imgURL = imageLoad.class.getResource(path);
+                java.net.URL imgURL = ImageLoad.class.getResource(path);
                 
                 if (imgURL != null) {
                     ImageIcon icon = new ImageIcon(imgURL);
@@ -49,7 +49,7 @@ public class imageLoad {
     public static void loadBackgroundButton(){
         try{
             String path = "/images/Picture_button/BackgroundButtonInMain.png";
-            java.net.URL imgURL = imageLoad.class.getResource(path);
+            java.net.URL imgURL = ImageLoad.class.getResource(path);
             
             if(imgURL != null){
                 ImageIcon icon = new ImageIcon(imgURL);

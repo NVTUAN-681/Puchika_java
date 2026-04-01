@@ -9,7 +9,7 @@ import com.mycompany.pikachu_master.Model.LevelType;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
 //import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundStartScreen;
-import com.mycompany.pikachu_master.Utils.imageLoad;
+import com.mycompany.pikachu_master.Utils.ImageLoad;
 import com.mycompany.pikachu_master.Utils.Button_Icon;
 
 /**
@@ -31,8 +31,8 @@ public class StartScreen extends javax.swing.JFrame {
         this.config = config;
         this.level = level;
         setContentPane(new BackgroundStartScreen());
-        imageLoad.loadAllImagesPika(); // tải ảnh trước khi bắt đầu trò chơi
-        imageLoad.loadBackgroundButton();
+        ImageLoad.loadAllImagesPika(); // tải ảnh trước khi bắt đầu trò chơi
+        ImageLoad.loadBackgroundButton();
         initComponents();
         this.setMinimumSize(new java.awt.Dimension(800, 600));
         setupAllButtonIcons();

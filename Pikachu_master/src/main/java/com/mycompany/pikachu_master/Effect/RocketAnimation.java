@@ -8,7 +8,7 @@ import com.mycompany.pikachu_master.Model.Cell;
 import com.mycompany.pikachu_master.Model.CellPair;
 import com.mycompany.pikachu_master.User_Interface.Components.RoundedIconButton;
 import com.mycompany.pikachu_master.User_Interface.Screens.MainScreen;
-import com.mycompany.pikachu_master.Utils.imageLoad;
+import com.mycompany.pikachu_master.Utils.ImageLoad;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Window;
@@ -42,7 +42,7 @@ public class RocketAnimation {
         MainScreen main = (MainScreen) window;
 
         int ROCKET_ID = 1; 
-        ImageIcon originalIcon = imageLoad.getImage(ROCKET_ID); 
+        ImageIcon originalIcon = ImageLoad.getImage(ROCKET_ID); 
         Image img = originalIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         ImageIcon rocketIcon = new ImageIcon(img);
 
