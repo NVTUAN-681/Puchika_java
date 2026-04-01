@@ -21,19 +21,16 @@ public class Pikachu {
 
     public static void main(String[] args) {
         //System.out.println("Hello World!");
-        Board b = new Board(6, 5, true);
+        Board b = new Board(2, 2, true);
         IAlgorithm a = new ClassicAlgorithm();
         System.out.println("Hello world!");
         //b.initBoard(a, 20);
         int[][] values = {
-            {1, 1, 3, 1, 2},
-            {3, 4, 2, 5, 6},
-            {7, 8, 2, 1, 9},
-            {10, 11, 12, 10, 12},
-            {7, 9, 11, 6, 11},
-            {2, 11, 8, 4, 5}
+            {1, 1},
+            {1, 1},
         };
         b.initBoardFixed(a, values);
+          //b.initHardBoard(a, 5, true);
         System.out.println("Hello world!");
         //System.out.println("Hello World!");
         Scanner sc = new Scanner(System.in);

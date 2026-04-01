@@ -88,13 +88,12 @@ public class Board {
         // rocket : biến xác nhận xem có cho tên lửa (Id = 1) vào màn chơi không
         
         ArrayList<Integer> list = new ArrayList<>();
-        int halfElems = totalCells / 2;
-        for (int i = 1; i <= halfElems; i++) {
-            if(i != 1 || (i == 1 && rocket == false)) {
-                list.add(i % NoP);
-                list.add(i % NoP);
+        for (int i = 1; list.size() != totalCells; i++) {
+            if(i % NoP + 1 != 1 || (i % NoP + 1 == 1 && rocket == true)) {
+                list.add(i % NoP + 1);
+                list.add(i % NoP + 1);
             }
-        }        
+        }
         
         do {
             Collections.shuffle(list);
@@ -108,7 +107,7 @@ public class Board {
                     }
                 }
             }
-            
+            System.out.println(index);
             a.getMap().clear();
             for (int i = 1; i <= this.rows; i++) {
                 for (int j = 1; j <= this.cols; j++) {

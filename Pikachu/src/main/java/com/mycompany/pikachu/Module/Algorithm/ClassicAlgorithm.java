@@ -419,6 +419,6 @@ public class ClassicAlgorithm implements IAlgorithm{
             randomC2.setStatus(false);
             board.setTotalCells(board.getTotalCells() - 2);
         }
-    }   
+    }
 
 }
