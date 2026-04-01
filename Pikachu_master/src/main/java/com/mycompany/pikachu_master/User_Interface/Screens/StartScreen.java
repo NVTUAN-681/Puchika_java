@@ -26,17 +26,16 @@ public class StartScreen extends javax.swing.JFrame {
     private GameConfig config;
     private LevelType level;
     public StartScreen(GameConfig config,LevelType level) {
-        //this.setUndecorated(true); // Xóa thanh tiêu đề (chơi tràn viền)
+        setContentPane(new BackgroundStartScreen());
+        initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.config = config;
         this.level = level;
-        setContentPane(new BackgroundStartScreen());
-        ImageLoad.loadAllImagesPika(); // tải ảnh trước khi bắt đầu trò chơi
-        ImageLoad.loadBackgroundButton();
-        initComponents();
+// tải ảnh trước khi bắt đầu trò chơi        
+        ImageLoad.loadAllImagesPika();
+        ImageLoad.BackgroundButtonsLoad();
         this.setMinimumSize(new java.awt.Dimension(800, 600));
         setupAllButtonIcons();
-
     }
     
     public void setLevel(String Level){
@@ -47,21 +46,20 @@ public class StartScreen extends javax.swing.JFrame {
     public void UpdateLevel(String Level){
         this.config = new GameConfig(Level);
         this.level = LevelType.getByName(Level);
-      setupAllButtonIcons();
+//        setupAllButtonIcons();
     }
     
     private void setupAllButtonIcons() {
         // Giả sử bạn có 1 cái khung tên là "KhungGo.png" (hoặc cứ dùng lại ảnh cũ tạm cũng được)
-        String frameImage = "/images/Picture_button/Back_Ground.png"; 
         //this.setLayout(new java.awt.GridBagLayout()); 
         //this.add(myButton, new java.awt.GridBagConstraints());
         // Gọi hàm: truyền nút, truyền ảnh khung, và TRUYỀN CHỮ
-        Button_Icon.setupImageButton(playButton, frameImage, "CHƠI NGAY");
-        Button_Icon.setupImageButton(levelButton, frameImage, "CẤP ĐỘ");
-        Button_Icon.setupImageButton(maxButton, frameImage, "THÀNH TÍCH CAO NHẤT");
-        Button_Icon.setupImageButton(settingButton, frameImage, "CÀI ĐẶT");
-        Button_Icon.setupImageButton(instructionutton, frameImage, "HƯỚNG DẪN");
-        Button_Icon.setupImageButton(exitButton, frameImage, "THOÁT");
+        Button_Icon.applyCachedIcons(playButton, "CHƠI NGAY");
+        Button_Icon.applyCachedIcons(levelButton, "CẤP ĐỘ");
+        Button_Icon.applyCachedIcons(maxButton, "THÀNH TÍCH CAO NHẤT");
+        Button_Icon.applyCachedIcons(settingButton, "CÀI ĐẶT");
+        Button_Icon.applyCachedIcons(instructionutton, "HƯỚNG DẪN");
+        Button_Icon.applyCachedIcons(exitButton, "THOÁT");
     }
     
     
