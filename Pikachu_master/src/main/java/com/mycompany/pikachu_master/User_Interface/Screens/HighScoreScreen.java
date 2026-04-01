@@ -20,16 +20,17 @@ public class HighScoreScreen extends javax.swing.JFrame {
     StartScreen start;
 
     public HighScoreScreen(StartScreen start) {
+        this.setUndecorated(true);
         initComponents();
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        //this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.start = start;
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                start.setVisible(true);
-            }
-        });
+//        this.addWindowListener(new java.awt.event.WindowAdapter() {
+//            @Override
+//            public void windowClosing(WindowEvent e) {
+//                start.setVisible(true);
+//            }
+//        });
 
     }
 

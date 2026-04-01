@@ -18,6 +18,7 @@ public class SettingMenuScreen extends javax.swing.JFrame {
     
     StartScreen start;
     public SettingMenuScreen(StartScreen start) {
+        this.setUndecorated(true);
         initComponents();
         this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.start = start;

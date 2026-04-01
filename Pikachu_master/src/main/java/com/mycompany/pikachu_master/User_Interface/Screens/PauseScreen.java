@@ -26,6 +26,7 @@ public class PauseScreen extends javax.swing.JFrame {
     PlayScreen play;
 
     public PauseScreen(MainScreen main, GameConfig config, LevelType level, PlayScreen play) {
+        this.setUndecorated(true);
         setContentPane(new BackgroundPause());
         initComponents();
         this.setMinimumSize(new java.awt.Dimension(300, 400));
@@ -39,6 +40,12 @@ public class PauseScreen extends javax.swing.JFrame {
         this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         
         // Bắt sự kiện bấm nút X
+//        this.addWindowListener(new java.awt.event.WindowAdapter() {
+//            @Override
+//            public void windowClosing(java.awt.event.WindowEvent e) {
+//                main.resumeTimer(); // Báo màn hình chính đếm thời gian tiếp
+//            }
+//        });
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -188,10 +195,9 @@ public class PauseScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_exitmenuButtonActionPerformed
 
     private void instructionButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instructionButton1ActionPerformed
-        // TODO add your handling code here:
-        // HelpScreen instruct = new HelpScreen();
-        //instruct.setVisible(true);
-        this.setVisible(false);
+        HelpMainScreen help = new HelpMainScreen(this);
+        help.setVisible(true);
+        //this.setVisible(false);
     }//GEN-LAST:event_instructionButton1ActionPerformed
 
     private void soundButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_soundButtonActionPerformed

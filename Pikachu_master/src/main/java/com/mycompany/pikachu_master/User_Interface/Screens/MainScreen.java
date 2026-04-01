@@ -26,6 +26,8 @@ public class MainScreen extends javax.swing.JFrame {
      *
      * @param config
      */
+    
+    
     GameConfig config;
     PlayScreen play;
     LevelType level;
@@ -126,6 +128,7 @@ public class MainScreen extends javax.swing.JFrame {
 
     public MainScreen(GameConfig config, LevelType level) {
         initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.config = config;
         this.level = level;
         this.play = new PlayScreen(config);

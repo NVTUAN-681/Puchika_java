@@ -19,7 +19,7 @@ import com.mycompany.pikachu_master.User_Interface.Components.RoundedIconButton;
 import com.mycompany.pikachu_master.User_Interface.Screens.HonorScreen;
 import com.mycompany.pikachu_master.User_Interface.Screens.LossScreen;
 import com.mycompany.pikachu_master.User_Interface.Screens.MainScreen;
-import com.mycompany.pikachu_master.Utils.ImageLoad;
+import com.mycompany.pikachu_master.Utils.imageLoad;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -104,7 +104,7 @@ public class PlayScreen extends JPanel implements ActionListener {
         for (int i = 1; i <= level.getRows(); i++) {
             for (int j = 1; j <= level.getCols(); j++) {
                 int id = board.getCell(i, j).getId();
-                ImageIcon icon = ImageLoad.getImage(id);
+                ImageIcon icon = imageLoad.getImage(id);
                 btnMatrix[i][j] = new RoundedIconButton(icon, 0, i, j);
                 btnMatrix[i][j].addActionListener(this);
                 add(btnMatrix[i][j]);
@@ -125,7 +125,7 @@ public class PlayScreen extends JPanel implements ActionListener {
                     if (isHiddenPhase) {
                         btn.setIcon(null);
                     } else {
-                        btn.setIcon(ImageLoad.getImage(cell.getId()));
+                        btn.setIcon(imageLoad.getImage(cell.getId()));
                     }
                     btn.setVisible(true);
                 } else {
@@ -285,11 +285,11 @@ public class PlayScreen extends JPanel implements ActionListener {
         firstClick = cell;
         firstClickBtn = btn;
         btn.setSelectedState(true);
-        if (isHidden) btn.setIcon(ImageLoad.getImage(cell.getId()));
+        if (isHidden) btn.setIcon(imageLoad.getImage(cell.getId()));
     }
 
     private void handleSecondClick(Cell currentCell, RoundedIconButton clickedBtn, boolean isHidden) {
-        if (isHidden) clickedBtn.setIcon(ImageLoad.getImage(currentCell.getId()));
+        if (isHidden) clickedBtn.setIcon(imageLoad.getImage(currentCell.getId()));
 
         // Hủy chọn nếu click lại ô cũ
         if (firstClick == currentCell) {

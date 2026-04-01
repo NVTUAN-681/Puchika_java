@@ -20,6 +20,7 @@ public class HelpScreen extends javax.swing.JFrame {
     StartScreen start;
     
     public HelpScreen(StartScreen start) {
+        this.setUndecorated(true);
         setContentPane(new BackgroundHelp());
         initComponents();
         this.start = start;          

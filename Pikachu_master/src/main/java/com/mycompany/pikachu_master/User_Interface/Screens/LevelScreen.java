@@ -22,6 +22,8 @@ public class LevelScreen extends javax.swing.JFrame {
     
     StartScreen start;
     public LevelScreen(StartScreen start) {
+        this.setUndecorated(true);
+        //this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         setContentPane(new BackgroundStartScreen());
         initComponents();
         this.setMinimumSize(new java.awt.Dimension(800, 600));

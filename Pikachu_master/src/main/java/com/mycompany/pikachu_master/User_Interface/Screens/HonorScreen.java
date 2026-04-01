@@ -25,6 +25,7 @@ public class HonorScreen extends javax.swing.JFrame {
     LevelType level;
 
     public HonorScreen(MainScreen main, GameConfig config, LevelType level) {
+        this.setUndecorated(true);
         initComponents();
         this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.main = main;
@@ -33,6 +34,16 @@ public class HonorScreen extends javax.swing.JFrame {
         this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
         // Bắt sự kiện bấm nút X
+//        this.addWindowListener(new java.awt.event.WindowAdapter() {
+//            @Override
+//            public void windowClosing(java.awt.event.WindowEvent e) {
+//                main.setEnabled(true);
+//                main.dispose(); 
+//                StartScreen pika = new StartScreen(config);
+//                pika.setLevel(config.GetLevel());
+//                pika.setVisible(true); // Báo màn hình chính đếm thời gian tiếp
+//            }
+//        });
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
