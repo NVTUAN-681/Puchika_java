@@ -5,6 +5,11 @@
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
 import com.mycompany.pikachu_master.Controller.GameConfig;
+import com.mycompany.pikachu_master.Model.LevelType;
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundHonorScreen;
+import com.mycompany.pikachu_master.Utils.Button_Icon;
+import com.mycompany.pikachu_master.Utils.ImageLoad;
+import com.mycompany.pikachu_master.Utils.SoundLoad;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundHonorScreen;
 import com.mycompany.pikachu_master.Model.LevelType;
 
@@ -24,17 +29,26 @@ public class HonorScreen extends javax.swing.JFrame {
     MainScreen main;
     GameConfig config;
     LevelType level;
+    
+    private SoundLoad audioManager = new SoundLoad();
 
     public HonorScreen(MainScreen main, GameConfig config, LevelType level) {
         this.setUndecorated(true);
+        //má mày thằng lồn
         setContentPane(new BackgroundHonorScreen());
         initComponents();
+          
+        ImageLoad.loadBg("PAUSE_BTN", 2, 250, 40, 10);
+        setupAllButtonIcons();
+        
         this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.main = main;
         this.config = config;
         this.level = level;
         this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-
+        setEnabled(true);
+        this.main.stopMusic();
+        audioManager.playBGM("/images/Sound/Winner.wav");
         // Bắt sự kiện bấm nút X
 //        this.addWindowListener(new java.awt.event.WindowAdapter() {
 //            @Override
@@ -57,6 +71,27 @@ public class HonorScreen extends javax.swing.JFrame {
             }
         });
     }
+    
+     private void setupAllButtonIcons() {
+        // ---> 1. THUỐC ĐẶC TRỊ TẬT KÉO DÃN LỆCH CHỮ CỦA NETBEANS <---
+        java.awt.GridBagLayout layout = (java.awt.GridBagLayout) getContentPane().getLayout();
+        javax.swing.AbstractButton[] btns = {exitButton, newButton};
+        
+        for (javax.swing.AbstractButton btn : btns) {
+            java.awt.GridBagConstraints gbc = layout.getConstraints(btn);
+            gbc.fill = java.awt.GridBagConstraints.NONE; // Cấm tiệt việc tự kéo dãn nút
+            gbc.ipadx = 0; // Xóa sạch cái lề ảo 150px mà NetBeans tự nhét vào
+            layout.setConstraints(btn, gbc);
+        }
+        
+        
+       Button_Icon.applyCachedIcons(exitButton, "THOÁT", "PAUSE_BTN");
+       Button_Icon.applyCachedIcons( newButton, "VÁN MỚI", "PAUSE_BTN");
+       
+       exitButton.setForeground(java.awt.Color.WHITE);
+        newButton.setForeground(java.awt.Color.WHITE);
+        
+     }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -117,6 +152,22 @@ public class HonorScreen extends javax.swing.JFrame {
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         // TODO add your handling code here:
+       //this.main.playBGM();
+       //audioManager.playBGM("/images/Sound/Winner.wav");
+       audioManager.stopBGM();
+        String levelName = config.GetLevel(); 
+        
+        if (levelName.equalsIgnoreCase("AFRICA")) {
+            audioManager.playBGM("/images/Sound/SoundAfrica_Europe.wav");
+        } else if (levelName.equalsIgnoreCase("ASIAN")) {
+            audioManager.playBGM("/images/Sound/SoundAsian.wav");
+        } else if (levelName.equalsIgnoreCase("EUROPE")) {
+            audioManager.playBGM("/images/Sound/SoundAfrica_Europe.wav");
+        } else {
+            // Nhạc mặc định nếu người chơi không chọn màn mà bấm Play ngay từ đầu
+            audioManager.playBGM("/images/Sound/SoundAfrica_Europe.wav");
+        }
+
         main.setEnabled(true);
         main.resertGame(config, level);
         this.dispose();
@@ -124,6 +175,7 @@ public class HonorScreen extends javax.swing.JFrame {
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         // TODO add your handling code here:
+          audioManager.stopBGM();
         StartScreen pika = new StartScreen(config, level);
         pika.setLevel(config.GetLevel());
         pika.setVisible(true);

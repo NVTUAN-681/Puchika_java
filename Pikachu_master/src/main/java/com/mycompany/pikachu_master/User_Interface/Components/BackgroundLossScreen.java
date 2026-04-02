@@ -11,7 +11,7 @@ import javax.swing.*;
  * @author laptop
  */
 public class BackgroundLossScreen extends JPanel{
-     private Image backgroundImage;
+      private Image backgroundImage;
 
     public BackgroundLossScreen() {
         String path = "/images/LossScreen.png";

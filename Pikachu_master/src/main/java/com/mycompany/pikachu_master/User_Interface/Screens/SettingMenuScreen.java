@@ -4,6 +4,9 @@
  */
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundSettingStartScreen;
+import com.mycompany.pikachu_master.Utils.Button_Icon;
+import com.mycompany.pikachu_master.Utils.ImageLoad;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundSettingMenuScreen;
 import com.mycompany.pikachu_master.Utils.SoundLoad;
 
@@ -12,20 +15,47 @@ import com.mycompany.pikachu_master.Utils.SoundLoad;
  * @author laptop
  */
 public class SettingMenuScreen extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SettingMenuScreen.class.getName());
 
     /**
      * Creates new form SettingMenuScreen
      */
-    
     StartScreen start;
+
     public SettingMenuScreen(StartScreen start) {
         this.setUndecorated(true);
-        setContentPane(new BackgroundSettingMenuScreen());
+        setContentPane(new BackgroundSettingStartScreen());
         initComponents();
+
+        ImageLoad.loadBg("PAUSE_BTN", 2, 250, 40, 10);
+        setupAllButtonIcons();
+
         this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.start = start;
+    }
+
+    private void setupAllButtonIcons() {
+        // ---> 1. THUỐC ĐẶC TRỊ TẬT KÉO DÃN LỆCH CHỮ CỦA NETBEANS <---
+        java.awt.GridBagLayout layout = (java.awt.GridBagLayout) getContentPane().getLayout();
+        javax.swing.AbstractButton[] btns = {soundButton, volumnButton, authorButton};
+
+        for (javax.swing.AbstractButton btn : btns) {
+            java.awt.GridBagConstraints gbc = layout.getConstraints(btn);
+            gbc.fill = java.awt.GridBagConstraints.NONE; // Cấm tiệt việc tự kéo dãn nút
+            gbc.ipadx = 0; // Xóa sạch cái lề ảo 150px mà NetBeans tự nhét vào
+            layout.setConstraints(btn, gbc);
+        }
+
+        //Button_Icon.applyCachedIcons(exitButton6, "CHƠI TIẾP", "PAUSE_BTN");
+        Button_Icon.applyCachedIcons(soundButton, "1", "PAUSE_BTN");
+        Button_Icon.applyCachedIcons(volumnButton, "2", "PAUSE_BTN");
+        Button_Icon.applyCachedIcons(authorButton, "NHÀ SẢN SUẤT", "PAUSE_BTN");
+
+        //exitButton6.setForeground(java.awt.Color.WHITE);
+        soundButton.setForeground(java.awt.Color.WHITE);
+        volumnButton.setForeground(java.awt.Color.WHITE);
+        authorButton.setForeground(java.awt.Color.WHITE);
     }
 
     /**
@@ -90,6 +120,7 @@ public class SettingMenuScreen extends javax.swing.JFrame {
         authorButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         authorButton.setText("ĐỘI NGŨ SẢN XUẤT");
         authorButton.setPreferredSize(new java.awt.Dimension(250, 40));
+        authorButton.addActionListener(this::authorButtonActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -108,33 +139,37 @@ public class SettingMenuScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         start.setVisible(true);
         this.dispose();
-        
+
     }//GEN-LAST:event_exitButton6ActionPerformed
 // này là tiếng thao tác nhé, như kiểu chọn hay ăn á
     private void soundButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_soundButtonActionPerformed
         // TODO add your handling code here:
         if (soundButton.isSelected()) {
             soundButton.setText("🔇");
-            SoundLoad.isSfxOn = false; // Tắt SFX
+//            SoundLoad.isSfxOn = false; // Tắt SFX
         } else {
             soundButton.setText("🔊");
-            SoundLoad.isSfxOn = true;
+//            SoundLoad.isSfxOn = true;
         }
     }//GEN-LAST:event_soundButtonActionPerformed
 
     private void volumnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volumnButtonActionPerformed
         // TODO add your handling code here:
-         if (volumnButton.isSelected()) {
+        if (volumnButton.isSelected()) {
             volumnButton.setText("🚫");
-            SoundLoad.isBgmOn = false;
-            SoundLoad.stopBGM();
+//            SoundLoad.isBgmOn = false;
+//            SoundLoad.stopBGM();
         } else {
             volumnButton.setText("🎧");
-            SoundLoad.isBgmOn = true;
-            //nhạc nền game nhé
-            SoundLoad.playBGM("");
+//            SoundLoad.isBgmOn = true;
+//            //nhạc nền game nhé
+//            SoundLoad.playBGM("");
         }
     }//GEN-LAST:event_volumnButtonActionPerformed
+
+    private void authorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_authorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_authorButtonActionPerformed
 
     /**
      * @param args the command line arguments

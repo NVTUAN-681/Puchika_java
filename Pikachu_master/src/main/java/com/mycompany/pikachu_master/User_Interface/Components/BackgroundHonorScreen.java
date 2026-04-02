@@ -6,13 +6,12 @@ package com.mycompany.pikachu_master.User_Interface.Components;
 import javax.swing.JPanel;
 import java.awt.*;
 import javax.swing.*;
-
 /**
  *
  * @author laptop
  */
 public class BackgroundHonorScreen extends JPanel{
-     private Image backgroundImage;
+    private Image backgroundImage;
 
     public BackgroundHonorScreen() {
         String path = "/images/HonorScreen.png";

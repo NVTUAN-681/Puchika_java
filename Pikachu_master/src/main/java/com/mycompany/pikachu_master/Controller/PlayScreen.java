@@ -20,6 +20,7 @@ import com.mycompany.pikachu_master.User_Interface.Screens.HonorScreen;
 import com.mycompany.pikachu_master.User_Interface.Screens.LossScreen;
 import com.mycompany.pikachu_master.User_Interface.Screens.MainScreen;
 import com.mycompany.pikachu_master.Utils.ImageLoad;
+import com.mycompany.pikachu_master.Utils.SoundLoad;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -48,6 +49,7 @@ public class PlayScreen extends JPanel implements ActionListener {
     private int TileCount;
     public javax.swing.Timer countdownTimer;
     private javax.swing.JSlider timeline;
+    
 
     
     public PlayScreen(GameConfig config) {
@@ -212,18 +214,19 @@ public class PlayScreen extends JPanel implements ActionListener {
         java.awt.Window windown = javax.swing.SwingUtilities.getWindowAncestor(this);
         if (windown instanceof MainScreen) {
             MainScreen main = (MainScreen) windown;
+//            main.stopTimer();
             main.setEnabled(false);
             HonorScreen honorScreen = new HonorScreen(main, config, level);
             honorScreen.setAlwaysOnTop(true);
             honorScreen.setVisible(true);
         }
     } 
- 
-// hàm hiển thị khi thua
+    
     public void showlossScreen(){
         java.awt.Window windown = javax.swing.SwingUtilities.getWindowAncestor(this);
             if (windown instanceof MainScreen) {
                 MainScreen main = (MainScreen) windown;
+//                main.stopTimer();
                 main.setEnabled(false);
                 LossScreen lossScreen = new LossScreen(main, config, level);
                 lossScreen.setAlwaysOnTop(true);
@@ -231,7 +234,7 @@ public class PlayScreen extends JPanel implements ActionListener {
             }
     }
 
-// hàm vẽ đường nối giữa hai ô
+// hàm vẽ 
     private void drawPathOnOverlay() {
         java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(this);
         if (window instanceof MainScreen) {
@@ -248,6 +251,14 @@ public class PlayScreen extends JPanel implements ActionListener {
    
 // xử lý khi chọn sai    
     private void processMismatch(RoundedIconButton clickedBtn, boolean isHidden) {
+       // Tương lai nếu có file wrong.wav thì bật 4 dòng này lên
+        /*
+        java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (window instanceof MainScreen) {
+            ((MainScreen) window).playSoundEffect("/images/Sound/wrong.wav");
+        }
+        */
+        
         isProcessingMismatch = true; // Khóa không cho bấm lung tung khi đang chờ
 
         // Tạo bản sao của firstBtn để dùng trong Timer (vì firstClickBtn sẽ bị reset về null sớm)
@@ -303,10 +314,17 @@ public class PlayScreen extends JPanel implements ActionListener {
             processMismatch(clickedBtn, isHidden);
         }
     }
-
 //sự kiện nếu chạy đúng
     private void processMatch(Cell currentCell, RoundedIconButton clickedBtn) {
-        // Vẽ đường đi
+       //âm thanh của sự đói khát
+        //audioManager.playSoundEffect("/images/Sound/eated.wav");
+        // ---> SỬA CÁCH GỌI ÂM THANH ĂN Ô TẠI ĐÂY <---
+        java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (window instanceof MainScreen) {
+            MainScreen main = (MainScreen) window;
+            main.playSoundEffect("/images/Sound/eated.wav"); 
+        }
+// Vẽ đường đi
         drawPathOnOverlay();
 
         int matchedId = firstClick.getId();

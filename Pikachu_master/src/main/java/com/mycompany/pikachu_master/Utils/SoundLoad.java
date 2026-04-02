@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.pikachu_master.Utils;
+import javax.sound.sampled.*;
+import java.io.File;
+import java.net.URL;
 import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -12,58 +15,46 @@ import javax.sound.sampled.Clip;
  * @author DELL
  */
 public class SoundLoad {
-    // Biến trạng thái bật/tắt (mặc định là bật)
-    public static boolean isSfxOn = true;
-    public static boolean isBgmOn = true;
+    private Clip bgmClip;
     
-    // Biến lưu trữ nhạc nền để có thể dừng nó lại
-    private static Clip bgmClip;
-
-    // Hàm phát nhạc nền (Lặp đi lặp lại)
-    public static void playBGM(String filepath) {
-        if (!isBgmOn) return; // Nếu đang tắt thì không phát
-        
+    // Phát nhạc nền lặp vô tận
+    public void playBGM(String resourcePath) {
         try {
-            // Dừng nhạc cũ nếu đang phát
-            if (bgmClip != null && bgmClip.isRunning()) {
-                bgmClip.stop();
-            }
-            
-            File musicPath = new File(filepath);
-            if (musicPath.exists()) {
-                AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
+            // Dùng URL thay vì File để đọc từ thư mục resources/source của Project
+            URL url = getClass().getResource(resourcePath);
+            if (url != null) {
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(url);
                 bgmClip = AudioSystem.getClip();
                 bgmClip.open(audioInput);
-                bgmClip.loop(Clip.LOOP_CONTINUOUSLY); // Lệnh lặp vô hạn
+                bgmClip.loop(Clip.LOOP_CONTINUOUSLY); 
                 bgmClip.start();
+                System.out.println("Đã tìm thấy và đang phát nhạc nền!");
             } else {
-                System.out.println("Không tìm thấy file nhạc: " + filepath);
+                System.err.println("LỖI: Không tìm thấy file nhạc nền tại: " + resourcePath);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    // Hàm dừng nhạc nền
-    public static void stopBGM() {
+    // Dừng nhạc nền
+    public void stopBGM() {
         if (bgmClip != null && bgmClip.isRunning()) {
             bgmClip.stop();
         }
     }
 
-    // Hàm phát tiếng thao tác (Chỉ phát 1 lần)
-    public static void playSFX(String filepath) {
-        if (!isSfxOn) return; // Nếu đang tắt SFX thì không phát
-        
+    // Phát âm thanh 1 lần (click chuột, ăn điểm...)
+    public void playSoundEffect(String filePath) {
         try {
-            File soundPath = new File(filepath);
+            File soundPath = new File(filePath);
             if (soundPath.exists()) {
                 AudioInputStream audioInput = AudioSystem.getAudioInputStream(soundPath);
-                Clip sfxClip = AudioSystem.getClip();
-                sfxClip.open(audioInput);
-                sfxClip.start(); // Chỉ phát 1 lần
+                Clip effectClip = AudioSystem.getClip();
+                effectClip.open(audioInput);
+                effectClip.start();
             } else {
-                System.out.println("Không tìm thấy file âm thanh: " + filepath);
+                System.out.println("Không tìm thấy file âm thanh: " + filePath);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

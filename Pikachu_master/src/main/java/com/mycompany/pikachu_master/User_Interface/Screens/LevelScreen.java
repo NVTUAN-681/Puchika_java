@@ -7,6 +7,8 @@ package com.mycompany.pikachu_master.User_Interface.Screens;
 import com.mycompany.pikachu_master.Controller.GameConfig;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundStartScreen;
+import com.mycompany.pikachu_master.Utils.Button_Icon;
+import com.mycompany.pikachu_master.Utils.ImageLoad;
 
 /**
  *
@@ -24,12 +26,40 @@ public class LevelScreen extends javax.swing.JFrame {
     public LevelScreen(StartScreen start) {
         this.setUndecorated(true);
         //this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        setContentPane(new BackgroundStartScreen());
+        setContentPane(new BackgroundMain());
         initComponents();
+                 
+        ImageLoad.loadBg("PAUSE_BTN", 2, 240, 60, 15);
+        setupAllButtonIcons();
+        
         this.setMinimumSize(new java.awt.Dimension(800, 600));
         this.start = start;
 //        GameConfig Level = new GameConfig(ERROR, ABORT, HEIGHT);
     }
+    
+     private void setupAllButtonIcons() {
+        // ---> 1. THUỐC ĐẶC TRỊ TẬT KÉO DÃN LỆCH CHỮ CỦA NETBEANS <---
+        java.awt.GridBagLayout layout = (java.awt.GridBagLayout) getContentPane().getLayout();
+        javax.swing.AbstractButton[] btns = {africaButton, europeButton, asianButton};
+        
+        for (javax.swing.AbstractButton btn : btns) {
+            java.awt.GridBagConstraints gbc = layout.getConstraints(btn);
+            gbc.fill = java.awt.GridBagConstraints.NONE; // Cấm tiệt việc tự kéo dãn nút
+            gbc.ipadx = 0; // Xóa sạch cái lề ảo 150px mà NetBeans tự nhét vào
+            layout.setConstraints(btn, gbc);
+        }
+        
+        
+       Button_Icon.applyCachedIcons(africaButton, "AFRICA", "PAUSE_BTN");
+       Button_Icon.applyCachedIcons(europeButton, "EUROPE", "PAUSE_BTN");
+       Button_Icon.applyCachedIcons(asianButton, "ASIAN", "PAUSE_BTN");
+       
+       africaButton.setForeground(java.awt.Color.WHITE);
+       europeButton.setForeground(java.awt.Color.WHITE);
+       asianButton.setForeground(java.awt.Color.WHITE);
+        
+     }
+
 
     
     /**

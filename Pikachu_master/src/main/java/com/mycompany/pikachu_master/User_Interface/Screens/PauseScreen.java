@@ -9,6 +9,9 @@ import com.mycompany.pikachu_master.Controller.PlayScreen;
 import com.mycompany.pikachu_master.Model.LevelType;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundPause;
 import com.mycompany.pikachu_master.User_Interface.Screens.MainScreen;
+import com.mycompany.pikachu_master.Utils.ImageLoad;
+import com.mycompany.pikachu_master.Utils.Button_Icon;
+import java.awt.Font;
 /**
  *
  * @author laptop
@@ -29,13 +32,17 @@ public class PauseScreen extends javax.swing.JFrame {
         this.setUndecorated(true);
         setContentPane(new BackgroundPause());
         initComponents();
-        this.setMinimumSize(new java.awt.Dimension(300, 400));
+        main.setEnabled(true);
+        
+        // Gọi hàm loadBg mới, truyền số 2 để lôi ảnh BạkgroundButtonMainGame.jpg ra xài
+        ImageLoad.loadBg("PAUSE_BTN", 2, 250, 40, 10);
+        setupAllButtonIcons();
+        
         this.level = level;
         this.config = config;
         this.main = main;
         this.play = play;
         
-        // ---> VIẾT CODE Ở ĐÂY <---
         // Ghi đè thiết lập của NetBeans: Chỉ ẩn cửa sổ khi bấm X
         this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         
@@ -53,7 +60,33 @@ public class PauseScreen extends javax.swing.JFrame {
             }
         });
     }
-    
+
+  private void setupAllButtonIcons() {
+        // ---> 1. THUỐC ĐẶC TRỊ TẬT KÉO DÃN LỆCH CHỮ CỦA NETBEANS <---
+        java.awt.GridBagLayout layout = (java.awt.GridBagLayout) getContentPane().getLayout();
+        javax.swing.AbstractButton[] btns = {Choi_tiep, Van_moi, instructionButton1, exitmenuButton};
+        
+        for (javax.swing.AbstractButton btn : btns) {
+            java.awt.GridBagConstraints gbc = layout.getConstraints(btn);
+            gbc.fill = java.awt.GridBagConstraints.NONE; // Cấm tiệt việc tự kéo dãn nút
+            gbc.ipadx = 0; // Xóa sạch cái lề ảo 150px mà NetBeans tự nhét vào
+            layout.setConstraints(btn, gbc);
+        }
+        // --------------------------------------------------------------
+
+        // ---> 2. GẮN BACKGROUND VÀ CHỮ (Tao đã đổi nút cuối thành THOÁT) <---
+        Button_Icon.applyCachedIcons(Choi_tiep, "CHƠI TIẾP", "PAUSE_BTN");
+        Button_Icon.applyCachedIcons(Van_moi, "VÁN MỚI", "PAUSE_BTN");
+        Button_Icon.applyCachedIcons(instructionButton1, "HƯỚNG DẪN", "PAUSE_BTN");
+        Button_Icon.applyCachedIcons(exitmenuButton, "THOÁT", "PAUSE_BTN"); 
+        //Button_Icon.applyCachedIcons(soundButton, "1", "PAUSE_BTN");
+        //Button_Icon.applyCachedIcons(volumnButton, "2", "PAUSE_BTN");
+        // ---> 3. ĐỔI MÀU CHỮ SANG TRẮNG <---
+        Choi_tiep.setForeground(java.awt.Color.WHITE);
+        Van_moi.setForeground(java.awt.Color.WHITE);
+        instructionButton1.setForeground(java.awt.Color.WHITE);
+        exitmenuButton.setForeground(java.awt.Color.WHITE);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -187,6 +220,7 @@ public class PauseScreen extends javax.swing.JFrame {
 
     private void exitmenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitmenuButtonActionPerformed
         // TODO add your handling code here:
+        this.main.stopMusic();
         StartScreen pika = new StartScreen(config, level);
         pika.setLevel(config.GetLevel());
         pika.setVisible(true);
@@ -229,7 +263,16 @@ public class PauseScreen extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
         /* Create and display the form */
         //java.awt.EventQueue.invokeLater(() -> new PauseScreen().setVisible(true));
     }

@@ -11,6 +11,7 @@ import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundStartScreen;
 import com.mycompany.pikachu_master.Utils.ImageLoad;
 import com.mycompany.pikachu_master.Utils.Button_Icon;
+import com.mycompany.pikachu_master.Utils.SoundLoad;
 
 /**
  *
@@ -25,6 +26,9 @@ public class StartScreen extends javax.swing.JFrame {
      */
     private GameConfig config;
     private LevelType level;
+    
+    private SoundLoad audioManager = new SoundLoad();
+    
     public StartScreen(GameConfig config,LevelType level) {
         setContentPane(new BackgroundStartScreen());
         initComponents();
@@ -36,6 +40,8 @@ public class StartScreen extends javax.swing.JFrame {
         ImageLoad.BackgroundButtonsLoad();
         this.setMinimumSize(new java.awt.Dimension(800, 600));
         setupAllButtonIcons();
+        // 3. GỌI NHẠC NỀN KHI VỪA MỞ MÀN HÌNH CHÍNH LÊN
+        audioManager.playBGM("/images/Sound/SoundStart.wav"); 
     }
     
     public void setLevel(String Level){
@@ -178,7 +184,9 @@ public class StartScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-
+// Phát tiếng click chuột
+audioManager.stopBGM();
+        audioManager.playSoundEffect("");
         MainScreen Main = new MainScreen(config, this.level);
         Main.setVisible(true);
         this.dispose();
@@ -186,17 +194,20 @@ public class StartScreen extends javax.swing.JFrame {
 
     private void maxButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maxButtonActionPerformed
         // TODO add your handling code here:
+        audioManager.playSoundEffect("");
         HighScoreScreen Max = new HighScoreScreen(this);
         Max.setVisible(true);
     }//GEN-LAST:event_maxButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         // TODO add your handling code here:
+        audioManager.playSoundEffect("");
         System.exit(0);
     }//GEN-LAST:event_exitButtonActionPerformed
 
     private void settingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingButtonActionPerformed
         // TODO add your handling code here:
+        audioManager.playSoundEffect("");
         SettingMenuScreen set = new SettingMenuScreen(this);
         set.setVisible(true);
         //this.setVisible(false);
@@ -204,6 +215,7 @@ public class StartScreen extends javax.swing.JFrame {
 
     private void instructionuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instructionuttonActionPerformed
         // TODO add your handling code here:
+        audioManager.playSoundEffect("");
         HelpScreen Instruct = new HelpScreen(this);
         Instruct.setVisible(true);
         //this.setVisible(false);
@@ -211,6 +223,7 @@ public class StartScreen extends javax.swing.JFrame {
 
     private void levelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_levelButtonActionPerformed
         // TODO add your handling code here:
+        audioManager.playSoundEffect("");
         LevelScreen lev = new LevelScreen(this);
         lev.setVisible(true);
         //this.setVisible(false);

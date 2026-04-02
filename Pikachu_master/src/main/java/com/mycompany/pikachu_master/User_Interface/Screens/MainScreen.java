@@ -11,6 +11,7 @@ import com.mycompany.pikachu_master.Model.LevelType;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
 //import com.mycompany.pikachu_master.User_Interface.Components.cus;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundStartScreen;
+import com.mycompany.pikachu_master.Utils.SoundLoad;
 import java.awt.event.ComponentEvent;
 
 /**
@@ -34,6 +35,8 @@ public class MainScreen extends javax.swing.JFrame {
 
     int hintCount;
     int shuffleCount;
+    
+    private SoundLoad audioManager = new SoundLoad();
 
     // ---> THÊM HÀM NÀY VÀO ĐỂ TRANG TRÍ THANH TOP BAR <---
     private void styleTopBar() {
@@ -120,6 +123,7 @@ public class MainScreen extends javax.swing.JFrame {
 //hàm hiện thị thua cuộc
     private void handleGameOver() {
         //javax.swing.JOptionPane.showMessageDialog(this, "Hết giờ! Bạn đã thua cuộc.", "Game Over", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+       audioManager.stopBGM();
         this.setEnabled(false);
         LossScreen loss = new LossScreen(this, config, level);
         loss.setAlwaysOnTop(true);
@@ -149,7 +153,9 @@ public class MainScreen extends javax.swing.JFrame {
         styleTopBar();
         this.getContentPane().setLayout(null);
         this.getContentPane().add(play);
-
+        
+        playMusicByLevel();
+        
         //căn chỉnh vị trí.
         // Căn chỉnh vị trí và kích thước linh động cho bảng Pokemon
         // Căn chỉnh vị trí và Kích thước (Scale) động cho TOÀN BỘ màn hình
@@ -163,6 +169,29 @@ public class MainScreen extends javax.swing.JFrame {
         javax.swing.SwingUtilities.invokeLater(()->{
             updateGameLayout(level);
         });
+    }
+    
+    private void playMusicByLevel() {
+        // Lấy tên của Level hiện tại (AFRICA, ASIAN, EUROPE...)
+        String levelName = config.GetLevel(); 
+        
+        if (levelName.equalsIgnoreCase("AFRICA")) {
+            audioManager.playBGM("/images/Sound/SoundAfrica_Europe.wav");
+        } else if (levelName.equalsIgnoreCase("ASIAN")) {
+            audioManager.playBGM("/images/Sound/SoundAsian.wav");
+        } else if (levelName.equalsIgnoreCase("EUROPE")) {
+            audioManager.playBGM("/images/Sound/SoundAfrica_Europe.wav");
+        } else {
+            // Nhạc mặc định nếu người chơi không chọn màn mà bấm Play ngay từ đầu
+            audioManager.playBGM("/images/Sound/SoundAfrica_Europe.wav");
+        }
+    }
+    
+    // Thêm hàm này vào MainScreen.java
+    public void playSoundEffect(String path) {
+        if (audioManager != null) {
+            audioManager.playSoundEffect(path);
+        }
     }
 
     // Hàm dùng chung để tự động tính toán và phóng to/thu nhỏ mọi thứ
@@ -278,6 +307,13 @@ public class MainScreen extends javax.swing.JFrame {
         play.initTimer(Timeline);
 
         updateGameLayout(level);
+    }
+    
+    // Thêm hàm này vào MainScreen.java
+    public void stopMusic() {
+        if (audioManager != null) {
+            audioManager.stopBGM();
+        }
     }
 
     /**
@@ -532,4 +568,8 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton timeButton;
     private javax.swing.JPanel topBarPanel;
     // End of variables declaration//GEN-END:variables
+
+    void playBGM() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
