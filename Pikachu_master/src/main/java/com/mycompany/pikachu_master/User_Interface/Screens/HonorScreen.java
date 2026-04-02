@@ -5,6 +5,7 @@
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
 import com.mycompany.pikachu_master.Controller.GameConfig;
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundHonorScreen;
 import com.mycompany.pikachu_master.Model.LevelType;
 
 
@@ -26,6 +27,7 @@ public class HonorScreen extends javax.swing.JFrame {
 
     public HonorScreen(MainScreen main, GameConfig config, LevelType level) {
         this.setUndecorated(true);
+        setContentPane(new BackgroundHonorScreen());
         initComponents();
         this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.main = main;

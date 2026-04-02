@@ -5,6 +5,7 @@
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
 import com.mycompany.pikachu_master.Controller.GameConfig;
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundLossScreen;
 import com.mycompany.pikachu_master.Model.LevelType;
 
 /**
@@ -25,6 +26,7 @@ public class LossScreen extends javax.swing.JFrame {
     
     public LossScreen(MainScreen main, GameConfig config , LevelType level) {
         this.setUndecorated(true);
+        setContentPane(new BackgroundLossScreen());
         initComponents();
         this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.main = main;
@@ -67,25 +69,11 @@ public class LossScreen extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        scoreLabel = new javax.swing.JLabel();
         retryButton = new javax.swing.JButton();
         exitButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        scoreLabel.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
-        scoreLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        scoreLabel.setText("ÔI THÔI CHẾC!!!");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 43;
-        gridBagConstraints.ipady = 37;
-        gridBagConstraints.insets = new java.awt.Insets(121, 74, 0, 76);
-        getContentPane().add(scoreLabel, gridBagConstraints);
 
         retryButton.setText("VÁN MỚI");
         retryButton.setPreferredSize(new java.awt.Dimension(150, 30));
@@ -161,6 +149,5 @@ public class LossScreen extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton exitButton;
     private javax.swing.JButton retryButton;
-    private javax.swing.JLabel scoreLabel;
     // End of variables declaration//GEN-END:variables
 }

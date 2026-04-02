@@ -4,6 +4,9 @@
  */
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundSettingMenuScreen;
+import com.mycompany.pikachu_master.Utils.SoundLoad;
+
 /**
  *
  * @author laptop
@@ -19,6 +22,7 @@ public class SettingMenuScreen extends javax.swing.JFrame {
     StartScreen start;
     public SettingMenuScreen(StartScreen start) {
         this.setUndecorated(true);
+        setContentPane(new BackgroundSettingMenuScreen());
         initComponents();
         this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.start = start;
@@ -106,13 +110,15 @@ public class SettingMenuScreen extends javax.swing.JFrame {
         this.dispose();
         
     }//GEN-LAST:event_exitButton6ActionPerformed
-
+// này là tiếng thao tác nhé, như kiểu chọn hay ăn á
     private void soundButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_soundButtonActionPerformed
         // TODO add your handling code here:
         if (soundButton.isSelected()) {
             soundButton.setText("🔇");
+            SoundLoad.isSfxOn = false; // Tắt SFX
         } else {
             soundButton.setText("🔊");
+            SoundLoad.isSfxOn = true;
         }
     }//GEN-LAST:event_soundButtonActionPerformed
 
@@ -120,8 +126,13 @@ public class SettingMenuScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
          if (volumnButton.isSelected()) {
             volumnButton.setText("🚫");
+            SoundLoad.isBgmOn = false;
+            SoundLoad.stopBGM();
         } else {
             volumnButton.setText("🎧");
+            SoundLoad.isBgmOn = true;
+            //nhạc nền game nhé
+            SoundLoad.playBGM("");
         }
     }//GEN-LAST:event_volumnButtonActionPerformed
 

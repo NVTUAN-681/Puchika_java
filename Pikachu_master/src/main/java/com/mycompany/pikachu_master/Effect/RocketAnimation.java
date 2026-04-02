@@ -24,11 +24,12 @@ import javax.swing.Timer;
  * @author laptop
  */
 public class RocketAnimation {
-    public static void triggerRocketEffect(PlayScreen playScreen, RoundedIconButton startBtn1, RoundedIconButton startBtn2) {
+    public static void triggerRocketEffect(PlayScreen playScreen, RoundedIconButton startBtn1, RoundedIconButton startBtn2, CellPair targetPair) {
         
-        CellPair targetPair = playScreen.getAlgorithm().findHint(playScreen.getBoard());
+//        CellPair targetPair = playScreen.getAlgorithm().findHint(playScreen.getBoard());
         if (targetPair == null) {
-            if (playScreen.isBoardEmpty()) playScreen.showHonorScreen();
+            if (playScreen.isBoardEmpty())
+                playScreen.showHonorScreen();
             return; 
         }
 

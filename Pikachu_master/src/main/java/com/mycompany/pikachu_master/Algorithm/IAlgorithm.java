@@ -29,5 +29,5 @@ public interface IAlgorithm {
     public boolean hasAnyMatch (Board board);
     public CellPair findHint (Board board);
     public void shuffle(Board board);
-    public void removePair(Cell c1, Cell c2, Board board);
+    public CellPair removePair(Cell c1, Cell c2, Board board);
 }

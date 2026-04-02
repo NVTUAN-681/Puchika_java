@@ -212,19 +212,18 @@ public class PlayScreen extends JPanel implements ActionListener {
         java.awt.Window windown = javax.swing.SwingUtilities.getWindowAncestor(this);
         if (windown instanceof MainScreen) {
             MainScreen main = (MainScreen) windown;
-//            main.stopTimer();
             main.setEnabled(false);
             HonorScreen honorScreen = new HonorScreen(main, config, level);
             honorScreen.setAlwaysOnTop(true);
             honorScreen.setVisible(true);
         }
     } 
-    
+ 
+// hàm hiển thị khi thua
     public void showlossScreen(){
         java.awt.Window windown = javax.swing.SwingUtilities.getWindowAncestor(this);
             if (windown instanceof MainScreen) {
                 MainScreen main = (MainScreen) windown;
-//                main.stopTimer();
                 main.setEnabled(false);
                 LossScreen lossScreen = new LossScreen(main, config, level);
                 lossScreen.setAlwaysOnTop(true);
@@ -232,7 +231,7 @@ public class PlayScreen extends JPanel implements ActionListener {
             }
     }
 
-// hàm vẽ 
+// hàm vẽ đường nối giữa hai ô
     private void drawPathOnOverlay() {
         java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(this);
         if (window instanceof MainScreen) {
@@ -304,6 +303,7 @@ public class PlayScreen extends JPanel implements ActionListener {
             processMismatch(clickedBtn, isHidden);
         }
     }
+
 //sự kiện nếu chạy đúng
     private void processMatch(Cell currentCell, RoundedIconButton clickedBtn) {
         // Vẽ đường đi
@@ -313,15 +313,15 @@ public class PlayScreen extends JPanel implements ActionListener {
         RoundedIconButton firstBtn = firstClickBtn;
 
         // Xóa dữ liệu & ẩn UI
-        algorithm.removePair(firstClick, currentCell, board);
+        CellPair RockketTarget = algorithm.removePair(firstClick, currentCell, board);
         firstBtn.setVisible(false);
         clickedBtn.setVisible(false);
-
+        
         updateAllButtons();
 
         //Hiệu ứng tên lửa
         if (matchedId == 1) { // ROCKET_ITEM_ID
-            RocketAnimation.triggerRocketEffect(this, firstBtn, clickedBtn);
+            RocketAnimation.triggerRocketEffect(this, firstBtn, clickedBtn, RockketTarget);
         }
 
         //KIỂM TRA THẮNG THUA (Đặt ở đây là chuẩn nhất)
@@ -362,8 +362,7 @@ public class PlayScreen extends JPanel implements ActionListener {
         if (countdownTimer != null && !countdownTimer.isRunning() && currentTime > 0) {
             countdownTimer.start();
         }
-    }
-    
+    }  
     public void addTimer(int time){
         currentTime = currentTime + time;
     }

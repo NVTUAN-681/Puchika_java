@@ -6,6 +6,7 @@ package com.mycompany.pikachu_master.Algorithm;
 
 import com.mycompany.pikachu_master.Model.Board;
 import com.mycompany.pikachu_master.Model.Cell;
+import com.mycompany.pikachu_master.Model.CellPair;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -16,8 +17,8 @@ import java.util.ArrayList;
 public class MediumModeAlgorithm extends ClassicAlgorithm {
 
 @Override
-public void removePair(Cell c1, Cell c2, Board board) {
-    super.removePair(c1, c2, board);
+public CellPair removePair(Cell c1, Cell c2, Board board) {
+    CellPair rocketTarget = super.removePair(c1, c2, board);
     int centerRow = board.getRows() / 2;
     int centerCol = board.getCols() / 2;
     
@@ -52,6 +53,7 @@ public void removePair(Cell c1, Cell c2, Board board) {
     }
     
     rebuildMap(board);
+    return rocketTarget;
 }
 
 private void applyVerticalAndHorizontal(Board board, int x, int y, int centerRow, int centerCol) {

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -386,39 +387,57 @@ public class ClassicAlgorithm implements IAlgorithm{
     }
     
     @Override
-    public void removePair(Cell c1, Cell c2, Board board) {
+    public CellPair removePair(Cell c1, Cell c2, Board board) {
         list.clear();
         c1.setStatus(false);
         c2.setStatus(false);
         board.setTotalCells(board.getTotalCells() - 2);
         
         if (c1.getId() == 1) {
-            // Tìm tất cả các id còn lại (không phải tên lửa)
-            List<Integer> availableIds = new ArrayList<>();
-            for (Integer key : map.keySet()) {
-                if (key != 1) { // không phải tên lửa
-                    List<Cell> cells = map.get(key);
-                    if (cells.stream().anyMatch(Cell::isStatus)) {
-                        availableIds.add(key);
-                    }
-                }
-            }
-
-            if (availableIds.isEmpty()) return;
-
-            // Chọn ngẫu nhiên 1 id
-            int randomId = availableIds.get((int)(Math.random() * availableIds.size()));
-            List<Cell> pair = map.get(randomId);
-
-            // Lấy 2 ô còn active của id đó
-            Cell randomC1 = pair.stream().filter(Cell::isStatus).findFirst().get();
-            Cell randomC2 = pair.stream().filter(Cell::isStatus).skip(1).findFirst().get();
-
-            list.clear();
-            randomC1.setStatus(false);
-            randomC2.setStatus(false);
-            board.setTotalCells(board.getTotalCells() - 2);
+            return findRandomTarget();
+//            // Tìm tất cả các id còn lại (không phải tên lửa)
+//            List<Integer> availableIds = new ArrayList<>();
+//            for (Integer key : map.keySet()) {
+//                if (key != 1) { // không phải tên lửa
+//                    List<Cell> cells = map.get(key);
+//                    if (cells.stream().anyMatch(Cell::isStatus)) {
+//                        availableIds.add(key);
+//                    }
+//                }
+//            }
+//
+//            if (!availableIds.isEmpty()){
+//
+//                // Chọn ngẫu nhiên 1 id
+//                int randomId = availableIds.get((int)(Math.random() * availableIds.size()));
+//                List<Cell> pair = map.get(randomId);
+//
+//                // Lấy 2 ô còn active của id đó
+//                Cell randomC1 = pair.stream().filter(Cell::isStatus).findFirst().get();
+//                Cell randomC2 = pair.stream().filter(Cell::isStatus).skip(1).findFirst().get();
+//                return new CellPair(randomC1,randomC2);
+////            list.clear();
+////            randomC1.setStatus(false);
+////            randomC2.setStatus(false);
+////            board.setTotalCells(board.getTotalCells() - 2);
+//            }
         }
-    }   
+        return null;
+    }
+    private CellPair findRandomTarget() {
+        // Lọc danh sách các ID còn ô đang "sống" (trừ ID 1 của Rocket)
+        List<Integer> validIds = map.keySet().stream()
+            .filter(id -> id != 1 && map.get(id).stream().anyMatch(Cell::isStatus))
+            .collect(Collectors.toList());
+
+        if (validIds.isEmpty()) return null; // TRÁNH SẬP: Nếu hết mục tiêu, trả về null
+
+        int randomId = validIds.get((int) (Math.random() * validIds.size()));
+        List<Cell> cells = map.get(randomId).stream()
+                              .filter(Cell::isStatus).limit(2)
+                              .collect(Collectors.toList());
+
+        return (cells.size() == 2) ? new CellPair(cells.get(0), cells.get(1)) : null;
+    }
 
 }

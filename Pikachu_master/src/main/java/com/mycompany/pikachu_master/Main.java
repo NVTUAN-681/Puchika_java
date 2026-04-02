@@ -10,6 +10,6 @@ package com.mycompany.pikachu_master;
  */
 public class Main {
     public static void main(String[] args) {
-        
+    
     }
 }
