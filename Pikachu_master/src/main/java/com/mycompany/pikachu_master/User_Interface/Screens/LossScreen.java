@@ -116,7 +116,7 @@ public class LossScreen extends javax.swing.JFrame {
             public void windowClosing(java.awt.event.WindowEvent e) {
                 main.setEnabled(true);
                 main.dispose(); 
-                StartScreen pika = new StartScreen(config, level);
+                StartScreen pika = new StartScreen(config, level, play);
                 pika.setLevel(config.GetLevel());
                 pika.setVisible(true); // Báo màn hình chính đếm thời gian tiếp
             }
@@ -263,7 +263,7 @@ public class LossScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         audioManager.stopBGM();
         
-        StartScreen pika = new StartScreen(config, level);
+        StartScreen pika = new StartScreen(config, level, play);
         pika.setLevel(config.GetLevel());
         pika.setVisible(true);
         this.dispose();

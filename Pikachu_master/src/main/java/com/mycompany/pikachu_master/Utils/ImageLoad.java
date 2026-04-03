@@ -42,10 +42,10 @@ public class ImageLoad {
                     imageMap.put(i, new ImageIcon(scaledImg));
                 }
                 else{
-                    System.err.println("❌ KHÔNG TÌM THẤY: " + path);
+                    System.err.println("❌ Not found: " + path);
                 }
             } catch (Exception e) {
-                System.out.println("Không tìm thấy ảnh ID: " + i);
+                System.out.println("ID not found: " + i);
             }
         }
     }

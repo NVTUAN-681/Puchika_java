@@ -264,7 +264,7 @@ public class PauseScreen extends javax.swing.JFrame {
     private void exitmenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitmenuButtonActionPerformed
         // TODO add your handling code here:
         this.main.stopMusic();
-        StartScreen pika = new StartScreen(config, level);
+        StartScreen pika = new StartScreen(config, level, play);
         pika.setLevel(config.GetLevel());
         pika.setVisible(true);
         main.setVisible(false);

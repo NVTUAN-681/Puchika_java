@@ -42,6 +42,70 @@ public class MainScreen extends javax.swing.JFrame {
     private int currentTotalCoin = 0;
     
     private SoundLoad audioManager = new SoundLoad();
+    
+    public int getHintCount() {
+        return hintCount;
+    }
+
+    public int getShuffleCount() {
+        return shuffleCount;
+    }
+    
+    public MainScreen(GameConfig config, LevelType level) {
+        initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        this.config = config;
+        this.level = level;
+        this.play = new PlayScreen(config, this);
+        this.hintCount = 3;
+        this.shuffleCount = 3;
+        //setContentPane(new BackgroundMain());
+        // --- THÊM CỤM NÀY ĐỂ MÀN CHƠI TỰ CHỌN ĐÚNG NỀN ---
+        javax.swing.JPanel dynamicBg = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                super.paintComponent(g);
+                // Tự động lấy đúng ảnh Ánh Sáng hoặc Bóng Tối
+                java.awt.Image bg = com.mycompany.pikachu_master.Model.ThemeManager.getBackgroundImage(com.mycompany.pikachu_master.Model.ThemeManager.currentTheme);
+                if (bg != null) {
+                    g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+        setContentPane(dynamicBg);
+        this.setUndecorated(true);
+        initComponents();
+        this.setMinimumSize(new java.awt.Dimension(800, 600));
+        play.initTimer(this.Timeline);
+        
+        // ---> THÊM 3 DÒNG NÀY ĐỂ KÍCH HOẠT LỚP VẼ ĐƯỜNG ĐI <---
+        PathOverlay pathOverlay = new PathOverlay();
+        this.setGlassPane(pathOverlay);
+        pathOverlay.setVisible(true);
+        
+        Timeline.setOpaque(false);
+        Timeline.setEnabled(false);
+        styleTopBar();
+        this.getContentPane().setLayout(null);
+        this.getContentPane().add(play);
+        
+        playMusicByLevel();
+        resetScoreDisPlay();
+        resetCoinDisplay();
+        //căn chỉnh vị trí.
+        // Căn chỉnh vị trí và kích thước linh động cho bảng Pokemon
+        // Căn chỉnh vị trí và Kích thước (Scale) động cho TOÀN BỘ màn hình
+        this.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                updateGameLayout(level);
+            }
+        });
+        
+        javax.swing.SwingUtilities.invokeLater(()->{
+            updateGameLayout(level);
+        });
+    }
 
     // ---> THÊM HÀM NÀY VÀO ĐỂ TRANG TRÍ THANH TOP BAR <---
     private void styleTopBar() {
@@ -125,120 +189,64 @@ public class MainScreen extends javax.swing.JFrame {
 //hàm hiện thị thua cuộc
     private void handleGameOver() {
         //javax.swing.JOptionPane.showMessageDialog(this, "Hết giờ! Bạn đã thua cuộc.", "Game Over", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-       audioManager.stopBGM();
+        audioManager.stopBGM();
         this.setEnabled(false);
         LossScreen loss = new LossScreen(this, config, level, play);
         loss.setAlwaysOnTop(true);
         loss.setVisible(true);
     }
-
-    public MainScreen(GameConfig config, LevelType level) {
-        initComponents();
-        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        this.config = config;
-        this.level = level;
-        this.play = new PlayScreen(config, this);
-        this.hintCount = 3;
-        this.shuffleCount = 3;
-        //setContentPane(new BackgroundMain());
-        // --- THÊM CỤM NÀY ĐỂ MÀN CHƠI TỰ CHỌN ĐÚNG NỀN ---
-        javax.swing.JPanel dynamicBg = new javax.swing.JPanel() {
-            @Override
-            protected void paintComponent(java.awt.Graphics g) {
-                super.paintComponent(g);
-                // Tự động lấy đúng ảnh Ánh Sáng hoặc Bóng Tối
-                java.awt.Image bg = com.mycompany.pikachu_master.Model.ThemeManager.getBackgroundImage(com.mycompany.pikachu_master.Model.ThemeManager.currentTheme);
-                if (bg != null) {
-                    g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
-                }
-            }
-        };
-        setContentPane(dynamicBg);
-        this.setUndecorated(true);
-        initComponents();
-        this.setMinimumSize(new java.awt.Dimension(800, 600));
-        play.initTimer(this.Timeline);
-        
-        // ---> THÊM 3 DÒNG NÀY ĐỂ KÍCH HOẠT LỚP VẼ ĐƯỜNG ĐI <---
-        PathOverlay pathOverlay = new PathOverlay();
-        this.setGlassPane(pathOverlay);
-        pathOverlay.setVisible(true);
-        
-        Timeline.setOpaque(false);
-        Timeline.setEnabled(false);
-        styleTopBar();
-        this.getContentPane().setLayout(null);
-        this.getContentPane().add(play);
-        
-        playMusicByLevel();
-        resetScoreDisPlay();
-        resetCoinDisplay();
-        //căn chỉnh vị trí.
-        // Căn chỉnh vị trí và kích thước linh động cho bảng Pokemon
-        // Căn chỉnh vị trí và Kích thước (Scale) động cho TOÀN BỘ màn hình
-        this.addComponentListener(new java.awt.event.ComponentAdapter() {
-            @Override
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                updateGameLayout(level);
-            }
-        });
-        
-        javax.swing.SwingUtilities.invokeLater(()->{
-            updateGameLayout(level);
-        });
-    }
     
-        public void updateScore(int newScore) {
-            this.currentTotalScore = newScore;
+    public void updateScore(int newScore) {
+        this.currentTotalScore = newScore;
 
-            // Tạo hiệu ứng nhảy số từ displayedScore đến currentTotalScore
-            javax.swing.Timer scoreTimer = new javax.swing.Timer(20, null);
-            scoreTimer.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
+        // Tạo hiệu ứng nhảy số từ displayedScore đến currentTotalScore
+        javax.swing.Timer scoreTimer = new javax.swing.Timer(20, null);
+        scoreTimer.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
 //                    displayedScore = 0;
 //                    PointLabel.setText("ĐIỂM: " + displayedScore);
-                    if (displayedScore < currentTotalScore) {
-                        displayedScore += 5; // Tốc độ tăng điểm
-                        if (displayedScore > currentTotalScore) displayedScore = currentTotalScore;
-                        PointLabel.setText("ĐIỂM: " + displayedScore);
-                    } else {
-                        scoreTimer.stop();
-                    }
+                if (displayedScore < currentTotalScore) {
+                    displayedScore += 5; // Tốc độ tăng điểm
+                    if (displayedScore > currentTotalScore) displayedScore = currentTotalScore;
+                    PointLabel.setText("ĐIỂM: " + displayedScore);
+                } else {
+                    scoreTimer.stop();
                 }
-            });
-            scoreTimer.start();
-        }
-        
-        public void updateCoin(int newCoin){
-            this.currentTotalCoin = newCoin;
+            }
+        });
+        scoreTimer.start();
+    }
 
-            // Tạo hiệu ứng nhảy số từ displayedCoin đến currentTotalCoin
-            javax.swing.Timer scoreTimer = new javax.swing.Timer(20, null);
-            scoreTimer.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
+    public void updateCoin(int newCoin){
+        this.currentTotalCoin = newCoin;
+
+        // Tạo hiệu ứng nhảy số từ displayedCoin đến currentTotalCoin
+        javax.swing.Timer scoreTimer = new javax.swing.Timer(20, null);
+        scoreTimer.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
 //                    displayedCoin = 0;
 //                    PointLabel.setText("ĐIỂM: " + displayedCoin);
-                    if (displayedCoin < currentTotalCoin) {
-                        displayedCoin += 5; // Tốc độ tăng điểm
-                        if (displayedCoin > currentTotalCoin) displayedCoin = currentTotalCoin;
-                        coin.setText("Vàng: " + displayedCoin);
-                    } else {
-                        scoreTimer.stop();
-                    }
+                if (displayedCoin < currentTotalCoin) {
+                    displayedCoin += 5; // Tốc độ tăng điểm
+                    if (displayedCoin > currentTotalCoin) displayedCoin = currentTotalCoin;
+                    coin.setText("Vàng: " + displayedCoin);
+                } else {
+                    scoreTimer.stop();
                 }
-            });
-            scoreTimer.start();
-        }
-        
-        public void resetCoinDisplay(){
-            this.currentTotalCoin = 0;
-            this.displayedCoin = 0;
-            coin.setText("Vàng: " + displayedCoin);
-        }
-        
-        public void resetScoreDisPlay(){
+            }
+        });
+        scoreTimer.start();
+    }
+
+    public void resetCoinDisplay(){
+        this.currentTotalCoin = 0;
+        this.displayedCoin = 0;
+        coin.setText("Vàng: " + displayedCoin);
+    }
+
+    public void resetScoreDisPlay(){
             this.currentTotalScore = 0;
             this.displayedScore = 0;
             PointLabel.setText("ĐIỂM: 0");
@@ -261,14 +269,14 @@ public class MainScreen extends javax.swing.JFrame {
     }
     
     // Thêm hàm này vào MainScreen.java
-   public void playSoundEffect(String path) {
+    public void playSoundEffect(String path) {
         // DÒNG NÀY RẤT QUAN TRỌNG: Nó sẽ in ra dòng chữ để chứng minh tín hiệu đã tới đây
-        System.out.println("Tín hiệu đã tới MainScreen! Đang chuẩn bị phát: " + path);
+//        System.out.println("Tín hiệu đã tới MainScreen! Đang chuẩn bị phát: " + path);
         
         if (audioManager != null) {
             audioManager.playSoundEffect(path);
         } else {
-            System.out.println("LỖI: audioManager bị null!");
+            System.out.println("audioManager bị null!");
         }
     }
 

@@ -9,12 +9,12 @@ package com.mycompany.pikachu_master.Model;
  * @author DELL
  */
 public class LevelType {
-    private String name;
+    private String Level;
     private int rows, cols, timeLimit, NoP;
     private boolean isHardMode, isRocket;
     
-    public LevelType(String name, int rows, int cols, int timeLimit, int NoP, boolean  isHardMode, boolean  isRocket){
-        this.name = name;
+    public LevelType(String level, int rows, int cols, int timeLimit, int NoP, boolean  isHardMode, boolean  isRocket){
+        this.Level = level;
         this.rows = rows;
         this.cols = cols;
         this.timeLimit = timeLimit;
@@ -22,7 +22,7 @@ public class LevelType {
         this.isHardMode = isHardMode;
         this.isRocket = isRocket;
     }
-    
+
     public static final LevelType START = new LevelType("Start", 3, 6, 20, 6, false, true);
     public static final LevelType AFRICA = new LevelType("AFRICA", 6, 8, 300, 12, false, true);
     public static final LevelType EUROPE = new LevelType("EUROPE", 8, 10, 240, 16, true, false);
@@ -50,10 +50,10 @@ public class LevelType {
         }
     }
     
-    public String getName() {
-        return name;
+    public String getLevel() {
+        return Level;
     }
-
+    
     public int getRows() {
         return rows;
     }

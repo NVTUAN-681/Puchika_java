@@ -54,7 +54,7 @@ public class SoundLoad {
                 effectClip.open(audioInput);
                 effectClip.start();
             } else {
-                System.err.println("LỖI: Không tìm thấy file âm thanh tại: " + resourcePath);
+                System.err.println("error: don't find audio at: " + resourcePath);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

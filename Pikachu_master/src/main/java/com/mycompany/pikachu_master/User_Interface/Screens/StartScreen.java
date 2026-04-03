@@ -5,6 +5,7 @@
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
 import com.mycompany.pikachu_master.Controller.GameConfig;
+import com.mycompany.pikachu_master.Controller.PlayScreen;
 import com.mycompany.pikachu_master.Model.LevelType;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
 //import com.mycompany.pikachu_master.User_Interface.Components.BackgroundMain;
@@ -27,36 +28,22 @@ public class StartScreen extends javax.swing.JFrame {
      */
     private GameConfig config;
     private LevelType level;
+    private PlayScreen play;
     
     private SoundLoad audioManager = new SoundLoad();
     
-    public StartScreen(GameConfig config,LevelType level) {
-        setContentPane(new BackgroundStartScreen());
-        //this.setUndecorated(true);
-//        // --- THÊM CỤM NÀY ĐỂ NỀN TỰ ĐỘNG CẬP NHẬT THEO THEME ---
-//        javax.swing.JPanel dynamicBg = new javax.swing.JPanel() {
-//            @Override
-//            protected void paintComponent(java.awt.Graphics g) {
-//                super.paintComponent(g);
-//                // Lấy ảnh dựa trên Theme hiện tại đang lưu trong ThemeManager
-//                java.awt.Image bg = com.mycompany.pikachu_master.Model.ThemeManager.getBackgroundImage(com.mycompany.pikachu_master.Model.ThemeManager.currentTheme);
-//                if (bg != null) {
-//                    g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
-//                }
-//            }
-//        };
-//        // Bắt buộc set Layout này để các nút playButton, levelButton... không bị bay màu
-//        dynamicBg.setLayout(new java.awt.GridBagLayout()); 
-//        setContentPane(dynamicBg);
-        
+    private int currentCoin;
+    
+    public StartScreen(GameConfig config, LevelType level, PlayScreen play) {
+        setContentPane(new BackgroundStartScreen());        
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.config = config;
         this.level = level;
+        this.play = play;
 // tải ảnh trước khi bắt đầu trò chơi        
         ImageLoad.loadAllImagesPika();
         ImageLoad.BackgroundButtonsLoad();
-        //this.setMinimumSize(new java.awt.Dimension(800, 600));
         setupAllButtonIcons();
         // 3. GỌI NHẠC NỀN KHI VỪA MỞ MÀN HÌNH CHÍNH LÊN
         audioManager.playBGM("/Sound/SoundStart.wav"); 
@@ -207,7 +194,7 @@ public class StartScreen extends javax.swing.JFrame {
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
 // Phát tiếng click chuột
-audioManager.stopBGM();
+        audioManager.stopBGM();
         audioManager.playSoundEffect("");
         MainScreen Main = new MainScreen(config, this.level);
         Main.setVisible(true);
@@ -217,8 +204,9 @@ audioManager.stopBGM();
     private void maxButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maxButtonActionPerformed
         // TODO add your handling code here:
         audioManager.playSoundEffect("");
-        HighScoreScreen Max = new HighScoreScreen(this);
+        HighScoreScreen Max = new HighScoreScreen(this, play);
         Max.setVisible(true);
+        Max.showHighScore();
     }//GEN-LAST:event_maxButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
@@ -273,10 +261,12 @@ audioManager.stopBGM();
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        GameConfig config = new GameConfig("Start");
+
         LevelType level = LevelType.START;
+        PlayScreen play = null;
+        GameConfig config = new GameConfig(level.getLevel());
     /* Create and display the form */
-    java.awt.EventQueue.invokeLater (() -> new StartScreen(config, level).setVisible(true));
+    java.awt.EventQueue.invokeLater (() -> new StartScreen(config, level, play).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

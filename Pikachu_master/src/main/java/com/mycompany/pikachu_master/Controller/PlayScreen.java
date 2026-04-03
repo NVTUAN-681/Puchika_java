@@ -287,15 +287,7 @@ public class PlayScreen extends JPanel implements ActionListener {
     }
    
 // xử lý khi chọn sai    
-    private void processMismatch(RoundedIconButton clickedBtn, boolean isHidden) {
-       // Tương lai nếu có file wrong.wav thì bật 4 dòng này lên
-        /*
-        java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(this);
-        if (window instanceof MainScreen) {
-            ((MainScreen) window).playSoundEffect("/images/Sound/wrong.wav");
-        }
-        */
-        
+    private void processMismatch(RoundedIconButton clickedBtn, boolean isHidden) {       
         isProcessingMismatch = true; // Khóa không cho bấm lung tung khi đang chờ
 
         // Tạo bản sao của firstBtn để dùng trong Timer (vì firstClickBtn sẽ bị reset về null sớm)
@@ -390,11 +382,8 @@ public class PlayScreen extends JPanel implements ActionListener {
                 addScore(50, 0);// Cộng điểm tên lửa sau khi bắn trúng mục tiêu
                 addcoin(TotalScore/10);
         }
-
-        //KIỂM TRA THẮNG THUA (Đặt ở đây là chuẩn nhất)
-        
         checkGameState();
-
+        
         firstClick = null;
         firstClickBtn = null;
     }
@@ -402,10 +391,10 @@ public class PlayScreen extends JPanel implements ActionListener {
 // Hàm kiểm tra thắng thua    
     private void checkGameState() {
         if (isBoardEmpty()) {
-            // Tính điểm dựa trên LevelType
             stopTimer();
-            stopAsianTimer(); 
-            DTB.insertScore("tuan", level.getName(), score, 150);
+            stopAsianTimer();
+            DTB.savePlayer("tuan", totalCoin);
+            DTB.updateHighScore(level.getLevel(), TotalScore);
             showHonorScreen();
             
         } else if (!algorithm.hasAnyMatch(board)) {
@@ -448,6 +437,9 @@ public class PlayScreen extends JPanel implements ActionListener {
     }
     public int get_TotalScore(){
         return TotalScore;
+    }
+    public String get_Level(){
+        return level.getLevel();
     }
     
 public void initTimer(javax.swing.JSlider externalTimeline) {

@@ -103,7 +103,7 @@ public class HonorScreen extends javax.swing.JFrame {
         audioManager.playBGM("/Sound/Winner.wav");
         this.updateScore(play.get_TotalScore());
         this.main.stopMusic();
-        audioManager.playBGM("/Sound/Winner.wav");
+
         
         // ---> KÍCH HOẠT HIỆU ỨNG PHÁO HOA <---
         fireworks = new FireWorks();
@@ -121,7 +121,7 @@ public class HonorScreen extends javax.swing.JFrame {
             public void windowClosing(java.awt.event.WindowEvent e) {
                 main.setEnabled(true);
                 main.dispose(); 
-                StartScreen pika = new StartScreen(config, level);
+                StartScreen pika = new StartScreen(config, level, play);
                 pika.setLevel(config.GetLevel());
                 pika.setVisible(true); // Báo màn hình chính đếm thời gian tiếp
             }
@@ -247,9 +247,7 @@ public class HonorScreen extends javax.swing.JFrame {
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         // TODO add your handling code here:
-       //this.main.playBGM();
-       //audioManager.playBGM("/images/Sound/Winner.wav");
-       audioManager.stopBGM();
+        audioManager.stopBGM();
         String levelName = config.GetLevel(); 
         
         if (levelName.equalsIgnoreCase("AFRICA")) {
@@ -270,8 +268,8 @@ public class HonorScreen extends javax.swing.JFrame {
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
         // TODO add your handling code here:
-          audioManager.stopBGM();
-        StartScreen pika = new StartScreen(config, level);
+        audioManager.stopBGM();
+        StartScreen pika = new StartScreen(config, level, play);
         pika.setLevel(config.GetLevel());
         pika.setVisible(true);
         main.dispose();
