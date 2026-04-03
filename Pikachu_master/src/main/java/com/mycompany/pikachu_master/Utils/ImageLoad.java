@@ -25,6 +25,7 @@ public class ImageLoad {
     // ---> 1. GẮN CỨNG 2 ĐƯỜNG DẪN ẢNH VÀO ĐÂY <---
     public static final String PATH_1 = "/images/Picture_button/BackgroundButtonInMain.png";
     public static final String PATH_2 = "/images/Picture_button/BackgroundButtonMainGame.png";
+    public static final String PATH_3 = "/images/Picture_button/BackgroundButtonLight.png";
     // Hàm load toàn bộ 21 ảnh vào bộ nhớ khi bắt đầu game
     public static void loadAllImagesPika() {
         
@@ -68,9 +69,14 @@ public class ImageLoad {
     }
     
     // ---> 3. HÀM MỚI: CHỈ CẦN TRUYỀN SỐ 1 HOẶC 2 <---
-    public static void loadBg(String key, int loaiAnh, int w, int h, int corner) {
-        // Nếu loaiAnh = 2 thì lấy PATH_2, còn không thì auto lấy PATH_1
-        String path = (loaiAnh == 2) ? PATH_2 : PATH_1;
+   public static void loadBg(String key, int loaiAnh, int w, int h, int corner) {
+        // Phân tách rõ ràng 3 loại ảnh
+        String path = PATH_1; // Mặc định là 1 (Main Screen)
+        if (loaiAnh == 2) {
+            path = PATH_2;    // Dark side
+        } else if (loaiAnh == 3) {
+            path = PATH_3;    // Light side
+        }
         
         URL imgURL = ImageLoad.class.getResource(path);
         try {

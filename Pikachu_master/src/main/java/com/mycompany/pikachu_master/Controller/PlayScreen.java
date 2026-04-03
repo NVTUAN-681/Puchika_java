@@ -238,7 +238,6 @@ public class PlayScreen extends JPanel implements ActionListener {
         java.awt.Window windown = javax.swing.SwingUtilities.getWindowAncestor(this);
         if (windown instanceof MainScreen) {
             MainScreen main = (MainScreen) windown;
-//            main.stopTimer();
             main.setEnabled(false);
             HonorScreen honorScreen = new HonorScreen(main, config, level, this);
             honorScreen.setAlwaysOnTop(true);
@@ -250,7 +249,6 @@ public class PlayScreen extends JPanel implements ActionListener {
         java.awt.Window windown = javax.swing.SwingUtilities.getWindowAncestor(this);
             if (windown instanceof MainScreen) {
                 MainScreen main = (MainScreen) windown;
-//                main.stopTimer();
                 main.setEnabled(false);
                 LossScreen lossScreen = new LossScreen(main, config, level, this);
                 lossScreen.setAlwaysOnTop(true);

@@ -13,6 +13,13 @@ import com.mycompany.pikachu_master.Utils.ImageLoad;
 import com.mycompany.pikachu_master.Utils.SoundLoad;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundLossScreen;
 import com.mycompany.pikachu_master.Model.LevelType;
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundLossScreen;
+import com.mycompany.pikachu_master.Utils.Button_Icon;
+import com.mycompany.pikachu_master.Utils.ImageLoad;
+import com.mycompany.pikachu_master.Utils.SoundLoad;
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundLossScreen;
+import com.mycompany.pikachu_master.Model.LevelType;
+import java.awt.geom.RoundRectangle2D;
 
 /**
  *
@@ -31,16 +38,45 @@ public class LossScreen extends javax.swing.JFrame {
     LevelType level;
     PlayScreen play;
     
+    
+    
+    private SoundLoad audioManager = new SoundLoad();    
     private int displayedScore = 0;
     private int currentTotalScore = 0;
-    
-    private SoundLoad audioManager = new SoundLoad();
     
     public LossScreen(MainScreen main, GameConfig config , LevelType level, PlayScreen play) {
         this.setUndecorated(true);
         setContentPane(new BackgroundLossScreen());
         initComponents();
-         
+        
+                 // ---> THÊM ĐOẠN CODE NÀY ĐỂ BO GÓC JFRAME <---
+        this.addComponentListener(new java.awt.event.ComponentAdapter() {
+                 public void componentResized(java.awt.event.ComponentEvent evt) {
+            // Cắt JFrame thành hình chữ nhật bo góc
+            // Tham số 40, 40 là độ cong của góc (bạn có thể tăng giảm tùy ý)
+            setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 40, 40));
+        }
+        });
+                javax.swing.JPanel contentPane = (javax.swing.JPanel) this.getContentPane();
+        contentPane.setBorder(new javax.swing.border.AbstractBorder() {
+            @Override
+            public void paintBorder(java.awt.Component c, java.awt.Graphics g, int x, int y, int width, int height) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                // Bật khử răng cưa cho viền mượt mà
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Chọn màu viền (Ví dụ: Màu Vàng Gold giống TopBar của bạn)
+                g2.setColor(new java.awt.Color(255, 215, 0));
+                // Chỉnh độ dày của đường viền (4f là 4 pixel)
+                g2.setStroke(new java.awt.BasicStroke(4f)); 
+                
+                // Vẽ viền bo góc 40px (Khớp với thông số 40 của lệnh setShape ở trên)
+                // Cộng trừ vài pixel (x+2, y+2, width-4, height-4) để viền không bị lẹm ra ngoài khung
+                g2.drawRoundRect(x + 2, y + 2, width - 4, height - 4, 40, 40);
+                g2.dispose();
+            }
+        });
+        //this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH); 
         ImageLoad.loadBg("PAUSE_BTN", 2, 250, 40, 10);
         setupAllButtonIcons();
         
@@ -50,10 +86,19 @@ public class LossScreen extends javax.swing.JFrame {
         this.level = level;
         this.play = play;
         
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
-        this.updateScore(play.get_TotalScore());
+        // ---> TẠO LỚP PHỦ ĐEN MỜ KHÓA MÀN HÌNH CHÍNH TẠI ĐÂY <---
+        this.darkOverlay = new javax.swing.JWindow(main);
+        this.darkOverlay.setBounds(main.getBounds()); 
+        this.darkOverlay.setBackground(new java.awt.Color(0, 0, 0, 180)); 
+        this.darkOverlay.addMouseListener(new java.awt.event.MouseAdapter() {}); 
+        this.darkOverlay.setVisible(true); 
+        this.setAlwaysOnTop(true);
+        
+        //this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        
         this.main.stopMusic();
-        audioManager.playBGM("/Sound/Loss.wav");
+        audioManager.playBGM("/images/Sound/Loss.wav");
+        this.updateScore(play.get_TotalScore());
         
         // Bắt sự kiện bấm nút X
 //        this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -183,20 +228,10 @@ public class LossScreen extends javax.swing.JFrame {
 
         scoreLabel.setFont(new java.awt.Font("Segoe UI", 3, 48)); // NOI18N
         scoreLabel.setForeground(new java.awt.Color(255, 255, 0));
-        scoreLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         scoreLabel.setText("9999");
-        scoreLabel.setToolTipText("");
-        scoreLabel.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 118;
-        gridBagConstraints.ipady = 16;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(75, 34, 0, 36);
-        getContentPane().add(scoreLabel, gridBagConstraints);
+        getContentPane().add(scoreLabel, new java.awt.GridBagConstraints());
 
-        setSize(new java.awt.Dimension(314, 408));
+        setSize(new java.awt.Dimension(464, 658));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -208,20 +243,20 @@ public class LossScreen extends javax.swing.JFrame {
        String levelName = config.GetLevel(); 
         
         if (levelName.equalsIgnoreCase("AFRICA")) {
-            audioManager.playBGM("/images/Sound/SoundAfrica_Europe.wav");
+            audioManager.playBGM("/Sound/SoundAfrica_Europe.wav");
         } else if (levelName.equalsIgnoreCase("ASIAN")) {
-            audioManager.playBGM("/images/Sound/SoundAsian.wav");
+            audioManager.playBGM("/Sound/SoundAsian.wav");
         } else if (levelName.equalsIgnoreCase("EUROPE")) {
-            audioManager.playBGM("/images/Sound/SoundAfrica_Europe.wav");
+            audioManager.playBGM("/Sound/SoundAfrica_Europe.wav");
         } else {
             // Nhạc mặc định nếu người chơi không chọn màn mà bấm Play ngay từ đầu
-            audioManager.playBGM("/images/Sound/SoundAfrica_Europe.wav");
+            audioManager.playBGM("/Sound/SoundAfrica_Europe.wav");
         }
 
        //main.playBGM();
        main.setEnabled(true);
        main.resertGame(config, level);
-        this.dispose();
+       this.dispose();
     }//GEN-LAST:event_retryButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
@@ -233,7 +268,7 @@ public class LossScreen extends javax.swing.JFrame {
         pika.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_exitButtonActionPerformed
-
+    
     /**
      * @param args the command line arguments
      */
@@ -257,6 +292,24 @@ public class LossScreen extends javax.swing.JFrame {
 
         /* Create and display the form */
         //java.awt.EventQueue.invokeLater(() -> new LossScreen().setVisible(true));
+    }
+    
+    private javax.swing.JWindow darkOverlay;
+
+    @Override
+    public void dispose() {
+        if (darkOverlay != null) {
+            darkOverlay.dispose(); 
+        }
+        super.dispose();
+    }
+    
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if (!b && darkOverlay != null) {
+            darkOverlay.setVisible(false);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

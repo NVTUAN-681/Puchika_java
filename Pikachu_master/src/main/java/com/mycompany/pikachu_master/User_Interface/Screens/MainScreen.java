@@ -140,7 +140,21 @@ public class MainScreen extends javax.swing.JFrame {
         this.play = new PlayScreen(config, this);
         this.hintCount = 3;
         this.shuffleCount = 3;
-        setContentPane(new BackgroundMain());
+        //setContentPane(new BackgroundMain());
+        // --- THÊM CỤM NÀY ĐỂ MÀN CHƠI TỰ CHỌN ĐÚNG NỀN ---
+        javax.swing.JPanel dynamicBg = new javax.swing.JPanel() {
+            @Override
+            protected void paintComponent(java.awt.Graphics g) {
+                super.paintComponent(g);
+                // Tự động lấy đúng ảnh Ánh Sáng hoặc Bóng Tối
+                java.awt.Image bg = com.mycompany.pikachu_master.Model.ThemeManager.getBackgroundImage(com.mycompany.pikachu_master.Model.ThemeManager.currentTheme);
+                if (bg != null) {
+                    g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+        setContentPane(dynamicBg);
+        this.setUndecorated(true);
         initComponents();
         this.setMinimumSize(new java.awt.Dimension(800, 600));
         play.initTimer(this.Timeline);
@@ -235,11 +249,11 @@ public class MainScreen extends javax.swing.JFrame {
         String levelName = config.GetLevel(); 
         
         if (levelName.equalsIgnoreCase("AFRICA")) {
-            audioManager.playBGM("/Sound/SoundAfrica_Europe.wav");
+            audioManager.playBGM("/sound/SoundAfrica_Europe.wav");
         } else if (levelName.equalsIgnoreCase("ASIAN")) {
-            audioManager.playBGM("/Sound/SoundAsian.wav");
+            audioManager.playBGM("/sound/SoundAsian.wav");
         } else if (levelName.equalsIgnoreCase("EUROPE")) {
-            audioManager.playBGM("/Sound/SoundAfrica_Europe.wav");
+            audioManager.playBGM("/sound/SoundAfrica_Europe.wav");
         } else {
             // Nhạc mặc định nếu người chơi không chọn màn mà bấm Play ngay từ đầu
             audioManager.playBGM("/Sound/SoundAfrica_Europe.wav");
@@ -247,9 +261,14 @@ public class MainScreen extends javax.swing.JFrame {
     }
     
     // Thêm hàm này vào MainScreen.java
-    public void playSoundEffect(String path) {
+   public void playSoundEffect(String path) {
+        // DÒNG NÀY RẤT QUAN TRỌNG: Nó sẽ in ra dòng chữ để chứng minh tín hiệu đã tới đây
+        System.out.println("Tín hiệu đã tới MainScreen! Đang chuẩn bị phát: " + path);
+        
         if (audioManager != null) {
             audioManager.playSoundEffect(path);
+        } else {
+            System.out.println("LỖI: audioManager bị null!");
         }
     }
 
@@ -631,6 +650,10 @@ public class MainScreen extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     void playBGM() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    void resumeTimer() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

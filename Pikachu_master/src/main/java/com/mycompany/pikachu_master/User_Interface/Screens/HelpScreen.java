@@ -5,25 +5,70 @@
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundHelp;
-
+import java.awt.geom.RoundRectangle2D;
 
 /**
  *
  * @author laptop
  */
 public class HelpScreen extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(HelpScreen.class.getName());
     /**
      * Creates new form HelpScreen
      */
     StartScreen start;
-    
+
     public HelpScreen(StartScreen start) {
         this.setUndecorated(true);
         setContentPane(new BackgroundHelp());
         initComponents();
-        this.start = start;          
+         // ---> THÊM ĐOẠN CODE NÀY ĐỂ BO GÓC JFRAME <---
+    this.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentResized(java.awt.event.ComponentEvent evt) {
+            // Cắt JFrame thành hình chữ nhật bo góc
+            // Tham số 40, 40 là độ cong của góc (bạn có thể tăng giảm tùy ý)
+            setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 40, 40));
+        }
+    });
+    
+    // ---> BẮT ĐẦU THÊM MỚI TỪ ĐÂY: VẼ ĐƯỜNG VIỀN MÀU (BORDER) BO TRÒN THEO KHUNG <---
+        javax.swing.JPanel contentPane = (javax.swing.JPanel) this.getContentPane();
+        contentPane.setBorder(new javax.swing.border.AbstractBorder() {
+            @Override
+            public void paintBorder(java.awt.Component c, java.awt.Graphics g, int x, int y, int width, int height) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                // Bật khử răng cưa cho viền mượt mà
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Chọn màu viền (Ví dụ: Màu Vàng Gold giống TopBar của bạn)
+                g2.setColor(new java.awt.Color(255, 215, 0));
+                // Chỉnh độ dày của đường viền (4f là 4 pixel)
+                g2.setStroke(new java.awt.BasicStroke(4f)); 
+                
+                // Vẽ viền bo góc 40px (Khớp với thông số 40 của lệnh setShape ở trên)
+                // Cộng trừ vài pixel (x+2, y+2, width-4, height-4) để viền không bị lẹm ra ngoài khung
+                g2.drawRoundRect(x + 2, y + 2, width - 4, height - 4, 40, 40);
+                g2.dispose();
+            }
+        });
+        this.start = start;
+          this.darkOverlay = new javax.swing.JWindow(start);
+        this.darkOverlay.setBounds(start.getBounds()); 
+        this.darkOverlay.setBackground(new java.awt.Color(0, 0, 0, 180)); 
+        this.darkOverlay.addMouseListener(new java.awt.event.MouseAdapter() {}); 
+        this.darkOverlay.setVisible(true); 
+        this.setAlwaysOnTop(true);
+        //this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+// 1. Rút nút Back ra khỏi lưới GridBagLayout
+       this.getContentPane().setLayout(null);
+
+        // 2. Ném nó lên tầng LayeredPane (tầng cao nhất, cho phép đặt vị trí tự do)
+        //this.getLayeredPane().add(exitButton2, javax.swing.JLayeredPane.PALETTE_LAYER);
+
+        // 3. Đóng đinh tọa độ tuyệt đối: Cách mép trái 20px, mép trên 20px, kích thước 60x40
+        exitButton2.setBounds(20, 20, 50, 30);
     }
 
     /**
@@ -34,28 +79,33 @@ public class HelpScreen extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        jLabel1 = new javax.swing.JLabel();
         exitButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 600));
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         exitButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         exitButton2.setText("<");
+        exitButton2.setPreferredSize(new java.awt.Dimension(50, 30));
         exitButton2.addActionListener(this::exitButton2ActionPerformed);
-        getContentPane().add(exitButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, 53, 31));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 23;
+        gridBagConstraints.ipady = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 610, 390);
+        getContentPane().add(exitButton2, gridBagConstraints);
 
-        setSize(new java.awt.Dimension(814, 608));
+        setSize(new java.awt.Dimension(464, 658));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void exitButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButton2ActionPerformed
         // TODO add your handling code here:
-        start.setVisible(true);
+        //start.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_exitButton2ActionPerformed
 
@@ -83,9 +133,24 @@ public class HelpScreen extends javax.swing.JFrame {
         /* Create and display the form */
         //java.awt.EventQueue.invokeLater(() -> new HelpScreen().setVisible(true));
     }
+ private javax.swing.JWindow darkOverlay;
 
+    @Override
+    public void dispose() {
+        if (darkOverlay != null) {
+            darkOverlay.dispose(); 
+        }
+        super.dispose();
+    }
+    
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if (!b && darkOverlay != null) {
+            darkOverlay.setVisible(false);
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton exitButton2;
-    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

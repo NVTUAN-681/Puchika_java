@@ -12,6 +12,8 @@ import com.mycompany.pikachu_master.User_Interface.Screens.MainScreen;
 import com.mycompany.pikachu_master.Utils.ImageLoad;
 import com.mycompany.pikachu_master.Utils.Button_Icon;
 import java.awt.Font;
+import java.awt.geom.RoundRectangle2D;
+import javax.swing.JWindow;
 /**
  *
  * @author laptop
@@ -27,15 +29,47 @@ public class PauseScreen extends javax.swing.JFrame {
     GameConfig config;
     LevelType level;
     PlayScreen play;
+    private final JWindow darkOverlay;
 
     public PauseScreen(MainScreen main, GameConfig config, LevelType level, PlayScreen play) {
         this.setUndecorated(true);
         setContentPane(new BackgroundPause());
         initComponents();
+        // ---> THÊM ĐOẠN CODE NÀY ĐỂ BO GÓC JFRAME <---
+    this.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentResized(java.awt.event.ComponentEvent evt) {
+            // Cắt JFrame thành hình chữ nhật bo góc
+            // Tham số 40, 40 là độ cong của góc (bạn có thể tăng giảm tùy ý)
+            setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 40, 40));
+        }
+    });
+    
+    // ---> BẮT ĐẦU THÊM MỚI TỪ ĐÂY: VẼ ĐƯỜNG VIỀN MÀU (BORDER) BO TRÒN THEO KHUNG <---
+        javax.swing.JPanel contentPane = (javax.swing.JPanel) this.getContentPane();
+        contentPane.setBorder(new javax.swing.border.AbstractBorder() {
+            @Override
+            public void paintBorder(java.awt.Component c, java.awt.Graphics g, int x, int y, int width, int height) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                // Bật khử răng cưa cho viền mượt mà
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Chọn màu viền (Ví dụ: Màu Vàng Gold giống TopBar của bạn)
+                g2.setColor(new java.awt.Color(255, 215, 0));
+                // Chỉnh độ dày của đường viền (4f là 4 pixel)
+                g2.setStroke(new java.awt.BasicStroke(4f)); 
+                
+                // Vẽ viền bo góc 40px (Khớp với thông số 40 của lệnh setShape ở trên)
+                // Cộng trừ vài pixel (x+2, y+2, width-4, height-4) để viền không bị lẹm ra ngoài khung
+                g2.drawRoundRect(x + 2, y + 2, width - 4, height - 4, 40, 40);
+                g2.dispose();
+            }
+        });
+        //this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         main.setEnabled(true);
         
         // Gọi hàm loadBg mới, truyền số 2 để lôi ảnh BạkgroundButtonMainGame.jpg ra xài
-        ImageLoad.loadBg("PAUSE_BTN", 2, 250, 40, 10);
+        ImageLoad.loadBg("PAUSE_BTN", 2, 250, 60, 10);
         setupAllButtonIcons();
         
         this.level = level;
@@ -43,16 +77,24 @@ public class PauseScreen extends javax.swing.JFrame {
         this.main = main;
         this.play = play;
         
+        // ---> TẠO LỚP PHỦ ĐEN MỜ KHÓA MÀN HÌNH CHÍNH TẠI ĐÂY <---
+        this.darkOverlay = new javax.swing.JWindow(main);
+        this.darkOverlay.setBounds(main.getBounds()); // Phủ kín toàn bộ MainScreen
+        this.darkOverlay.setBackground(new java.awt.Color(0, 0, 0, 180)); // Màu đen, độ mờ 180/255
+        this.darkOverlay.addMouseListener(new java.awt.event.MouseAdapter() {}); // Hút hết click chuột (không cho bấm xuyên qua)
+        this.darkOverlay.setVisible(true); // Bật lớp kính lên
+        this.setAlwaysOnTop(true); // Đảm bảo Menu Pause luôn nổi lên trên cùng
+        
         // Ghi đè thiết lập của NetBeans: Chỉ ẩn cửa sổ khi bấm X
         this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         
-        // Bắt sự kiện bấm nút X
-//        this.addWindowListener(new java.awt.event.WindowAdapter() {
-//            @Override
-//            public void windowClosing(java.awt.event.WindowEvent e) {
-//                main.resumeTimer(); // Báo màn hình chính đếm thời gian tiếp
-//            }
-//        });
+         //Bắt sự kiện bấm nút X
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                main.resumeTimer(); // Báo màn hình chính đếm thời gian tiếp
+            }
+        });
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -192,7 +234,7 @@ public class PauseScreen extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(6, 26, 94, 3);
         getContentPane().add(soundButton, gridBagConstraints);
 
-        setSize(new java.awt.Dimension(314, 408));
+        setSize(new java.awt.Dimension(464, 658));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -208,7 +250,8 @@ public class PauseScreen extends javax.swing.JFrame {
     private void Choi_tiepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Choi_tiepActionPerformed
         // TODO add your handling code here:    
         play.resumeTimer();
-        this.setVisible(false);
+        //this.setVisible(false);
+        this.dispose();
         play.countdownTimer.start();
     }//GEN-LAST:event_Choi_tiepActionPerformed
 
@@ -275,6 +318,28 @@ try {
         }
         /* Create and display the form */
         //java.awt.EventQueue.invokeLater(() -> new PauseScreen().setVisible(true));
+    }
+    
+    // ---> THÊM ĐOẠN CODE NÀY ĐỂ QUẢN LÝ TẤM KÍNH MỜ <---
+    // Khai báo tấm kính mờ
+   // private javax.swing.JWindow darkOverlay;
+
+    // Ghi đè hàm đóng cửa sổ: Cứ đóng Menu (dispose) là tự động đập vỡ tấm kính mờ
+    @Override
+    public void dispose() {
+        if (darkOverlay != null) {
+            darkOverlay.dispose(); 
+        }
+        super.dispose();
+    }
+    
+    // Ghi đè hàm setVisible: Nếu ẩn menu đi thì cũng phải ẩn kính mờ
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if (!b && darkOverlay != null) {
+            darkOverlay.setVisible(false);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

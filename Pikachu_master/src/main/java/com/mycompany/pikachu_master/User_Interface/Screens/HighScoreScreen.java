@@ -5,6 +5,7 @@
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
 import java.awt.event.WindowEvent;
+import java.awt.geom.RoundRectangle2D;
 
 /**
  *
@@ -22,9 +23,47 @@ public class HighScoreScreen extends javax.swing.JFrame {
     public HighScoreScreen(StartScreen start) {
         this.setUndecorated(true);
         initComponents();
+         // ---> THÊM ĐOẠN CODE NÀY ĐỂ BO GÓC JFRAME <---
+    this.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentResized(java.awt.event.ComponentEvent evt) {
+            // Cắt JFrame thành hình chữ nhật bo góc
+            // Tham số 40, 40 là độ cong của góc (bạn có thể tăng giảm tùy ý)
+            setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 40, 40));
+        }
+    });
+    
+    // ---> BẮT ĐẦU THÊM MỚI TỪ ĐÂY: VẼ ĐƯỜNG VIỀN MÀU (BORDER) BO TRÒN THEO KHUNG <---
+        javax.swing.JPanel contentPane = (javax.swing.JPanel) this.getContentPane();
+        contentPane.setBorder(new javax.swing.border.AbstractBorder() {
+            @Override
+            public void paintBorder(java.awt.Component c, java.awt.Graphics g, int x, int y, int width, int height) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                // Bật khử răng cưa cho viền mượt mà
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Chọn màu viền (Ví dụ: Màu Vàng Gold giống TopBar của bạn)
+                g2.setColor(new java.awt.Color(255, 215, 0));
+                // Chỉnh độ dày của đường viền (4f là 4 pixel)
+                g2.setStroke(new java.awt.BasicStroke(4f)); 
+                
+                // Vẽ viền bo góc 40px (Khớp với thông số 40 của lệnh setShape ở trên)
+                // Cộng trừ vài pixel (x+2, y+2, width-4, height-4) để viền không bị lẹm ra ngoài khung
+                g2.drawRoundRect(x + 2, y + 2, width - 4, height - 4, 40, 40);
+                g2.dispose();
+            }
+        });
         //this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        this.setMinimumSize(new java.awt.Dimension(300, 400));
+       // this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.start = start;
+        
+        this.darkOverlay = new javax.swing.JWindow(start);
+        this.darkOverlay.setBounds(start.getBounds()); 
+        this.darkOverlay.setBackground(new java.awt.Color(0, 0, 0, 180)); 
+        this.darkOverlay.addMouseListener(new java.awt.event.MouseAdapter() {}); 
+        this.darkOverlay.setVisible(true); 
+        this.setAlwaysOnTop(true);
+        
 //        this.addWindowListener(new java.awt.event.WindowAdapter() {
 //            @Override
 //            public void windowClosing(WindowEvent e) {
@@ -46,7 +85,6 @@ public class HighScoreScreen extends javax.swing.JFrame {
 
         jLabel2 = new javax.swing.JLabel();
         exitButton5 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(300, 400));
@@ -58,10 +96,10 @@ public class HighScoreScreen extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 28;
         gridBagConstraints.ipady = 46;
-        gridBagConstraints.insets = new java.awt.Insets(84, 24, 0, 0);
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(110, 20, 390, 230);
         getContentPane().add(jLabel2, gridBagConstraints);
 
         exitButton5.setText("<");
@@ -73,21 +111,10 @@ public class HighScoreScreen extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 27;
         gridBagConstraints.ipady = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
         getContentPane().add(exitButton5, gridBagConstraints);
 
-        jLabel1.setPreferredSize(new java.awt.Dimension(300, 400));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 3;
-        gridBagConstraints.ipadx = 300;
-        gridBagConstraints.ipady = 400;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        getContentPane().add(jLabel1, gridBagConstraints);
-
-        setSize(new java.awt.Dimension(314, 408));
+        setSize(new java.awt.Dimension(464, 658));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -122,9 +149,26 @@ public class HighScoreScreen extends javax.swing.JFrame {
         //java.awt.EventQueue.invokeLater(() -> new HighScoreScreen().setVisible(true));
     }
 
+    private javax.swing.JWindow darkOverlay;
+
+    @Override
+    public void dispose() {
+        if (darkOverlay != null) {
+            darkOverlay.dispose(); 
+        }
+        super.dispose();
+    }
+    
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if (!b && darkOverlay != null) {
+            darkOverlay.setVisible(false);
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton exitButton5;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }

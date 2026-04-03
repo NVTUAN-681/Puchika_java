@@ -12,6 +12,7 @@ import com.mycompany.pikachu_master.User_Interface.Components.BackgroundStartScr
 import com.mycompany.pikachu_master.Utils.ImageLoad;
 import com.mycompany.pikachu_master.Utils.Button_Icon;
 import com.mycompany.pikachu_master.Utils.SoundLoad;
+import com.mycompany.pikachu_master.Model.ThemeManager;
 
 /**
  *
@@ -31,6 +32,23 @@ public class StartScreen extends javax.swing.JFrame {
     
     public StartScreen(GameConfig config,LevelType level) {
         setContentPane(new BackgroundStartScreen());
+        //this.setUndecorated(true);
+//        // --- THÊM CỤM NÀY ĐỂ NỀN TỰ ĐỘNG CẬP NHẬT THEO THEME ---
+//        javax.swing.JPanel dynamicBg = new javax.swing.JPanel() {
+//            @Override
+//            protected void paintComponent(java.awt.Graphics g) {
+//                super.paintComponent(g);
+//                // Lấy ảnh dựa trên Theme hiện tại đang lưu trong ThemeManager
+//                java.awt.Image bg = com.mycompany.pikachu_master.Model.ThemeManager.getBackgroundImage(com.mycompany.pikachu_master.Model.ThemeManager.currentTheme);
+//                if (bg != null) {
+//                    g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
+//                }
+//            }
+//        };
+//        // Bắt buộc set Layout này để các nút playButton, levelButton... không bị bay màu
+//        dynamicBg.setLayout(new java.awt.GridBagLayout()); 
+//        setContentPane(dynamicBg);
+        
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.config = config;
@@ -38,7 +56,7 @@ public class StartScreen extends javax.swing.JFrame {
 // tải ảnh trước khi bắt đầu trò chơi        
         ImageLoad.loadAllImagesPika();
         ImageLoad.BackgroundButtonsLoad();
-        this.setMinimumSize(new java.awt.Dimension(800, 600));
+        //this.setMinimumSize(new java.awt.Dimension(800, 600));
         setupAllButtonIcons();
         // 3. GỌI NHẠC NỀN KHI VỪA MỞ MÀN HÌNH CHÍNH LÊN
         audioManager.playBGM("/Sound/SoundStart.wav"); 
@@ -53,6 +71,15 @@ public class StartScreen extends javax.swing.JFrame {
         this.config = new GameConfig(Level);
         this.level = LevelType.getByName(Level);
 //        setupAllButtonIcons();
+    }
+    
+    // Hàm này sẽ được LevelScreen gọi khi bấm nút chọn màn
+    public void setGameTheme(String themeSide) {
+        // Vẫn lưu phe vào Kho lưu trữ chung để lát nữa MainScreen mở lên tự lấy
+        com.mycompany.pikachu_master.Model.ThemeManager.currentTheme = themeSide;
+        
+        // ---> XÓA (HOẶC COMMENT) DÒNG NÀY ĐỂ START SCREEN KHÔNG BỊ ĐỔI NỀN <---
+        // this.getContentPane().repaint(); 
     }
     
     private void setupAllButtonIcons() {
@@ -89,11 +116,6 @@ public class StartScreen extends javax.swing.JFrame {
         playButton.setMinimumSize(new java.awt.Dimension(220, 30));
         playButton.setOpaque(true);
         playButton.setPreferredSize(new java.awt.Dimension(220, 30));
-        playButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                playButtonMouseEntered(evt);
-            }
-        });
         playButton.addActionListener(this::playButtonActionPerformed);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -215,8 +237,10 @@ audioManager.stopBGM();
 
     private void instructionuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instructionuttonActionPerformed
         // TODO add your handling code here:
-        audioManager.playSoundEffect("");
+        //audioManager.playSoundEffect("");
         HelpScreen Instruct = new HelpScreen(this);
+        Instruct.setAlwaysOnTop(true);
+        Instruct.setLocationRelativeTo(this);
         Instruct.setVisible(true);
         //this.setVisible(false);
     }//GEN-LAST:event_instructionuttonActionPerformed
@@ -228,11 +252,6 @@ audioManager.stopBGM();
         lev.setVisible(true);
         //this.setVisible(false);
     }//GEN-LAST:event_levelButtonActionPerformed
-
-    private void playButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_playButtonMouseEntered
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_playButtonMouseEntered
 
     /**
      * @param args the command line arguments

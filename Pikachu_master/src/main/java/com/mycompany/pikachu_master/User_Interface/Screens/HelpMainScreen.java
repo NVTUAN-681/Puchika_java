@@ -5,6 +5,7 @@
 package com.mycompany.pikachu_master.User_Interface.Screens;
 
 import com.mycompany.pikachu_master.Controller.GameConfig;
+import java.awt.geom.RoundRectangle2D;
 
 /**
  *
@@ -24,10 +25,48 @@ public class HelpMainScreen extends javax.swing.JFrame {
     public HelpMainScreen(PauseScreen pau) {
           this.setUndecorated(true);
         initComponents();
+         // ---> THÊM ĐOẠN CODE NÀY ĐỂ BO GÓC JFRAME <---
+    this.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentResized(java.awt.event.ComponentEvent evt) {
+            // Cắt JFrame thành hình chữ nhật bo góc
+            // Tham số 40, 40 là độ cong của góc (bạn có thể tăng giảm tùy ý)
+            setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 40, 40));
+        }
+    });
+    
+    // ---> BẮT ĐẦU THÊM MỚI TỪ ĐÂY: VẼ ĐƯỜNG VIỀN MÀU (BORDER) BO TRÒN THEO KHUNG <---
+        javax.swing.JPanel contentPane = (javax.swing.JPanel) this.getContentPane();
+        contentPane.setBorder(new javax.swing.border.AbstractBorder() {
+            @Override
+            public void paintBorder(java.awt.Component c, java.awt.Graphics g, int x, int y, int width, int height) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                // Bật khử răng cưa cho viền mượt mà
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Chọn màu viền (Ví dụ: Màu Vàng Gold giống TopBar của bạn)
+                g2.setColor(new java.awt.Color(255, 215, 0));
+                // Chỉnh độ dày của đường viền (4f là 4 pixel)
+                g2.setStroke(new java.awt.BasicStroke(4f)); 
+                
+                // Vẽ viền bo góc 40px (Khớp với thông số 40 của lệnh setShape ở trên)
+                // Cộng trừ vài pixel (x+2, y+2, width-4, height-4) để viền không bị lẹm ra ngoài khung
+                g2.drawRoundRect(x + 2, y + 2, width - 4, height - 4, 40, 40);
+                g2.dispose();
+            }
+        });
        // this.config= config;
         this.pau = pau;
-        this.setSize(800, 600);
+        //this.setSize(800, 600);
         this.setLocationRelativeTo(pau); 
+        this.setAlwaysOnTop(true);
+        
+ // ---> TẠO LỚP PHỦ ĐEN MỜ KHÓA MÀN HÌNH CHÍNH TẠI ĐÂY <---
+        this.darkOverlay = new javax.swing.JWindow(pau);
+        this.darkOverlay.setBounds(pau.getBounds()); 
+        this.darkOverlay.setBackground(new java.awt.Color(0, 0, 0, 180)); 
+        this.darkOverlay.addMouseListener(new java.awt.event.MouseAdapter() {}); 
+        this.darkOverlay.setVisible(true); 
         this.setAlwaysOnTop(true);
     }
 
@@ -39,31 +78,26 @@ public class HelpMainScreen extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         exit6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         exit6.setText("<");
         exit6.setPreferredSize(new java.awt.Dimension(50, 30));
         exit6.addActionListener(this::exit6ActionPerformed);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 27;
+        gridBagConstraints.ipady = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 614, 394);
+        getContentPane().add(exit6, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(exit6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(744, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(exit6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(564, Short.MAX_VALUE))
-        );
+        setBounds(0, 0, 464, 658);
     }// </editor-fold>//GEN-END:initComponents
 
     private void exit6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exit6ActionPerformed
@@ -97,7 +131,23 @@ public class HelpMainScreen extends javax.swing.JFrame {
         /* Create and display the form */
         //java.awt.EventQueue.invokeLater(() -> new HelpMainScreen().setVisible(true));
     }
+ private javax.swing.JWindow darkOverlay;
 
+    @Override
+    public void dispose() {
+        if (darkOverlay != null) {
+            darkOverlay.dispose(); 
+        }
+        super.dispose();
+    }
+    
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if (!b && darkOverlay != null) {
+            darkOverlay.setVisible(false);
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton exit6;
     // End of variables declaration//GEN-END:variables

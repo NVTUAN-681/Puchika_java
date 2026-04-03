@@ -13,6 +13,14 @@ import com.mycompany.pikachu_master.Utils.ImageLoad;
 import com.mycompany.pikachu_master.Utils.SoundLoad;
 import com.mycompany.pikachu_master.User_Interface.Components.BackgroundHonorScreen;
 import com.mycompany.pikachu_master.Model.LevelType;
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundHonorScreen;
+import com.mycompany.pikachu_master.Utils.Button_Icon;
+import com.mycompany.pikachu_master.Utils.ImageLoad;
+import com.mycompany.pikachu_master.Utils.SoundLoad;
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundHonorScreen;
+import com.mycompany.pikachu_master.Model.LevelType;
+import java.awt.geom.RoundRectangle2D;
+import com.mycompany.pikachu_master.Effect.FireWorks;
 
 
 
@@ -41,8 +49,38 @@ public class HonorScreen extends javax.swing.JFrame {
         this.setUndecorated(true);
         setContentPane(new BackgroundHonorScreen());
         initComponents();
+         // ---> THÊM ĐOẠN CODE NÀY ĐỂ BO GÓC JFRAME <---
+    this.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentResized(java.awt.event.ComponentEvent evt) {
+            // Cắt JFrame thành hình chữ nhật bo góc
+            // Tham số 40, 40 là độ cong của góc (bạn có thể tăng giảm tùy ý)
+            setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 40, 40));
+        }
+    });
+    
+    // ---> BẮT ĐẦU THÊM MỚI TỪ ĐÂY: VẼ ĐƯỜNG VIỀN MÀU (BORDER) BO TRÒN THEO KHUNG <---
+        javax.swing.JPanel contentPane = (javax.swing.JPanel) this.getContentPane();
+        contentPane.setBorder(new javax.swing.border.AbstractBorder() {
+            @Override
+            public void paintBorder(java.awt.Component c, java.awt.Graphics g, int x, int y, int width, int height) {
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+                // Bật khử răng cưa cho viền mượt mà
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Chọn màu viền (Ví dụ: Màu Vàng Gold giống TopBar của bạn)
+                g2.setColor(new java.awt.Color(255, 215, 0));
+                // Chỉnh độ dày của đường viền (4f là 4 pixel)
+                g2.setStroke(new java.awt.BasicStroke(4f)); 
+                
+                // Vẽ viền bo góc 40px (Khớp với thông số 40 của lệnh setShape ở trên)
+                // Cộng trừ vài pixel (x+2, y+2, width-4, height-4) để viền không bị lẹm ra ngoài khung
+                g2.drawRoundRect(x + 2, y + 2, width - 4, height - 4, 40, 40);
+                g2.dispose();
+            }
+        });
           
-        ImageLoad.loadBg("PAUSE_BTN", 2, 250, 40, 10);
+        ImageLoad.loadBg("PAUSE_BTN", 2, 300, 40, 10);
         setupAllButtonIcons();
         
         this.setMinimumSize(new java.awt.Dimension(300, 400));
@@ -50,12 +88,32 @@ public class HonorScreen extends javax.swing.JFrame {
         this.config = config;
         this.level = level;
         this.play = play;
+        
+        // ---> TẠO LỚP PHỦ ĐEN MỜ KHÓA MÀN HÌNH CHÍNH TẠI ĐÂY <---
+        this.darkOverlay = new javax.swing.JWindow(main);
+        this.darkOverlay.setBounds(main.getBounds()); 
+        this.darkOverlay.setBackground(new java.awt.Color(0, 0, 0, 180)); 
+        this.darkOverlay.addMouseListener(new java.awt.event.MouseAdapter() {}); 
+        this.darkOverlay.setVisible(true); 
+        this.setAlwaysOnTop(true);
+        
+        
         this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
         setEnabled(true);
-        
+        audioManager.playBGM("/Sound/Winner.wav");
         this.updateScore(play.get_TotalScore());
         this.main.stopMusic();
         audioManager.playBGM("/Sound/Winner.wav");
+        
+        // ---> KÍCH HOẠT HIỆU ỨNG PHÁO HOA <---
+        fireworks = new FireWorks();
+        this.setGlassPane(fireworks);
+        fireworks.setVisible(true);
+        fireworks.start();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        setEnabled(true);
+        
+
         // Bắt sự kiện bấm nút X
 
         this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -91,44 +149,44 @@ public class HonorScreen extends javax.swing.JFrame {
         
      }
      
-public void updateScore(int newScore) {
-    // 1. Tính tổng điểm cuối cùng
-    this.currentTotalScore = newScore + (play.get_timeRemain() * 10);
-    this.displayedScore = 0;
+        public void updateScore(int newScore) {
+            // 1. Tính tổng điểm cuối cùng
+            this.currentTotalScore = newScore + (play.get_timeRemain() * 10);
+            this.displayedScore = 0;
 
-    // 2. Thiết lập cấu hình thời gian
-    final int TotalAnimationTime = 2000;
-    final int TimeDelay = 20;            
-    
-    // 3. Tính toán số bước nhảy và giá trị mỗi bước
-    int totalSteps = TotalAnimationTime / TimeDelay; // Tổng số lần Timer sẽ chạy
-    // Mỗi bước cộng bao nhiêu điểm (dùng số thực để tránh mất mát dữ liệu khi chia)
-    final double incrementPerStep = (double) currentTotalScore / totalSteps;
+            // 2. Thiết lập cấu hình thời gian
+            final int TotalAnimationTime = 2000;
+            final int TimeDelay = 20;            
 
-    javax.swing.Timer scoreTimer = new javax.swing.Timer(TimeDelay, null);
-    scoreTimer.addActionListener(new java.awt.event.ActionListener() {
-        private int currentStep = 0;
+            // 3. Tính toán số bước nhảy và giá trị mỗi bước
+            int totalSteps = TotalAnimationTime / TimeDelay; // Tổng số lần Timer sẽ chạy
+            // Mỗi bước cộng bao nhiêu điểm (dùng số thực để tránh mất mát dữ liệu khi chia)
+            final double incrementPerStep = (double) currentTotalScore / totalSteps;
 
-        @Override
-        public void actionPerformed(java.awt.event.ActionEvent e) {
-            currentStep++;
-            
-            if (currentStep <= totalSteps) {
-                displayedScore = (int) (currentStep * incrementPerStep);
-                if (displayedScore > currentTotalScore) 
-                    displayedScore = currentTotalScore;
-                
-                scoreLabel.setText(String.valueOf(displayedScore));
-            } else {
-                // Bước cuối cùng: Chốt hạ con số chính xác nhất
-                scoreLabel.setText(String.valueOf(currentTotalScore));
-                ((javax.swing.Timer) e.getSource()).stop();
-            }
+            javax.swing.Timer scoreTimer = new javax.swing.Timer(TimeDelay, null);
+            scoreTimer.addActionListener(new java.awt.event.ActionListener() {
+                private int currentStep = 0;
+
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    currentStep++;
+
+                    if (currentStep <= totalSteps) {
+                        displayedScore = (int) (currentStep * incrementPerStep);
+                        if (displayedScore > currentTotalScore) 
+                            displayedScore = currentTotalScore;
+
+                        scoreLabel.setText(String.valueOf(displayedScore));
+                    } else {
+                        // Bước cuối cùng: Chốt hạ con số chính xác nhất
+                        scoreLabel.setText(String.valueOf(currentTotalScore));
+                        ((javax.swing.Timer) e.getSource()).stop();
+                    }
+                }
+            });
+
+            scoreTimer.start();
         }
-    });
-    
-    scoreTimer.start();
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -183,7 +241,7 @@ public void updateScore(int newScore) {
         gridBagConstraints.insets = new java.awt.Insets(121, 74, 0, 76);
         getContentPane().add(scoreLabel, gridBagConstraints);
 
-        setSize(new java.awt.Dimension(314, 408));
+        setSize(new java.awt.Dimension(464, 658));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -243,6 +301,29 @@ public void updateScore(int newScore) {
 
         /* Create and display the form */
         //java.awt.EventQueue.invokeLater(() -> new HonorScreen().setVisible(true));
+    }
+    
+    private javax.swing.JWindow darkOverlay;
+   
+    private FireWorks fireworks;
+
+    @Override
+    public void dispose() {
+        if (darkOverlay != null) {
+            darkOverlay.dispose(); 
+        }
+        if(fireworks != null){
+        fireworks.stop();
+        }
+        super.dispose();
+    }
+    
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        if (!b && darkOverlay != null) {
+            darkOverlay.setVisible(false);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

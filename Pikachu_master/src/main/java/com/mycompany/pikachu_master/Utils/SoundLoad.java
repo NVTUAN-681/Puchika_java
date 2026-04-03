@@ -44,17 +44,17 @@ public class SoundLoad {
         }
     }
 
-    // Phát âm thanh 1 lần (click chuột, ăn điểm...)
-    public void playSoundEffect(String filePath) {
+ // Phát âm thanh 1 lần (click chuột, ăn điểm...)
+    public void playSoundEffect(String resourcePath) {
         try {
-            File soundPath = new File(filePath);
-            if (soundPath.exists()) {
-                AudioInputStream audioInput = AudioSystem.getAudioInputStream(soundPath);
+            URL url = getClass().getResource(resourcePath);
+            if (url != null) {
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(url);
                 Clip effectClip = AudioSystem.getClip();
                 effectClip.open(audioInput);
                 effectClip.start();
             } else {
-                System.out.println("Không tìm thấy file âm thanh: " + filePath);
+                System.err.println("LỖI: Không tìm thấy file âm thanh tại: " + resourcePath);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
