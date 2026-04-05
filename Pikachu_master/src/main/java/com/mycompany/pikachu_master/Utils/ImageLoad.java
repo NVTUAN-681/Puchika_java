@@ -33,28 +33,33 @@ public class ImageLoad {
     public static final String PATH_2 = "/images/Picture_button/BackgroundButtonMainGame.png";
     public static final String PATH_3 = "/images/Picture_button/BackgroundButtonLight.png";
     public static final String PATH_4 = "/images/Picture_button/BackgroundButtonLight_Dark.png";
+    
+    private static boolean isLoadedImage = false;
+//    private static boolean isLoadedBg = false;
     // Hàm load toàn bộ 21 ảnh vào bộ nhớ khi bắt đầu game
     public static void loadAllImagesPika() {
-        
-        for (int i = 1; i <= 91; i++) {
-            try {
-                // Đường dẫn tương đối trong project Maven
-                String path = "/images/Picture/" + i + ".png"; 
-                java.net.URL imgURL = ImageLoad.class.getResource(path);
-                
-                if (imgURL != null) {
-                    BufferedImage originalImage = ImageIO.read(imgURL);
-                    Image smartScaledImg = trimAndFit(originalImage, 75); 
-                    imageMap.put(i, new ImageIcon(smartScaledImg));
+        if(isLoadedImage == false){
+            for (int i = 1; i <= 91; i++) {
+                try {
+                    // Đường dẫn tương đối trong project Maven
+                    String path = "/images/Picture/" + i + ".png"; 
+                    java.net.URL imgURL = ImageLoad.class.getResource(path);
+
+                    if (imgURL != null) {
+                        BufferedImage originalImage = ImageIO.read(imgURL);
+                        Image smartScaledImg = trimAndFit(originalImage, 75); 
+                        imageMap.put(i, new ImageIcon(smartScaledImg));
+                    }
+                    else{
+                        System.err.println(" Path Not found: " + path);
+                    }
+                } catch (Exception e) {
+                    System.out.println("ID not found: " + i);
                 }
-                else{
-                    System.err.println(" Path Not found: " + path);
-                }
-            } catch (Exception e) {
-                System.out.println("ID not found: " + i);
             }
+            loadAsianImagesPika();
+            isLoadedImage = true;
         }
-        loadAsianImagesPika();
     }
     
     public static void loadAsianImagesPika() {

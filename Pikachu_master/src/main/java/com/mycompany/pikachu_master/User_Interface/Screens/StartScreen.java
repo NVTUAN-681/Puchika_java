@@ -29,7 +29,6 @@ public class StartScreen extends javax.swing.JFrame {
     private PlayScreen play;
     private gameDAO DTB;
     
-//    private boolean load = false;
     private SoundLoad audioManager = new SoundLoad();
     
     public StartScreen(GameConfig config, LevelType level, PlayScreen play) {
