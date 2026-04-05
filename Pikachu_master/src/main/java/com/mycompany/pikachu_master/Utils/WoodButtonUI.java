@@ -34,13 +34,14 @@ public class WoodButtonUI extends BasicButtonUI{
             baseColor = new Color(48, 52, 70);     
             lightEdge = new Color(75, 85, 110);    
             darkEdge = new Color(20, 25, 35);      
-            textColor = new Color(0, 255, 255);    // Chữ Vàng Gold
+            textColor = new Color(0, 255, 255); 
         } else {
             // Gỗ thông sáng (Pine Wood)
             baseColor = new Color(222, 184, 135);  
             lightEdge = new Color(255, 225, 180);  
             darkEdge = new Color(180, 140, 90);    
-            textColor = new Color(60, 40, 20);     // Chữ Nâu đậm
+            textColor = new Color(60, 40, 20);   
+            
         }
     }
 

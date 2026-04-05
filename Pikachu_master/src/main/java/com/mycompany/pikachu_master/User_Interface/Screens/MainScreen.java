@@ -62,6 +62,16 @@ public class MainScreen extends javax.swing.JFrame {
                 if (bg != null) {
                     g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
                 }
+                
+                // --- THÊM LỚP PHỦ ĐEN MỜ GIẢM ĐỘ SÁNG ---
+                java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
+             
+                g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Set màu đen với độ mờ là 75 (nhỏ hơn 150 của topbar để nó mờ và nhẹ nhàng hơn)
+                g2.setColor(new java.awt.Color(0, 0, 0, 75)); 
+                g2.fillRect(0, 0, getWidth(), getHeight());
+                g2.dispose();
             }
         };
         setContentPane(dynamicBg);
