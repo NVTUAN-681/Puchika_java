@@ -109,9 +109,9 @@ public class PlayScreen extends JPanel implements ActionListener {
                 this.algorithm = new ClassicAlgorithm();
                 isDark = false;
             }
-            case "MEDIUM" -> {
+            case "NORMAL" -> {
                 ImageLoad.isAsianMode = false; // === [THÊM MỚI] Tắt cờ ===
-                this.level = LevelType.MEDIUM;
+                this.level = LevelType.NORMAL;
                 this.algorithm = new ClassicAlgorithm();
                 isDark = false;
             }
@@ -309,7 +309,7 @@ public void applySavedMatrix(int[][] savedData) {
             honorScreen.setVisible(true);
 
             DTB.updateCoin_player("tuan", totalCoin);
-            DTB.updateHighScore(level.getLevel(), TotalScore, level.getTimeLimit() - currentTime);
+            DTB.updateHighScore(level.getLevel(), TotalScore + (this.get_timeRemain() *10), level.getTimeLimit() - currentTime);
             DTB.deleteSaveGame("tuan");
             DTB.insertScore("tuan", level.getLevel(), TotalScore, level.getTimeLimit() - currentTime);
         }
@@ -326,7 +326,7 @@ public void applySavedMatrix(int[][] savedData) {
             lossScreen.setVisible(true);
 
             DTB.updateCoin_player("tuan", totalCoin);
-            DTB.updateHighScore(level.getLevel(), TotalScore, level.getTimeLimit() - currentTime);
+            DTB.updateHighScore(level.getLevel(), TotalScore + (this.get_timeRemain() * 10), level.getTimeLimit() - currentTime);
             DTB.deleteSaveGame("tuan");
         }
     }
@@ -350,9 +350,13 @@ public void applySavedMatrix(int[][] savedData) {
     }
 
     public void BuyTime() {
+        if(totalCoin >= CostBuyTime){
         this.totalCoin -= CostBuyTime;
         this.currentTime += TimeBought;
-        DTB.updateCoin_player("tuan", this.totalCoin);
+//        DTB.updateCoin_player("tuan", this.totalCoin);
+        }
+        else{
+        }
     }
 
     public void Reward() {
@@ -398,7 +402,7 @@ public void applySavedMatrix(int[][] savedData) {
     }
 
     // hàm vẽ đường nối giữa hai ô khi chọn đúng
-    private void drawPathOnOverlay() {
+    private void drawPathOnOverlay(Runnable onComplete) {
         java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(this);
         if (window instanceof MainScreen) {
             MainScreen main = (MainScreen) window;
@@ -406,7 +410,10 @@ public void applySavedMatrix(int[][] savedData) {
 
             if (glassPane instanceof PathOverlay) {
                 PathOverlay overlay = (PathOverlay) glassPane;
-                overlay.showPath(algorithm.getPath(), this.getBounds(), level.getRows(), level.getCols());
+                overlay.showPath(algorithm.getPath(), this.getBounds(), level.getRows(), level.getCols(),onComplete);
+            } else {
+                // Nếu vì lý do nào đó không có overlay, vẫn phải chạy lệnh xóa ô
+                if (onComplete != null) onComplete.run();
             }
         }
     }
@@ -456,13 +463,21 @@ public void applySavedMatrix(int[][] savedData) {
         addScore(RewardScore, reward);
         addcoin(RewardCoin, reward);
 // Vẽ đường đi
-        drawPathOnOverlay();
+        //drawPathOnOverlay();
 
         int matchedId = firstClick.getId();
         RoundedIconButton firstBtn = firstClickBtn;
+        Cell savedFirstClick = firstClick;
+        
+        // Khóa không cho người chơi click lung tung trong lúc đợi 0.4s vẽ đường
+        isProcessingMismatch = true; 
 
+        // Truyền toàn bộ đoạn code "Xóa dữ liệu, hiệu ứng, check thắng thua" vào trong Runnable
+        drawPathOnOverlay(() -> {
         // Xóa dữ liệu & ẩn UI
-        CellPair RockketTarget = algorithm.removePair(firstClick, currentCell, board);
+        //CellPair RockketTarget = algorithm.removePair(firstClick, currentCell, board);
+       // [CHỈNH SỬA] - SỬA LẠI THÀNH:
+        CellPair RockketTarget = algorithm.removePair(savedFirstClick, currentCell, board);
         if (RockketTarget != null) {
             addScore((int) (RewardScore * 1.5), 0);// Cộng điểm nếu là tên lửa
             addcoin(RewardScore, 0);
@@ -483,6 +498,9 @@ public void applySavedMatrix(int[][] savedData) {
             addcoin(RewardScore, 0);
         }
         checkGameState();
+        // Vẽ xong, xóa xong rồi thì mở khóa chuột lại cho người chơi
+            isProcessingMismatch = false;
+        });
         firstClick = null;
         firstClickBtn = null;
     }

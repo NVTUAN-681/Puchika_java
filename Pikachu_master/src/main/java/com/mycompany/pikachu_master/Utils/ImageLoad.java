@@ -36,15 +36,15 @@ public class ImageLoad {
     // Hàm load toàn bộ 21 ảnh vào bộ nhớ khi bắt đầu game
     public static void loadAllImagesPika() {
         
-        for (int i = 1; i <= 21; i++) {
+        for (int i = 1; i <= 91; i++) {
             try {
                 // Đường dẫn tương đối trong project Maven
-                String path = "/images/Picture/" + i + ".jpg"; 
+                String path = "/images/Picture/" + i + ".png"; 
                 java.net.URL imgURL = ImageLoad.class.getResource(path);
                 
                 if (imgURL != null) {
                     BufferedImage originalImage = ImageIO.read(imgURL);
-                    Image smartScaledImg = trimAndFit(originalImage, 85); 
+                    Image smartScaledImg = trimAndFit(originalImage, 75); 
                     imageMap.put(i, new ImageIcon(smartScaledImg));
                 }
                 else{
@@ -58,20 +58,16 @@ public class ImageLoad {
     }
     
     public static void loadAsianImagesPika() {
-        for (int i = 1; i <= 25; i++) { 
+        for (int i = 1; i <= 45; i++) { 
             try {
-                // Đảm bảo bạn có thư mục Picture_wood trong resources/images/
-                String path = "/images/Pictuce_wood/" + i + ".png"; 
+                String path = "/images/Picture_wood/" + i + ".png"; 
                 java.net.URL imgURL = ImageLoad.class.getResource(path);
                 
                 if (imgURL != null) {
-                  // === [SỬA ĐỔI] Áp dụng thuật toán cắt lề PNG và phóng to lên 85x85 ===
                     BufferedImage originalImage = ImageIO.read(imgURL);
                     Image smartScaledImg = trimAndFit(originalImage, 85); 
-                    asianImageMap.put(i, new ImageIcon(smartScaledImg));
-                    System.out.println("asian loaded: " + path);
+                    asianImageMap.put(i, new ImageIcon(smartScaledImg));                    
                 } else {
-                    // CÒI BÁO LỖI Ở ĐÂY
                     System.err.println("not asian: " + path);
                 }
             } catch (Exception e) {
@@ -82,7 +78,6 @@ public class ImageLoad {
     
     //tách biệt không liên quan đến icon game
     
-// === [SỬA ĐỔI] THUẬT TOÁN CẮT VIỀN, CĂN GIỮA VÀ THÊM LỀ AN TOÀN (PADDING) ===
     public static Image trimAndFit(BufferedImage img, int targetSize) {
         try {
             int width = img.getWidth();
@@ -182,7 +177,7 @@ public class ImageLoad {
                 // Lưu ảnh vào map với cái tên (key) mày truyền vào
                 buttonIconMap.put(key, new ImageIcon[]{normalIcon, hoverIcon});
             } else {
-                System.err.println("❌ KHÔNG TÌM THẤY ẢNH BACKGROUND NÚT: " + path);
+                System.err.println("❌ KHONG TIM THAY BACKGROUND NUT: " + path);
             }
             
         } catch (Exception e) {

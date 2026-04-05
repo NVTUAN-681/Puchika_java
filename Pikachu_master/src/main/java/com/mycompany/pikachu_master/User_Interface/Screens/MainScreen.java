@@ -637,7 +637,11 @@ public void updateGameLayout(LevelType level) {
     private void timeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timeButtonActionPerformed
 //        // TODO add your handling code here:
         audioManager.playSoundEffect("/sound/SoundTap/tap.wav");
-        play.BuyTime();
+        if(level.getLevel().equals("ASIAN")){
+        }
+        else{
+            play.BuyTime();
+        }
         resetCoinDisplay(play.get_Totalcoin());
         System.out.println("cong them 5 giay");
     }//GEN-LAST:event_timeButtonActionPerformed
@@ -649,7 +653,7 @@ public void updateGameLayout(LevelType level) {
     private void hintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hintButtonActionPerformed
         // TODO add your handling code here:
         audioManager.playSoundEffect("/sound/SoundTap/tap.wav");
-        if (this.hintCount >= 0) {
+        if (this.hintCount > 0) {
             this.hintCount--;
             play.findHint();
         } else {
@@ -660,7 +664,7 @@ public void updateGameLayout(LevelType level) {
     private void swapButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_swapButtonActionPerformed
         // TODO add your handling code here:
         audioManager.playSoundEffect("/sound/SoundTap/tap.wav");
-        if (this.shuffleCount >= 0) {
+        if (this.shuffleCount > 0) {
             this.shuffleCount--;
             play.shuffle();
         } else {

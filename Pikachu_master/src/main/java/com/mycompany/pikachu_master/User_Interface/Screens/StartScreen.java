@@ -28,9 +28,10 @@ public class StartScreen extends javax.swing.JFrame {
     private LevelType level;
     private PlayScreen play;
     private gameDAO DTB;
-
+    
+//    private boolean load = false;
     private SoundLoad audioManager = new SoundLoad();
-
+    
     public StartScreen(GameConfig config, LevelType level, PlayScreen play) {
         setContentPane(new BackgroundStartScreen());
         initComponents();
@@ -40,7 +41,7 @@ public class StartScreen extends javax.swing.JFrame {
         this.play = play;
         this.DTB = new gameDAO();
         
-// tải ảnh trước khi bắt đầu trò chơi        
+// tải ảnh trước khi bắt đầu trò chơi
         ImageLoad.loadAllImagesPika();
         ImageLoad.BackgroundButtonsLoad();
         setupAllButtonIcons();
@@ -87,6 +88,7 @@ public class StartScreen extends javax.swing.JFrame {
         exitButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("PIKACHU ADVENTURE");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         playButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N

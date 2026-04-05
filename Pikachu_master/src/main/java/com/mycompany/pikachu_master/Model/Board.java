@@ -97,21 +97,13 @@ public class Board {
     
         // NoP (Number of Pokemons): số loại hình trên bảng
         // rocket : biến xác nhận xem có cho tên lửa (Id = 1) vào màn chơi không
-        Random rand = new Random();
         ArrayList<Integer> list = new ArrayList<>();
-        int halfElems = totalCells / 2;
-        for (int i = 1; i <= halfElems; i++) {
-//            if(i != 1 || (i == 1 && rocket == true)) {
-//                list.add(i % NoP + 1);
-//                list.add(i % NoP + 1);
-//            }
-                int id = i % NoP +1;
-                if(id == 1 && rocket == false){
-                    id = rand.nextInt(1, NoP);
-                }
-                list.add(id);
-                list.add(id);
-        }        
+        for (int i = 1; list.size() != totalCells; i++) {
+            if(i % NoP + 1 != 1 || (i % NoP + 1 == 1 && rocket == true)) {
+                list.add(i % NoP + 1);
+                list.add(i % NoP + 1);
+            }
+        }      
         
         do {
             Collections.shuffle(list);

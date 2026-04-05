@@ -135,7 +135,7 @@ public class HighScoreScreen extends javax.swing.JFrame {
     }
     
     public void showTimeRemain_HighScore(){
-        timeLabel.setText(String.valueOf(DTB.getTimeRemainHighScoreByLevel(this.level.getLevel())));
+        timeLabel.setText(String.valueOf(DTB.getTimeRemainHighScoreByLevel(this.level.getLevel())) + 's');
     }
     
 

@@ -29,20 +29,26 @@ public class PathOverlay extends JComponent{
         setOpaque(false); // Đảm bảo mặt kính hoàn toàn trong suốt
     }
 
-    public void showPath(List<Point> pathGrid, Rectangle boardBounds, int rows, int cols) {
+    public void showPath(List<Point> pathGrid, Rectangle boardBounds, int rows, int cols, Runnable onComplete) {
         this.pathGrid = pathGrid;
         this.boardBounds = boardBounds;
         this.rows = rows;
         this.cols = cols;
+        
         repaint(); // Yêu cầu vẽ lại ngay lập tức
 
         // Xoá đường đi sau 0.4 giây
         if (clearTimer != null && clearTimer.isRunning()) {
             clearTimer.stop();
         }
-        clearTimer = new Timer(50, e -> {
+        clearTimer = new Timer(40, e -> {
             this.pathGrid = null;
             repaint();
+            
+            if (onComplete != null) {
+                onComplete.run(); 
+            }
+            
         });
         clearTimer.setRepeats(false);
         clearTimer.start();

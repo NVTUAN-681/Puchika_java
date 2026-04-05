@@ -704,8 +704,8 @@ public class LevelScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         //SoundLoad audioManager = new SoundLoad();
         audioManager.playTransitionSound("/sound/SoundTap/NextScreen.wav");
-        start.setLevel("MEDIUM");
-        start.UpdateLevel("MEDIUM");
+        start.setLevel("NORMAL");
+        start.UpdateLevel("NORMAL");
         start.setGameTheme(this.selectedSide);
         start.setVisible(true);
         this.dispose();
