@@ -139,6 +139,7 @@ public class gameDAO {
     catch (SQLException e) {
         System.out.println("error take HighScore: " + e.getMessage());
         }
+    System.out.println("Điểm cao của " + levelName + " là: " + score);
     return 0; // Trả về 0 nếu chưa có kỷ lục
     }
     
@@ -158,11 +159,11 @@ public class gameDAO {
     return 0;
     }
     
-    public GameConfig getSavedGame(String username) {
-    String sql = "SELECT * FROM CurrentGameSave WHERE UserName = ?";
+    public GameConfig getSavedGame(String LevelName) {
+    String sql = "SELECT * FROM CurrentGameSave WHERE LevelName = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
+            pstmt.setString(1, LevelName);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 // Giả sử Tuấn đã nâng cấp Constructor của GameConfig như chúng ta bàn trước đó

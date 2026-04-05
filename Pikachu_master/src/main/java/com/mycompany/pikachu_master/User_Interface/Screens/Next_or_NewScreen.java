@@ -37,6 +37,7 @@ public class Next_or_NewScreen extends javax.swing.JFrame {
         setUndecorated(true);
         this.configNew = configNew;
         this.configSaved = configSave;
+//        this.level = level;
 
         initComponents();
         this.addComponentListener(new java.awt.event.ComponentAdapter() {

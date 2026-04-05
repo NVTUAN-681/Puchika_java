@@ -26,13 +26,13 @@ public class LevelType {
     public static final LevelType START = new LevelType("Start", 3, 6, 20, 6, false, true);
     public static final LevelType AFRICA = new LevelType("AFRICA", 6, 8, 300, 12, false, true);
     public static final LevelType EUROPE = new LevelType("EUROPE", 8, 10, 240, 16, true, false);
-    public static final LevelType ASIAN = new LevelType("ASIAN", 8, 12, 180, 18, true, true);
+    public static final LevelType ASIAN = new LevelType("ASIAN", 8, 12, 180, 18, true, false);
     public static final LevelType EASY = new LevelType("EASY", 6, 8, 240, 12, false, false);
     public static final LevelType MEDIUM = new LevelType("MEDIUM", 8, 10, 240, 16, false, false);
     public static final LevelType HARD = new LevelType("HARD", 8, 12, 180, 18, false, false);
 
     public static LevelType getByName(String levelName){
-        switch (levelName) {
+        switch (levelName.trim().toUpperCase()) {
             case "AFRICA":
                 return AFRICA;
             case "EUROPE":

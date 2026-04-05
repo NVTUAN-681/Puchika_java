@@ -56,7 +56,6 @@ public class StartScreen extends javax.swing.JFrame {
     public void UpdateLevel(String Level) {
         this.config = new GameConfig(Level);
         this.level = LevelType.getByName(Level);
-
     }
 
 // Hàm này sẽ được LevelScreen gọi khi bấm nút chọn màn
@@ -188,7 +187,7 @@ public class StartScreen extends javax.swing.JFrame {
 // Phát tiếng click chuột
         audioManager.stopBGM();
         audioManager.playTransitionSound("/sound/SoundTap/NextScreen.wav");
-        GameConfig saveConfig = DTB.getSavedGame("tuan");
+        GameConfig saveConfig = DTB.getSavedGame(level.getLevel());
         if(saveConfig != null){
             Next_or_NewScreen Screen = new Next_or_NewScreen(this.config, saveConfig);
             Screen.setVisible(true);
@@ -210,7 +209,7 @@ public class StartScreen extends javax.swing.JFrame {
         // TODO add your handling code here
        audioManager.playTransitionSound("/sound/SoundTap/NextScreen.wav");
  
-        HighScoreScreen Max = new HighScoreScreen(this, play);
+        HighScoreScreen Max = new HighScoreScreen(this, play, this.level);
         Max.setVisible(true);
         Max.showHighScore();
     }//GEN-LAST:event_maxButtonActionPerformed

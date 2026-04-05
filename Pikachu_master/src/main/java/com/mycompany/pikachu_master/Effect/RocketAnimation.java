@@ -87,10 +87,32 @@ public class RocketAnimation {
                     animTimer.stop();
                     
                     main.playSoundEffect("/sound/SoundRocket/RocketBoom.wav");
-                    
-                    main.getLayeredPane().remove(rocket1);
-                    main.getLayeredPane().remove(rocket2);
-                    main.getLayeredPane().repaint();
+                    try {
+                        // Load ảnh vụ nổ (Đảm bảo bạn có file explosion.png trong folder)
+                        ImageIcon expOriginal = new ImageIcon(RocketAnimation.class.getResource("/images/Picture_Rocket/Boom.png"));
+                        Image expImg = expOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                        ImageIcon explosionIcon = new ImageIcon(expImg);
+                        
+                        // Đổi icon của tên lửa thành vụ nổ
+                        rocket1.setIcon(explosionIcon);
+                        rocket2.setIcon(explosionIcon);
+                        rocket1.setSize(50, 50);
+                        rocket2.setSize(50, 50);
+                    } catch (Exception ex) {
+                        System.out.println("Loi Boom: " + ex.getMessage());
+                    }
+
+                    // Tạo một timer chờ 300ms (0.3s) để người chơi kịp nhìn thấy hiệu ứng nổ rồi mới xóa ảnh đi
+                    Timer explosionTimer = new Timer(300, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent evt) {
+                            main.getLayeredPane().remove(rocket1);
+                            main.getLayeredPane().remove(rocket2);
+                            main.getLayeredPane().repaint();
+                        }
+                    });
+                    explosionTimer.setRepeats(false);
+                    explosionTimer.start();
 
                     playScreen.getAlgorithm().removePair(tCell1, tCell2, playScreen.getBoard());
                     targetBtn1.setVisible(false);

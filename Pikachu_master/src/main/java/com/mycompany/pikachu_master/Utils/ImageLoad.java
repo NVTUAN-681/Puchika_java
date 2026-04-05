@@ -16,13 +16,19 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
+import java.awt.Graphics2D;
 
 public class ImageLoad {
-    // Map lưu trữ: Key là ID (1-21), Value là đối tượng Image tương ứng
+   // Map lưu trữ: Key là ID (1-21), Value là đối tượng Image tương ứng (CHẾ ĐỘ THƯỜNG)
     private static Map<Integer, ImageIcon> imageMap = new HashMap<>();
-    private static Map<String, ImageIcon[]> buttonIconMap = new HashMap<>();
+    
+    // === [THÊM MỚI] 1. Khai báo Map và Cờ cho chế độ Asian ===
+    private static Map<Integer, ImageIcon> asianImageMap = new HashMap<>(); // Chứa ảnh của thư mục 1life
+    public static boolean isAsianMode = false; // Cờ báo hiệu đang ở chế độ Asian
+    // ==========================================================
 
-    // ---> 1. GẮN CỨNG 2 ĐƯỜNG DẪN ẢNH VÀO ĐÂY <---
+    private static Map<String, ImageIcon[]> buttonIconMap = new HashMap<>();
+// ---> 1. GẮN CỨNG 2 ĐƯỜNG DẪN ẢNH VÀO ĐÂY <---
     public static final String PATH_1 = "/images/Picture_button/BackgroundButtonInMain.png";
     public static final String PATH_2 = "/images/Picture_button/BackgroundButtonMainGame.png";
     public static final String PATH_3 = "/images/Picture_button/BackgroundButtonLight.png";
@@ -37,10 +43,9 @@ public class ImageLoad {
                 java.net.URL imgURL = ImageLoad.class.getResource(path);
                 
                 if (imgURL != null) {
-                    ImageIcon icon = new ImageIcon(imgURL);
-                    // Có thể resize ảnh tại đây để khớp với kích thước nút bấm
-                    Image scaledImg = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-                    imageMap.put(i, new ImageIcon(scaledImg));
+                    BufferedImage originalImage = ImageIO.read(imgURL);
+                    Image smartScaledImg = trimAndFit(originalImage, 85); 
+                    imageMap.put(i, new ImageIcon(smartScaledImg));
                 }
                 else{
                     System.err.println(" Path Not found: " + path);
@@ -49,12 +54,99 @@ public class ImageLoad {
                 System.out.println("ID not found: " + i);
             }
         }
+        loadAsianImagesPika();
+    }
+    
+    public static void loadAsianImagesPika() {
+        for (int i = 1; i <= 25; i++) { 
+            try {
+                // Đảm bảo bạn có thư mục Picture_wood trong resources/images/
+                String path = "/images/Pictuce_wood/" + i + ".png"; 
+                java.net.URL imgURL = ImageLoad.class.getResource(path);
+                
+                if (imgURL != null) {
+                  // === [SỬA ĐỔI] Áp dụng thuật toán cắt lề PNG và phóng to lên 85x85 ===
+                    BufferedImage originalImage = ImageIO.read(imgURL);
+                    Image smartScaledImg = trimAndFit(originalImage, 85); 
+                    asianImageMap.put(i, new ImageIcon(smartScaledImg));
+                    System.out.println("asian loaded: " + path);
+                } else {
+                    // CÒI BÁO LỖI Ở ĐÂY
+                    System.err.println("not asian: " + path);
+                }
+            } catch (Exception e) {
+                System.out.println("Asian ID not found: " + i);
+            }
+        }
     }
     
     //tách biệt không liên quan đến icon game
     
+// === [SỬA ĐỔI] THUẬT TOÁN CẮT VIỀN, CĂN GIỮA VÀ THÊM LỀ AN TOÀN (PADDING) ===
+    public static Image trimAndFit(BufferedImage img, int targetSize) {
+        try {
+            int width = img.getWidth();
+            int height = img.getHeight();
+            int top = height, bottom = 0, left = width, right = 0;
 
+            // 1. Quét tia X tìm ranh giới thực sự của con Pikachu
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int alpha = (img.getRGB(x, y) >> 24) & 0xff;
+                    if (alpha > 10) { 
+                        top = Math.min(top, y);
+                        bottom = Math.max(bottom, y);
+                        left = Math.min(left, x);
+                        right = Math.max(right, x);
+                    }
+                }
+            }
+
+            if (top > bottom || left > right) {
+                 return img.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
+            }
+
+            // 2. Cắt sát sạt lấy đúng phần "thịt" có chứa Pikachu
+            BufferedImage cropped = img.getSubimage(left, top, right - left + 1, bottom - top + 1);
+
+            // 3. Tạo một khung hình vuông để chống méo ảnh
+            int maxDim = Math.max(cropped.getWidth(), cropped.getHeight());
+            BufferedImage squareImg = new BufferedImage(maxDim, maxDim, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = squareImg.createGraphics();
+            
+            // Đặt Pikachu vào chính giữa hình vuông
+            int x = (maxDim - cropped.getWidth()) / 2;
+            int y = (maxDim - cropped.getHeight()) / 2;
+            g2.drawImage(cropped, x, y, null);
+            g2.dispose();
+
+            // 4. QUAN TRỌNG: Cài đặt khoảng cách an toàn (Padding)
+            int padding = 10; // Khoảng cách cách viền gỗ 10 pixel mỗi bên
+            int innerSize = targetSize - (padding * 2); // Ví dụ target 85 -> ruột còn 65
+
+            // 5. Thu nhỏ con Pikachu cho vừa phần ruột
+            Image scaledInner = squareImg.getScaledInstance(innerSize, innerSize, Image.SCALE_SMOOTH);
+
+            // 6. Tạo một tấm kính tàng hình kích thước chuẩn (85x85)
+            BufferedImage finalImg = new BufferedImage(targetSize, targetSize, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D gFinal = finalImg.createGraphics();
+            
+            // Dán con Pikachu đã thu nhỏ vào giữa tấm kính (dịch vào 1 khoảng = padding)
+            gFinal.drawImage(scaledInner, padding, padding, null);
+            gFinal.dispose();
+
+            return finalImg;
+        } catch (Exception e) {
+             return img.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
+        }
+    }
+    
     public static ImageIcon getImage(int id) {
+        // Nếu cờ Asian đang bật VÀ có ảnh trong thư mục 1life thì trả về ảnh Asian
+        if (isAsianMode && asianImageMap.containsKey(id)) {
+            return asianImageMap.get(id);
+        }
+        // Nếu không thì trả về ảnh mặc định
         return imageMap.get(id);
     }
     

@@ -7,6 +7,7 @@ package com.mycompany.pikachu_master.User_Interface.Screens;
 import com.mycompany.pikachu_master.Utils.SoundLoad;
 import com.mycompany.pikachu_master.Controller.PlayScreen;
 import com.mycompany.pikachu_master.Data.gameDAO;
+import com.mycompany.pikachu_master.Model.LevelType;
 import java.awt.event.WindowEvent;
 import java.awt.geom.RoundRectangle2D;
 
@@ -25,11 +26,13 @@ public class HighScoreScreen extends javax.swing.JFrame {
     private SoundLoad audioManager = new SoundLoad();
     PlayScreen play;
     MainScreen main;
+    LevelType level;
     gameDAO DTB = new gameDAO();
 
-    public HighScoreScreen(StartScreen start, PlayScreen play) {
+    public HighScoreScreen(StartScreen start, PlayScreen play, LevelType level) {
         this.setUndecorated(true);
         this.play = play;
+        this.level = level;
         initComponents();
          // ---> THÊM ĐOẠN CODE NÀY ĐỂ BO GÓC JFRAME <---
     this.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -120,7 +123,8 @@ public class HighScoreScreen extends javax.swing.JFrame {
     }
     
     public void showHighScore(){
-        HighScoreLabel.setText(String.valueOf(DTB.getHighScoreByLevel(play.get_Level())));
+        HighScoreLabel.setText(String.valueOf(DTB.getHighScoreByLevel(this.level.getLevel())));
+        System.out.println(this.level.getLevel());
     }
 
     /**

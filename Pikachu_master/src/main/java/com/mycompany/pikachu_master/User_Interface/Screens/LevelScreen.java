@@ -284,7 +284,6 @@ public class LevelScreen extends javax.swing.JFrame {
     }
 
     private void updateButtonSkins() {
-        // LIGHT -> LIGHT_SIDE (Loại 1) | DARK -> DARK_SIDE (Loại 2)
         String styleKey = selectedSide.equals("DARK") ? "DARK_SIDE" : "LIGHT_SIDE";
         java.awt.Color txtColor = selectedSide.equals("DARK") ? java.awt.Color.CYAN : java.awt.Color.BLACK;
 
@@ -659,8 +658,8 @@ public class LevelScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         //SoundLoad audioManager = new SoundLoad();
         audioManager.playTransitionSound("/sound/SoundTap/NextScreen.wav");
-        start.setLevel("NORMAL");
-        start.UpdateLevel("NORMAL");
+        start.setLevel("MEDIUM");
+        start.UpdateLevel("MEDIUM");
         start.setGameTheme(this.selectedSide);
         start.setVisible(true);
         this.dispose();

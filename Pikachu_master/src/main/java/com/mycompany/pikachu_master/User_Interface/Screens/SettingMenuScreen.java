@@ -187,7 +187,7 @@ public class SettingMenuScreen extends javax.swing.JFrame {
         }
 
         // Đặt lại chữ
-        authorButton.setText("NHÀ SẢN SUẤT");
+        authorButton.setText("NHÀ SẢN XUẤT");
         canncelButton.setText("XÓA DỮ LIỆU");
         
         // Căn giữa nội dung
@@ -323,6 +323,9 @@ public class SettingMenuScreen extends javax.swing.JFrame {
     private void authorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_authorButtonActionPerformed
         // TODO add your handling code here:
         audioManager.playSoundEffect("/sound/SoundTap/tap.wav");
+        AuthorDialog dialog = new AuthorDialog(this, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }//GEN-LAST:event_authorButtonActionPerformed
 
     private void canncelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_canncelButtonActionPerformed
