@@ -37,17 +37,29 @@ public class HighScoreScreen extends javax.swing.JFrame {
         this.level = level;
         setContentPane(new BackgroundHighScoreScreen());
         initComponents();
-         // ---> THÊM ĐOẠN CODE NÀY ĐỂ BO GÓC JFRAME <---
-    this.addComponentListener(new java.awt.event.ComponentAdapter() {
-        @Override
-        public void componentResized(java.awt.event.ComponentEvent evt) {
-            // Cắt JFrame thành hình chữ nhật bo góc
-            // Tham số 40, 40 là độ cong của góc (bạn có thể tăng giảm tùy ý)
-            setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 40, 40));
-        }
-    });
-    
-    // ---> BẮT ĐẦU THÊM MỚI TỪ ĐÂY: VẼ ĐƯỜNG VIỀN MÀU (BORDER) BO TRÒN THEO KHUNG <---
+        this.setSize(450, 650);
+        this.getContentPane().setLayout(null);
+
+        timeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        timeLabel.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        levelLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        levelLabel.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        HighScoreLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        HighScoreLabel.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+
+        // 4. Set tọa độ tuyệt đối: setBounds(x, y, width, height)
+        exitButton5.setBounds(10, 10, 50, 40);
+        timeLabel.setBounds(30, 250, 160, 150);
+        levelLabel.setBounds(280, 250, 160, 150);
+        HighScoreLabel.setBounds(100, 485, 250, 60);
+
+        this.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 40, 40));
+            }
+        });
+
         javax.swing.JPanel contentPane = (javax.swing.JPanel) this.getContentPane();
         contentPane.setBorder(new javax.swing.border.AbstractBorder() {
             @Override
@@ -55,12 +67,12 @@ public class HighScoreScreen extends javax.swing.JFrame {
                 java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
                 // Bật khử răng cưa cho viền mượt mà
                 g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                
+
                 // Chọn màu viền (Ví dụ: Màu Vàng Gold giống TopBar của bạn)
                 g2.setColor(new java.awt.Color(255, 215, 0));
                 // Chỉnh độ dày của đường viền (4f là 4 pixel)
-                g2.setStroke(new java.awt.BasicStroke(4f)); 
-                
+                g2.setStroke(new java.awt.BasicStroke(4f));
+
                 // Vẽ viền bo góc 40px (Khớp với thông số 40 của lệnh setShape ở trên)
                 // Cộng trừ vài pixel (x+2, y+2, width-4, height-4) để viền không bị lẹm ra ngoài khung
                 g2.drawRoundRect(x + 2, y + 2, width - 4, height - 4, 40, 40);
@@ -68,23 +80,24 @@ public class HighScoreScreen extends javax.swing.JFrame {
             }
         });
         //this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-       // this.setMinimumSize(new java.awt.Dimension(300, 400));
+        // this.setMinimumSize(new java.awt.Dimension(300, 400));
         this.start = start;
-        
+
         this.darkOverlay = new javax.swing.JWindow(start);
-        this.darkOverlay.setBounds(start.getBounds()); 
-        this.darkOverlay.setBackground(new java.awt.Color(0, 0, 0, 180)); 
-        this.darkOverlay.addMouseListener(new java.awt.event.MouseAdapter() {}); 
-        this.darkOverlay.setVisible(true); 
+        this.darkOverlay.setBounds(start.getBounds());
+        this.darkOverlay.setBackground(new java.awt.Color(0, 0, 0, 180));
+        this.darkOverlay.addMouseListener(new java.awt.event.MouseAdapter() {
+        });
+        this.darkOverlay.setVisible(true);
         this.setAlwaysOnTop(true);
-        
-         // --- BẮT ĐẦU: ĐỘ NÚT < THÀNH BO GÓC TRONG SUỐT ---
+
+        // --- BẮT ĐẦU: ĐỘ NÚT < THÀNH BO GÓC TRONG SUỐT ---
         exitButton5.setContentAreaFilled(false);
         exitButton5.setFocusPainted(false);
         exitButton5.setBorderPainted(false);
         exitButton5.setOpaque(false);
         exitButton5.setRolloverEnabled(true); // Bật nhận diện lướt chuột
-        exitButton5.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 18)); 
+        exitButton5.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 18));
 
         exitButton5.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
             @Override
@@ -92,30 +105,30 @@ public class HighScoreScreen extends javax.swing.JFrame {
                 java.awt.Graphics2D g2 = (java.awt.Graphics2D) g.create();
                 g2.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
                 javax.swing.AbstractButton b = (javax.swing.AbstractButton) c;
-                
+
                 if (b.getModel().isPressed()) {
-                    g2.setColor(new java.awt.Color(200, 200, 200, 255)); 
+                    g2.setColor(new java.awt.Color(200, 200, 200, 255));
                 } else if (b.getModel().isRollover()) {
                     g2.setColor(new java.awt.Color(255, 255, 255, 230)); // Nền trắng đặc để nổi chữ
                 } else {
-                    g2.setColor(new java.awt.Color(0, 0, 0, 150)); 
+                    g2.setColor(new java.awt.Color(0, 0, 0, 150));
                 }
-                
+
                 g2.fillRoundRect(0, 0, c.getWidth(), c.getHeight(), 20, 20);
                 g2.setColor(java.awt.Color.WHITE);
                 g2.setStroke(new java.awt.BasicStroke(1.5f));
                 g2.drawRoundRect(0, 0, c.getWidth() - 1, c.getHeight() - 1, 20, 20);
                 g2.dispose();
-                super.paint(g, c); 
+                super.paint(g, c);
             }
 
             @Override
             protected void paintText(java.awt.Graphics g, javax.swing.JComponent c, java.awt.Rectangle textRect, String text) {
                 javax.swing.AbstractButton b = (javax.swing.AbstractButton) c;
                 if (b.getModel().isRollover() || b.getModel().isPressed()) {
-                    g.setColor(new java.awt.Color(40, 40, 40)); 
+                    g.setColor(new java.awt.Color(40, 40, 40));
                 } else {
-                    g.setColor(java.awt.Color.WHITE); 
+                    g.setColor(java.awt.Color.WHITE);
                 }
                 java.awt.FontMetrics fm = g.getFontMetrics(c.getFont());
                 int mnemonicIndex = b.getDisplayedMnemonicIndex();
@@ -124,20 +137,19 @@ public class HighScoreScreen extends javax.swing.JFrame {
         });
         // --- KẾT THÚC ĐỘ NÚT ---
     }
-    
-    public void showHighScore(){
+
+    public void showHighScore() {
         HighScoreLabel.setText(String.valueOf(DTB.getHighScoreByLevel(this.level.getLevel())));
         System.out.println(this.level.getLevel());
     }
-    
-    public void showLevel_HighScore(){
+
+    public void showLevel_HighScore() {
         levelLabel.setText(level.getLevel());
     }
-    
-    public void showTimeRemain_HighScore(){
+
+    public void showTimeRemain_HighScore() {
         timeLabel.setText(String.valueOf(DTB.getTimeRemainHighScoreByLevel(this.level.getLevel())) + 's');
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -169,7 +181,7 @@ public class HighScoreScreen extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 318;
         gridBagConstraints.ipady = 46;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(105, 14, 80, 6);
+        gridBagConstraints.insets = new java.awt.Insets(105, 20, 80, 6);
         getContentPane().add(HighScoreLabel, gridBagConstraints);
 
         exitButton5.setText("<");
@@ -186,7 +198,7 @@ public class HighScoreScreen extends javax.swing.JFrame {
 
         timeLabel.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
         timeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        timeLabel.setText("////");
+        timeLabel.setText("thời gian");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -194,13 +206,13 @@ public class HighScoreScreen extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 125;
         gridBagConstraints.ipady = 32;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(255, 24, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(255, 30, 0, 0);
         getContentPane().add(timeLabel, gridBagConstraints);
 
         levelLabel.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
         levelLabel.setForeground(new java.awt.Color(255, 255, 255));
         levelLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        levelLabel.setText("asian");
+        levelLabel.setText("ASIAN");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
@@ -251,11 +263,11 @@ public class HighScoreScreen extends javax.swing.JFrame {
     @Override
     public void dispose() {
         if (darkOverlay != null) {
-            darkOverlay.dispose(); 
+            darkOverlay.dispose();
         }
         super.dispose();
     }
-    
+
     @Override
     public void setVisible(boolean b) {
         super.setVisible(b);
@@ -263,7 +275,7 @@ public class HighScoreScreen extends javax.swing.JFrame {
             darkOverlay.setVisible(false);
         }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel HighScoreLabel;
     private javax.swing.JButton exitButton5;

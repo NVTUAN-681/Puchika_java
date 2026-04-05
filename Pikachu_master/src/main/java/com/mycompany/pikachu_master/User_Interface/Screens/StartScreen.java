@@ -34,6 +34,7 @@ public class StartScreen extends javax.swing.JFrame {
     public StartScreen(GameConfig config, LevelType level, PlayScreen play) {
         setContentPane(new BackgroundStartScreen());
         initComponents();
+        
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.config = config;
         this.level = level;
