@@ -70,7 +70,7 @@ public class ImageLoad {
                 
                 if (imgURL != null) {
                     BufferedImage originalImage = ImageIO.read(imgURL);
-                    Image smartScaledImg = trimAndFit(originalImage, 85); 
+                    Image smartScaledImg = trimAndFit(originalImage, 75); 
                     asianImageMap.put(i, new ImageIcon(smartScaledImg));                    
                 } else {
                     System.err.println("not asian: " + path);

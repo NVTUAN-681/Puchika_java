@@ -290,8 +290,8 @@ private void styleTopBar() {
         String level = play.get_Level();
 
         // Lưu vào Database qua DAO
-        DTB.saveCurrentGame("tuan", level, score, time, hintCount, shuffleCount, matrix);
-        System.out.println("Đã lưu ván đấu thành công!");
+        DTB.saveCurrentGame("tuan", level, score, time, hintCount, shuffleCount, matrix, 1);
+        System.out.println("saved current game!");
     }
 
     public void updateCoin(int newCoin) {
@@ -627,6 +627,10 @@ public void updateGameLayout(LevelType level) {
         //Pause Setting = new PauseScreen();
         audioManager.playSoundEffect("/sound/SoundTap/tap.wav");
         play.stopTimer();
+        if(config.GetResume() == 1){
+            config.setLevel(level.getLevel());
+            config.setResume(0);
+        }
         PauseScreen pause = new PauseScreen(this, config, level, play);
         pause.setVisible(true);
         saveGame();

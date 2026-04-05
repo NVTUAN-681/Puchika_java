@@ -130,7 +130,7 @@ public class PlayScreen extends JPanel implements ActionListener {
 
         this.board = new Board(level.getRows(), level.getCols(), true);
 
-        if (config.resume) {
+        if (config.GetResume() == 1) {
             // KỊCH BẢN VÁN DỞ: Lấy ma trận từ chuỗi lưu trữ
             int[][] savedData = convertStringToMatrix(config.getMatrix_data(), level.getRows(), level.getCols());
             applySavedMatrix(savedData);
@@ -327,7 +327,7 @@ public void applySavedMatrix(int[][] savedData) {
 
             DTB.updateCoin_player("tuan", totalCoin);
             DTB.updateHighScore(level.getLevel(), TotalScore + (this.get_timeRemain() * 10), level.getTimeLimit() - currentTime);
-            DTB.deleteSaveGame("tuan");
+            DTB.deleteSaveGame(level.getLevel());
         }
     }
 
@@ -353,7 +353,7 @@ public void applySavedMatrix(int[][] savedData) {
         if(totalCoin >= CostBuyTime){
         this.totalCoin -= CostBuyTime;
         this.currentTime += TimeBought;
-//        DTB.updateCoin_player("tuan", this.totalCoin);
+        DTB.updateCoin_player("tuan", this.totalCoin);
         }
         else{
         }
@@ -608,7 +608,7 @@ public void applySavedMatrix(int[][] savedData) {
         }
 
 //        this.currentTime = maxTime;
-        if (config.resume && config.getTimeLimit() > 0) {
+        if (config.GetResume() == 1 && config.getTimeLimit() > 0) {
             this.currentTime = config.getTimeLimit();
         } else {
             this.currentTime = maxTime;

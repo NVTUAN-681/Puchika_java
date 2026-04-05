@@ -109,9 +109,9 @@ public class gameDAO {
         }
     }
     
-    public void saveCurrentGame(String username, String level, int score, int time, int hints, int shuffles, String matrix) {
-        String sql = "INSERT OR REPLACE INTO CurrentGameSave(UserName, LevelName, CurrentScore, TimeRemain, HintCount, ShuffleCount, MatrixData) "
-                   + "VALUES(?, ?, ?, ?, ?, ?, ?)";
+    public void saveCurrentGame(String username, String level, int score, int time, int hints, int shuffles, String matrix, int Resume) {
+        String sql = "INSERT OR REPLACE INTO CurrentGameSave(UserName, LevelName, CurrentScore, TimeRemain, HintCount, ShuffleCount, MatrixData, Resume) "
+                   + "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
@@ -121,6 +121,7 @@ public class gameDAO {
             pstmt.setInt(5, hints);
             pstmt.setInt(6, shuffles);
             pstmt.setString(7, matrix);
+            pstmt.setInt(8, Resume);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error save game: " + e.getMessage());
@@ -172,7 +173,7 @@ public class gameDAO {
             }
         }
     catch (SQLException e) {
-        System.out.println("Lỗi lấy Coin: " + e.getMessage());
+        System.out.println("DTB error get Coin: " + e.getMessage());
     }
     return 0;
     }
@@ -190,7 +191,7 @@ public class gameDAO {
                 savedConfig.setHintCount(rs.getInt("HintCount"));
                 savedConfig.setShuffleCount(rs.getInt("ShuffleCount"));
                 savedConfig.setMatrix_data(rs.getString("MatrixData"));
-                savedConfig.setResume(true); // Đánh dấu đây là ván chơi tiếp
+                savedConfig.setResume(1); // Đánh dấu đây là ván chơi tiếp
                 return savedConfig;
             }
         } catch (SQLException e) {

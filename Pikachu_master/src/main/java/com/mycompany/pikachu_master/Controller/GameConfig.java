@@ -12,15 +12,14 @@ import java.sql.SQLException;
 
 public class GameConfig {
     String Level, matrix_data;
-    int rows, cols, score, currentCoin, shuffleCount, hintCount, timeLimit;
-    boolean resume = false;
+    int rows, cols, score, currentCoin, shuffleCount, hintCount, timeLimit, Resume = 0;
 
-    public boolean isResume() {
-        return resume;
+    public int GetResume() {
+        return Resume;
     }
 
-    public void setResume(boolean resume) {
-        this.resume = resume;
+    public void setResume(int resume) {
+        this.Resume = resume;
     }
     
     public String getMatrix_data() {
@@ -101,7 +100,7 @@ public class GameConfig {
     
     public GameConfig(String Level){
         this.Level = Level;
-        this.resume = false;
+        this.Resume = 0;
     }
 
     public GameConfig(String Level, int rows, int cols, int currentCoin, int shuffleCount, int hintCount, int timeLimit) {

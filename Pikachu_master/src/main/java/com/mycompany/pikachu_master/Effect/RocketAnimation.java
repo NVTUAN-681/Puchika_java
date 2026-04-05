@@ -44,13 +44,13 @@ public class RocketAnimation {
 
         int ROCKET_ID = 1; 
         ImageIcon originalIcon = ImageLoad.getImage(ROCKET_ID); 
-        Image img = originalIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        Image img = originalIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
         ImageIcon rocketIcon = new ImageIcon(img);
 
         JLabel rocket1 = new JLabel(rocketIcon);
         JLabel rocket2 = new JLabel(rocketIcon);
-        rocket1.setSize(40, 40);
-        rocket2.setSize(40, 40);
+        rocket1.setSize(80, 80);
+        rocket2.setSize(80, 80);
 
         Point s1 = SwingUtilities.convertPoint(playScreen, startBtn1.getLocation(), main.getContentPane());
         Point s2 = SwingUtilities.convertPoint(playScreen, startBtn2.getLocation(), main.getContentPane());
@@ -90,14 +90,14 @@ public class RocketAnimation {
                     try {
                         // Load ảnh vụ nổ (Đảm bảo bạn có file explosion.png trong folder)
                         ImageIcon expOriginal = new ImageIcon(RocketAnimation.class.getResource("/images/Picture_Rocket/Boom.png"));
-                        Image expImg = expOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                        Image expImg = expOriginal.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
                         ImageIcon explosionIcon = new ImageIcon(expImg);
                         
                         // Đổi icon của tên lửa thành vụ nổ
                         rocket1.setIcon(explosionIcon);
                         rocket2.setIcon(explosionIcon);
-                        rocket1.setSize(50, 50);
-                        rocket2.setSize(50, 50);
+                        rocket1.setSize(80, 80);
+                        rocket2.setSize(80, 80);
                     } catch (Exception ex) {
                         System.out.println("Loi Boom: " + ex.getMessage());
                     }

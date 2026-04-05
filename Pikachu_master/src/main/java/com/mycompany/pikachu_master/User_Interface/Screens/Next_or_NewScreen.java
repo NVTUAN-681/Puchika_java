@@ -193,6 +193,7 @@ public class Next_or_NewScreen extends javax.swing.JFrame {
     }
         
         private void OpenMainScreen(GameConfig config){
+//            config.setResume(0);
             MainScreen Main = new MainScreen(config, LevelType.getByName(config.GetLevel()));
             Main.setVisible(true);
             javax.swing.SwingUtilities.invokeLater(() -> {
