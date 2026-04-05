@@ -115,7 +115,17 @@ public class WoodButtonUI extends BasicButtonUI{
         g2.drawArc(w - 4 - arc, h - 4 - arc, arc, arc, 270, 90); 
         g2.drawLine(offset + arc/2, h - 4, w - 4 - arc/2, h - 4); 
         g2.drawLine(w - 4, offset + arc/2, w - 4, h - 4 - arc/2); 
-
+        
+        if (b.isSelected()) { // Kiểm tra xem nút có đang bật trạng thái chọn không
+            g2.setColor(Color.YELLOW);
+            g2.setStroke(new BasicStroke(3.0f)); // Viền dày 3 pixel cho rõ
+            g2.drawRoundRect(offset, offset, w - 4, h - 4, arc, arc);
+            
+            // Tùy chọn: Tô thêm một lớp mờ vàng lên mặt gỗ để nó rực lên
+            g2.setColor(new Color(255, 255, 0, 50)); 
+            g2.fillRoundRect(offset, offset, w - 4, h - 4, arc, arc);
+        }
+        
         g2.dispose();
         
         // Gọi super.paint để Java vẽ đè con Pikachu (hoặc Text) lên cái nền gỗ vừa tạo

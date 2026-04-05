@@ -63,6 +63,8 @@ public class RoundedIconButton extends JButton {
 
     public void setSelectedState(boolean selected) {
         this.isSelectedState = selected;
+        this.setSelected(selected); 
+        this.repaint();
         setBackground(selected ? selectedColor : normalColor);
     }
 }

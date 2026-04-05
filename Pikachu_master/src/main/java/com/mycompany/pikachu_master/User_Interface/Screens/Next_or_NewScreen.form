@@ -28,7 +28,7 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="yes_I_doButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="C&#xf3;"/>
+        <Property name="text" type="java.lang.String" value="C&#xf3;!"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[100, 30]"/>
         </Property>
@@ -44,7 +44,8 @@
     </Component>
     <Component class="javax.swing.JButton" name="No_I_dontButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="K&#xf3;"/>
+        <Property name="text" type="java.lang.String" value="Kh&#xf4;ng!"/>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[100, 30]"/>
         </Property>
@@ -60,8 +61,11 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="18" style="3"/>
+        </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="m&#xe0;y c&#xf3; mu&#x1ed1;n ch&#x1a1;i ti&#x1ebf;p hay kh&#xf4;ng"/>
+        <Property name="text" type="java.lang.String" value="Ti&#x1ebf;p t&#x1ee5;c v&#xe1;n ch&#x1a1;i tr&#x1b0;&#x1edb;c?&#xa;"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>
       </Properties>
       <Constraints>

@@ -8,6 +8,8 @@ import com.mycompany.pikachu_master.Utils.SoundLoad;
 import com.mycompany.pikachu_master.Controller.PlayScreen;
 import com.mycompany.pikachu_master.Data.gameDAO;
 import com.mycompany.pikachu_master.Model.LevelType;
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundHighScoreScreen;
+import com.mycompany.pikachu_master.User_Interface.Components.BackgroundPause;
 import java.awt.event.WindowEvent;
 import java.awt.geom.RoundRectangle2D;
 
@@ -33,6 +35,7 @@ public class HighScoreScreen extends javax.swing.JFrame {
         this.setUndecorated(true);
         this.play = play;
         this.level = level;
+        setContentPane(new BackgroundHighScoreScreen());
         initComponents();
          // ---> THÊM ĐOẠN CODE NÀY ĐỂ BO GÓC JFRAME <---
     this.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -126,6 +129,15 @@ public class HighScoreScreen extends javax.swing.JFrame {
         HighScoreLabel.setText(String.valueOf(DTB.getHighScoreByLevel(this.level.getLevel())));
         System.out.println(this.level.getLevel());
     }
+    
+    public void showLevel_HighScore(){
+        levelLabel.setText(level.getLevel());
+    }
+    
+    public void showTimeRemain_HighScore(){
+        timeLabel.setText(String.valueOf(DTB.getTimeRemainHighScoreByLevel(this.level.getLevel())));
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -139,21 +151,25 @@ public class HighScoreScreen extends javax.swing.JFrame {
 
         HighScoreLabel = new javax.swing.JLabel();
         exitButton5 = new javax.swing.JButton();
+        timeLabel = new javax.swing.JLabel();
+        levelLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(300, 400));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         HighScoreLabel.setFont(new java.awt.Font("Segoe UI", 3, 48)); // NOI18N
+        HighScoreLabel.setForeground(new java.awt.Color(255, 0, 51));
         HighScoreLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         HighScoreLabel.setText("9999");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 28;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.ipadx = 318;
         gridBagConstraints.ipady = 46;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(214, 89, 290, 165);
+        gridBagConstraints.insets = new java.awt.Insets(105, 14, 80, 6);
         getContentPane().add(HighScoreLabel, gridBagConstraints);
 
         exitButton5.setText("<");
@@ -167,6 +183,32 @@ public class HighScoreScreen extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 0);
         getContentPane().add(exitButton5, gridBagConstraints);
+
+        timeLabel.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        timeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        timeLabel.setText("////");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 125;
+        gridBagConstraints.ipady = 32;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(255, 24, 0, 0);
+        getContentPane().add(timeLabel, gridBagConstraints);
+
+        levelLabel.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        levelLabel.setForeground(new java.awt.Color(255, 255, 255));
+        levelLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        levelLabel.setText("asian");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 121;
+        gridBagConstraints.ipady = 32;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(255, 70, 0, 6);
+        getContentPane().add(levelLabel, gridBagConstraints);
 
         setSize(new java.awt.Dimension(464, 658));
         setLocationRelativeTo(null);
@@ -225,5 +267,7 @@ public class HighScoreScreen extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel HighScoreLabel;
     private javax.swing.JButton exitButton5;
+    private javax.swing.JLabel levelLabel;
+    private javax.swing.JLabel timeLabel;
     // End of variables declaration//GEN-END:variables
 }

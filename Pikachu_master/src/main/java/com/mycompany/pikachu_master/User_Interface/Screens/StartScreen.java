@@ -189,9 +189,9 @@ public class StartScreen extends javax.swing.JFrame {
         audioManager.playTransitionSound("/sound/SoundTap/NextScreen.wav");
         GameConfig saveConfig = DTB.getSavedGame(level.getLevel());
         if(saveConfig != null){
-            Next_or_NewScreen Screen = new Next_or_NewScreen(this.config, saveConfig);
+            Next_or_NewScreen Screen = new Next_or_NewScreen(this, this.config, saveConfig);
             Screen.setVisible(true);
-            this.dispose();
+            //this.dispose();
         }else{
             if (com.mycompany.pikachu_master.Model.ThemeManager.currentTheme == null) {
     // Cho mặc định là giao diện Sáng nếu chưa chọn
@@ -212,6 +212,8 @@ public class StartScreen extends javax.swing.JFrame {
         HighScoreScreen Max = new HighScoreScreen(this, play, this.level);
         Max.setVisible(true);
         Max.showHighScore();
+        Max.showLevel_HighScore();
+        Max.showTimeRemain_HighScore();
     }//GEN-LAST:event_maxButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
@@ -230,7 +232,7 @@ public class StartScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
        audioManager.playTransitionSound("/sound/SoundTap/NextScreen.wav");
         
-        HelpScreen Instruct = new HelpScreen(this);
+        HelpDialog Instruct = new HelpDialog(this, true);
         Instruct.setAlwaysOnTop(true);
         Instruct.setLocationRelativeTo(this);
         Instruct.setVisible(true);

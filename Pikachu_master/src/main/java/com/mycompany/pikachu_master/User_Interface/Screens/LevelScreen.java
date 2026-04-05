@@ -285,14 +285,31 @@ public class LevelScreen extends javax.swing.JFrame {
 
     private void updateButtonSkins() {
         String styleKey = selectedSide.equals("DARK") ? "DARK_SIDE" : "LIGHT_SIDE";
-        java.awt.Color txtColor = selectedSide.equals("DARK") ? java.awt.Color.CYAN : java.awt.Color.BLACK;
+        java.awt.Color txtColor = selectedSide.equals("DARK") ? java.awt.Color.CYAN : java.awt.Color.DARK_GRAY;
 
         javax.swing.JButton[] allButtons = {africaButton, asianButton, europeButton, easyButton, normalButton, hardButton};
 
-        for (javax.swing.JButton btn : allButtons) {
-            // Dùng hàm applyCachedIcons từ Utils của bạn
-            Button_Icon.applyCachedIcons(btn, btn.getText(), styleKey);
+       for (javax.swing.JButton btn : allButtons) {
+            // 1. LƯU LẠI TOÀN BỘ CHỮ VÀ FONT HIỆN TẠI (Size 36 bự chà bá)
+            String textToSave = btn.getText();
+            java.awt.Font fontToSave = btn.getFont(); // <--- Bắt quả tang và lưu lại font
+            
+            if (textToSave == null || textToSave.isEmpty() || textToSave.trim().isEmpty()) {
+                if (btn == africaButton) textToSave = "AFRICA";
+                else if (btn == europeButton) textToSave = "EUROPE";
+                else if (btn == asianButton) textToSave = "ASIAN";
+                else if (btn == easyButton) textToSave = "EASY";
+                else if (btn == normalButton) textToSave = "NORMAL";
+                else if (btn == hardButton) textToSave = "HARD";
+            }
+
+            // 2. Gọi hàm tải ảnh (Hàm này sẽ lén reset font về 14)
+            Button_Icon.applyCachedIcons(btn, "", styleKey);
+            
+            // 3. VẢ LẠI NGAY LẬP TỨC: Trả lại chữ, màu, và ép cứng lại cái FONT TO
+            btn.setText(textToSave);
             btn.setForeground(txtColor);
+            btn.setFont(fontToSave);
         }
     }
 
@@ -356,14 +373,43 @@ public class LevelScreen extends javax.swing.JFrame {
             layout.setConstraints(btn, gbc);
         }
 
-        Button_Icon.applyCachedIcons(africaButton, "AFRICA", "DARK_BTN");
-        Button_Icon.applyCachedIcons(europeButton, "EUROPE", "DARK_BTN");
-        Button_Icon.applyCachedIcons(asianButton, "ASIAN", "DARK_BTN");
-        Button_Icon.applyCachedIcons(easyButton, "EASY", "LIGHT_BTN");
-        Button_Icon.applyCachedIcons(normalButton, "NORMAL", "LIGHT_BTN");
-        Button_Icon.applyCachedIcons(hardButton, "HARD", "LIGHT_BTN");
+        // BƯỚC 1: TRUYỀN CHUỖI RỖNG "" ĐỂ HÀM applyCachedIcons KHÔNG VẼ CHỮ LÊN ẢNH NỮA
+        Button_Icon.applyCachedIcons(africaButton, "", "DARK_BTN");
+        Button_Icon.applyCachedIcons(europeButton, "", "DARK_BTN");
+        Button_Icon.applyCachedIcons(asianButton, "", "DARK_BTN");
+        Button_Icon.applyCachedIcons(easyButton, "", "LIGHT_BTN");
+        Button_Icon.applyCachedIcons(normalButton, "", "LIGHT_BTN");
+        Button_Icon.applyCachedIcons(hardButton, "", "LIGHT_BTN");
 
-       // --- BẮT ĐẦU: ĐỘ NÚT < THÀNH BO GÓC TRONG SUỐT ---
+        // BƯỚC 2: TÙY CHỈNH LẠI FONT CHỮ VÀ ÉP NÓ NẰM ĐÈ LÊN GIỮA ẢNH
+        javax.swing.JButton[] levelBtns = {africaButton, europeButton, asianButton, easyButton, normalButton, hardButton};
+        java.awt.Font levelFont = new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 24); // Đổi size 24 ở đây
+
+        for (javax.swing.JButton btn : levelBtns) {
+            btn.setFont(levelFont); // Set font to đùng
+            
+            // Ép chữ phải nằm chính giữa nút (đè ngay giữa bức ảnh)
+            btn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+            btn.setVerticalTextPosition(javax.swing.SwingConstants.CENTER);
+            
+            // Xóa cái nền viền xám mặc định của nút Java để hiển thị ảnh cho đẹp
+            btn.setContentAreaFilled(false);
+            btn.setFocusPainted(false);
+            btn.setBorderPainted(false);
+            btn.setOpaque(false);
+        }
+
+        // BƯỚC 3: DÙNG setText() ĐỂ GÁN LẠI CHỮ. LÚC NÀY FONT VÀ MÀU SẼ CÓ TÁC DỤNG!
+        africaButton.setText("AFRICA");
+        europeButton.setText("EUROPE");
+        asianButton.setText("ASIAN");
+        easyButton.setText("EASY");
+        normalButton.setText("NORMAL");
+        hardButton.setText("HARD");
+        
+        
+        
+       // ---ĐỘ NÚT < THÀNH BO GÓC TRONG SUỐT ---
         exitButton3.setContentAreaFilled(false);
         exitButton3.setFocusPainted(false);
         exitButton3.setBorderPainted(false);

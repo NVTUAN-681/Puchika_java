@@ -92,9 +92,9 @@ public class gameDAO {
         }   
     }
     
-    public void updateHighScore(String LevelName, int score) {
+    public void updateHighScore(String LevelName, int score, int timeRemain) {
     // Chỉ cập nhật nếu điểm mới cao hơn điểm cũ
-    String sql = "INSERT INTO HighScore(LevelName, MaxScore, DateAchieved) VALUES(?, ?, DATETIME('now')) " +
+    String sql = "INSERT INTO HighScore(LevelName, MaxScore, TimeRemain) VALUES(?, ?, ?) " +
                  "ON CONFLICT(LevelName) DO UPDATE SET " +
                  "MaxScore = excluded.MaxScore " +
                  "WHERE excluded.MaxScore > HighScore.MaxScore";
@@ -102,6 +102,7 @@ public class gameDAO {
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
         pstmt.setString(1, LevelName);
         pstmt.setInt(2, score);
+        pstmt.setInt(3, timeRemain);
         pstmt.executeUpdate();
     } catch (SQLException e) {
         System.out.println("error save HighScore: " + e.getMessage());
@@ -143,6 +144,23 @@ public class gameDAO {
     return 0; // Trả về 0 nếu chưa có kỷ lục
     }
     
+    public int getTimeRemainHighScoreByLevel(String levelName) {
+    String sql = "SELECT TimeRemain FROM HighScore WHERE LevelName = ?";
+    try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, levelName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("TimeRemain");
+            }
+        } 
+    catch (SQLException e) {
+        System.out.println("error take HighScore: " + e.getMessage());
+        }
+    System.out.println("Điểm cao của " + levelName + " là: " + score);
+    return 0; // Trả về 0 nếu chưa có kỷ lục
+    }
+    
     public int getTotalCoin(String username) {
     String sql = "SELECT TotalCoin FROM User WHERE username = ?";
     try (Connection conn = DatabaseConnection.getConnection();
@@ -166,7 +184,6 @@ public class gameDAO {
             pstmt.setString(1, LevelName);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                // Giả sử Tuấn đã nâng cấp Constructor của GameConfig như chúng ta bàn trước đó
                 GameConfig savedConfig = new GameConfig(rs.getString("LevelName"));
                 savedConfig.setScore(rs.getInt("CurrentScore"));
                 savedConfig.setTimeLimit(rs.getInt("TimeRemain"));

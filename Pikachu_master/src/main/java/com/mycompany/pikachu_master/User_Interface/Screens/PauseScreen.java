@@ -115,6 +115,17 @@ public class PauseScreen extends javax.swing.JFrame {
         this.config = config;
         this.main = main;
         this.play = play;
+        //giấu pokemon khi bật pause để tránh gian lận
+        play.pauseAsianTimer();
+        
+        com.mycompany.pikachu_master.User_Interface.Components.RoundedIconButton[][] matrix = play.getBtnMatrix();
+        for (int i = 1; i <= play.getRows(); i++) {
+            for (int j = 1; j <= play.getCols(); j++) {
+                if (matrix[i][j] != null) {
+                    matrix[i][j].setIcon(null); // Gỡ ảnh Pokemon ra (nhưng nút vẫn ở đó)
+                }
+            }
+        }
 
         // ---> TẠO LỚP PHỦ ĐEN MỜ KHÓA MÀN HÌNH CHÍNH TẠI ĐÂY <---
         this.darkOverlay = new javax.swing.JWindow(main);
@@ -343,6 +354,8 @@ public class PauseScreen extends javax.swing.JFrame {
     private void Choi_tiepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Choi_tiepActionPerformed
         // TODO add your handling code here:  
         audioManager.playSoundEffect("/sound/SoundTap/tap.wav");
+        play.updateAllButtons(); 
+        play.resumeAsianTimer();
         play.resumeTimer();
         //this.setVisible(false);
         this.dispose();
@@ -369,7 +382,7 @@ public class PauseScreen extends javax.swing.JFrame {
 
     private void instructionButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instructionButton1ActionPerformed
         audioManager.playSoundEffect("/sound/SoundTap/tap.wav");
-        HelpMainScreen help = new HelpMainScreen(this);
+       HelpMainDialog help = new HelpMainDialog(this, true);
         help.setVisible(true);
         //this.setVisible(false);
     }//GEN-LAST:event_instructionButton1ActionPerformed

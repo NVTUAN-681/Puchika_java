@@ -22,6 +22,10 @@ public class LevelType {
         this.isHardMode = isHardMode;
         this.isRocket = isRocket;
     }
+    
+    public LevelType(){
+        
+    }
 
     public static final LevelType START = new LevelType("Start", 3, 6, 20, 6, false, true);
     public static final LevelType AFRICA = new LevelType("AFRICA", 6, 8, 300, 12, false, true);

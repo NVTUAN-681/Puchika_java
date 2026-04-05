@@ -22,6 +22,7 @@ import com.mycompany.pikachu_master.User_Interface.Screens.LossScreen;
 import com.mycompany.pikachu_master.User_Interface.Screens.MainScreen;
 import com.mycompany.pikachu_master.Utils.ImageLoad;
 import com.mycompany.pikachu_master.Utils.SoundLoad;
+import com.mycompany.pikachu_master.Utils.WoodButtonUI;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -70,25 +71,28 @@ public class PlayScreen extends JPanel implements ActionListener {
         this.totalCoin = DTB.getTotalCoin("tuan");
         this.reward = 0;
         this.CostBuyTime = 500;
-        this.TimeBought = (int) (CostBuyTime/100);
-        
-        
+        this.TimeBought = (int) (CostBuyTime / 100);
+        boolean isDark = false;
+
 //thiết lập thuật toán và cố định level;
-        switch(config.GetLevel()){
+        switch (config.GetLevel()) {
             case "AFRICA" -> {
                 ImageLoad.isAsianMode = false; // === [THÊM MỚI] Tắt cờ ===
                 this.level = LevelType.AFRICA;
                 this.algorithm = new ClassicAlgorithm();
+                isDark = true;
             }
             case "EUROPE" -> {
                 ImageLoad.isAsianMode = false; // === [THÊM MỚI] Tắt cờ ===
                 this.level = LevelType.EUROPE;
                 this.algorithm = new ClassicAlgorithm();
+                isDark = true;
             }
             case "ASIAN" -> {
                 ImageLoad.isAsianMode = true; // === [THÊM MỚI] BẬT CỜ CHO CHẾ ĐỘ NÀY ===
                 this.level = LevelType.ASIAN;
                 this.algorithm = new MediumModeAlgorithm();
+                isDark = true;
                 // --- KHỞI TẠO ĐỒNG HỒ TÀNG HÌNH CHO ASIAN ---
                 asianModel = new AsianModel(this);
                 asianModel.start();
@@ -97,21 +101,25 @@ public class PlayScreen extends JPanel implements ActionListener {
                 ImageLoad.isAsianMode = false; // === [THÊM MỚI] Tắt cờ ===
                 this.level = LevelType.START;
                 this.algorithm = new ClassicAlgorithm();
+                isDark = false;
             }
             case "EASY" -> {
                 ImageLoad.isAsianMode = false; // === [THÊM MỚI] Tắt cờ ===
                 this.level = LevelType.EASY;
                 this.algorithm = new ClassicAlgorithm();
+                isDark = false;
             }
             case "MEDIUM" -> {
                 ImageLoad.isAsianMode = false; // === [THÊM MỚI] Tắt cờ ===
                 this.level = LevelType.MEDIUM;
                 this.algorithm = new ClassicAlgorithm();
+                isDark = false;
             }
             case "HARD" -> {
                 ImageLoad.isAsianMode = false; // === [THÊM MỚI] Tắt cờ ===
                 this.level = LevelType.HARD;
                 this.algorithm = new ClassicAlgorithm();
+                isDark = false;
             }
             default -> {
                 ImageLoad.isAsianMode = false; // === [THÊM MỚI] Tắt cờ ===
@@ -120,21 +128,13 @@ public class PlayScreen extends JPanel implements ActionListener {
             }
         }
 
-        // thiết lập bảng pika (bảng chơi chính)
-//        this.board = new Board(level.getRows(), level.getCols(),true);
-//            if(level.isIsHardMode() == true){
-//                board.initHardBoard(algorithm, level.getNoP(), level.isIsRocket());
-//            }
-//            else{
-//                board.initBoard(algorithm, level.getNoP());
-//            }
-        this.board = new Board(level.getRows(), level.getCols(),true);
+        this.board = new Board(level.getRows(), level.getCols(), true);
 
         if (config.resume) {
-        // KỊCH BẢN VÁN DỞ: Lấy ma trận từ chuỗi lưu trữ
-        int[][] savedData = convertStringToMatrix(config.getMatrix_data(), level.getRows(), level.getCols());
+            // KỊCH BẢN VÁN DỞ: Lấy ma trận từ chuỗi lưu trữ
+            int[][] savedData = convertStringToMatrix(config.getMatrix_data(), level.getRows(), level.getCols());
             applySavedMatrix(savedData);
-        this.TotalScore = config.getScore(); // Khôi phục điểm cũ
+            this.TotalScore = config.getScore(); // Khôi phục điểm cũ
         } else {
             // KỊCH BẢN VÁN MỚI: Khởi tạo ngẫu nhiên như cũ
             if (level.isIsHardMode()) {
@@ -143,35 +143,29 @@ public class PlayScreen extends JPanel implements ActionListener {
                 board.initBoard(algorithm, level.getNoP());
             }
         }
-        
+
         setLayout(new GridLayout(level.getRows(), level.getCols(), 0, 0));
         this.setOpaque(false); // Dòng này làm cho Panel không còn màu nền xám nữa
         this.setBackground(new Color(0, 0, 0, 0)); // Đảm bảo màu nền hoàn toàn trong suốt
-       
+
         btnMatrix = new RoundedIconButton[level.getRows() + 2][level.getCols() + 2]; // Bao gồm cả viền trống nếu cần
-        
-//        for (int i = 1; i <= level.getRows(); i++) {
-//            for (int j = 1; j <= level.getCols(); j++) {
-//                int id = board.getCell(i, j).getId();
-//                ImageIcon icon = ImageLoad.getImage(id);
-//                btnMatrix[i][j] = new RoundedIconButton(icon, 0, i, j);
-//                btnMatrix[i][j].addActionListener(this);
-//                add(btnMatrix[i][j]);
-//            }
-//        }
+
         for (int i = 1; i <= level.getRows(); i++) {
-        for (int j = 1; j <= level.getCols(); j++) {
-            Cell cell = board.getCell(i, j);
-            int id = cell.getId();
-            ImageIcon icon = ImageLoad.getImage(id);
-            
-            btnMatrix[i][j] = new RoundedIconButton(icon, 0, i, j);
-            btnMatrix[i][j].addActionListener(this);
-            
-            // QUAN TRỌNG: Nếu ván dở mà ô đã ăn (status = false) thì phải ẩn nút ngay
-            if (!cell.isStatus()) {
-                btnMatrix[i][j].setVisible(false);
-            }
+            for (int j = 1; j <= level.getCols(); j++) {
+                Cell cell = board.getCell(i, j);
+                int id = cell.getId();
+                ImageIcon icon = ImageLoad.getImage(id);
+
+                btnMatrix[i][j] = new RoundedIconButton(icon, 0, i, j);
+                // mày xóa 2 dòng này đi tao đập chết mày
+
+                btnMatrix[i][j].setUI(new WoodButtonUI(isDark));
+                btnMatrix[i][j].addActionListener(this);
+
+                // QUAN TRỌNG: Nếu ván dở mà ô đã ăn (status = false) thì phải ẩn nút ngay
+                if (!cell.isStatus()) {
+                    btnMatrix[i][j].setVisible(false);
+                }
                 add(btnMatrix[i][j]);
             }
         }
@@ -315,26 +309,26 @@ public void applySavedMatrix(int[][] savedData) {
             honorScreen.setVisible(true);
 
             DTB.updateCoin_player("tuan", totalCoin);
-            DTB.updateHighScore(level.getLevel(), TotalScore);
+            DTB.updateHighScore(level.getLevel(), TotalScore, level.getTimeLimit() - currentTime);
             DTB.deleteSaveGame("tuan");
             DTB.insertScore("tuan", level.getLevel(), TotalScore, level.getTimeLimit() - currentTime);
         }
-    } 
-    
+    }
+
     //hàm hiện thị khi thua
-    public void showlossScreen(){
+    public void showlossScreen() {
         java.awt.Window windown = javax.swing.SwingUtilities.getWindowAncestor(this);
-            if (windown instanceof MainScreen) {
-                MainScreen main = (MainScreen) windown;
-                main.setEnabled(false);
-                LossScreen lossScreen = new LossScreen(main, config, level, this);
-                lossScreen.setAlwaysOnTop(true);
-                lossScreen.setVisible(true);
-                
-                DTB.updateCoin_player("tuan", totalCoin);
-                DTB.updateHighScore(level.getLevel(), TotalScore);
-                DTB.deleteSaveGame("tuan");
-            }
+        if (windown instanceof MainScreen) {
+            MainScreen main = (MainScreen) windown;
+            main.setEnabled(false);
+            LossScreen lossScreen = new LossScreen(main, config, level, this);
+            lossScreen.setAlwaysOnTop(true);
+            lossScreen.setVisible(true);
+
+            DTB.updateCoin_player("tuan", totalCoin);
+            DTB.updateHighScore(level.getLevel(), TotalScore, level.getTimeLimit() - currentTime);
+            DTB.deleteSaveGame("tuan");
+        }
     }
 
     //hàm cộng điểm
@@ -347,10 +341,10 @@ public void applySavedMatrix(int[][] savedData) {
     }
 
     //hàm cộng coin
-    public void addcoin(int coin, int reward){
-        this.totalCoin += (int) (coin/10);
-        this.totalCoin += (int) (reward/10);
-        if(main != null){
+    public void addcoin(int coin, int reward) {
+        this.totalCoin += (int) (coin / 10);
+        this.totalCoin += (int) (reward / 10);
+        if (main != null) {
             main.updateCoin(totalCoin);
         }
     }
@@ -368,7 +362,7 @@ public void applySavedMatrix(int[][] savedData) {
             this.reward = 0;
         }
     }
-    
+
     public String getMatrixAsString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= level.getRows(); i++) {
@@ -383,25 +377,26 @@ public void applySavedMatrix(int[][] savedData) {
         }
         return sb.toString();
     }
-    
-    public int[][] convertStringToMatrix(String matrixData, int rows, int cols) {
-    // 1. Khởi tạo mảng tạm để chứa dữ liệu
-    int[][] tempMatrix = new int[rows][cols];
-    
-    // 2. Tách chuỗi
-    String[] ids = matrixData.split(",");
-    int index = 0;
 
-    // 3. Đổ dữ liệu vào mảng (Giữ đúng thứ tự Duyệt hàng -> Duyệt cột)
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            if (index < ids.length) {
-                tempMatrix[i][j] = Integer.parseInt(ids[index++]);
+    public int[][] convertStringToMatrix(String matrixData, int rows, int cols) {
+        // 1. Khởi tạo mảng tạm để chứa dữ liệu
+        int[][] tempMatrix = new int[rows][cols];
+
+        // 2. Tách chuỗi
+        String[] ids = matrixData.split(",");
+        int index = 0;
+
+        // 3. Đổ dữ liệu vào mảng (Giữ đúng thứ tự Duyệt hàng -> Duyệt cột)
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (index < ids.length) {
+                    tempMatrix[i][j] = Integer.parseInt(ids[index++]);
+                }
             }
         }
+        return tempMatrix;
     }
-    return tempMatrix;
-}
+
     // hàm vẽ đường nối giữa hai ô khi chọn đúng
     private void drawPathOnOverlay() {
         java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(this);
@@ -595,7 +590,7 @@ public void applySavedMatrix(int[][] savedData) {
         }
 
 //        this.currentTime = maxTime;
-        if (config.resume && config.getTimeLimit()> 0) {
+        if (config.resume && config.getTimeLimit() > 0) {
             this.currentTime = config.getTimeLimit();
         } else {
             this.currentTime = maxTime;
@@ -618,7 +613,7 @@ public void applySavedMatrix(int[][] savedData) {
 
                 if (timeline != null) {
                     timeline.setValue(currentTime);
-                    timeline.repaint(); // <--- Thêm dòng này để ép UI vẽ lại giá trị mới
+                    timeline.repaint();
                 }
 
                 System.out.println("Thoi gian con: " + currentTime + " giay");
