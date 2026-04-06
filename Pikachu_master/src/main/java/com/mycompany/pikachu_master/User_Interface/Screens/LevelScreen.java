@@ -295,8 +295,8 @@ public class LevelScreen extends javax.swing.JFrame {
             java.awt.Font fontToSave = btn.getFont(); // <--- Bắt quả tang và lưu lại font
             
             if (textToSave == null || textToSave.isEmpty() || textToSave.trim().isEmpty()) {
-                if (btn == africaButton) textToSave = "AFRICA";
-                else if (btn == europeButton) textToSave = "EUROPE";
+                if (btn == africaButton) textToSave = "AFRICAN";
+                else if (btn == europeButton) textToSave = "EUROPEAN";
                 else if (btn == asianButton) textToSave = "ASIAN";
                 else if (btn == easyButton) textToSave = "EASY";
                 else if (btn == normalButton) textToSave = "NORMAL";
@@ -400,8 +400,8 @@ public class LevelScreen extends javax.swing.JFrame {
         }
 
         // BƯỚC 3: DÙNG setText() ĐỂ GÁN LẠI CHỮ. LÚC NÀY FONT VÀ MÀU SẼ CÓ TÁC DỤNG!
-        africaButton.setText("AFRICA");
-        europeButton.setText("EUROPE");
+        africaButton.setText("AFRICAN");
+        europeButton.setText("EUROPEAN");
         asianButton.setText("ASIAN");
         easyButton.setText("EASY");
         normalButton.setText("NORMAL");
@@ -605,8 +605,8 @@ public class LevelScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         //SoundLoad audioManager = new SoundLoad();
         audioManager.playTransitionSound("/sound/SoundTap/NextScreen.wav");
-        start.setLevel("AFRICA");
-        start.UpdateLevel("AFRICA");
+        start.setLevel("AFRICAN");
+        start.UpdateLevel("AFRICAN");
         start.setGameTheme(this.selectedSide);
         start.setVisible(true);
         this.dispose();
@@ -627,8 +627,8 @@ public class LevelScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
         //SoundLoad audioManager = new SoundLoad();
         audioManager.playTransitionSound("/sound/SoundTap/NextScreen.wav");
-        start.setLevel("EUROPE");
-        start.UpdateLevel("EUROPE");
+        start.setLevel("EUROPEAN");
+        start.UpdateLevel("EUROPEAN");
         start.setGameTheme(this.selectedSide);
         start.setVisible(true);
         this.dispose();
